@@ -47,7 +47,7 @@ func NewClient(user string, password string, key string) *Client {
 	return c
 }
 
-func (pc *Client) ListChecks() (*Check, error) {
+func (pc *Client) ListChecks() ([]Check, error) {
 	req, _ := http.NewRequest("GET", pc.BaseURL.String()+"/api/2.0/checks", nil)
 	req.SetBasicAuth(pc.User, pc.Password)
 	req.Header.Add("App-Key", pc.Key)
@@ -67,7 +67,7 @@ func (pc *Client) ListChecks() (*Check, error) {
 		if err != nil {
 			return nil, err
 		}
-		return &m.Checks[0], err
+		return m.Checks, err
 	}
 	return nil, err
 }

@@ -97,7 +97,10 @@ func TestListChecks(t *testing.T) {
 		t.Errorf("ListChecks returned error: %v", err)
 	}
 
-	want := &Check{ID: 85975, Name: "My check 1"}
+	want := []Check{Check{ID: 85975, Name: "My check 1"},
+		Check{ID: 161748, Name: "My check 2"},
+		Check{ID: 208655, Name: "My check 3"}}
+
 	if !reflect.DeepEqual(checks, want) {
 		t.Errorf("ListChecks returned %+v, want %+v", checks, want)
 	}
