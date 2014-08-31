@@ -97,9 +97,38 @@ func TestListChecks(t *testing.T) {
 		t.Errorf("ListChecks returned error: %v", err)
 	}
 
-	want := []Check{Check{ID: 85975, Name: "My check 1"},
-		Check{ID: 161748, Name: "My check 2"},
-		Check{ID: 208655, Name: "My check 3"}}
+	want := []Check{
+		Check{
+			ID:               85975,
+			Name:             "My check 1",
+			LastErrorTime:    1297446423,
+			LastResponseTime: 355,
+			LastTestTime:     1300977363,
+			Hostname:         "example.com",
+			Resolution:       1,
+			Status:           "up",
+		},
+		Check{
+			ID:               161748,
+			Name:             "My check 2",
+			LastErrorTime:    1299194968,
+			LastResponseTime: 1141,
+			LastTestTime:     1300977268,
+			Hostname:         "mydomain.com",
+			Resolution:       5,
+			Status:           "up",
+		},
+		Check{
+			ID:               208655,
+			Name:             "My check 3",
+			LastErrorTime:    1300527997,
+			LastResponseTime: 800,
+			LastTestTime:     1300977337,
+			Hostname:         "example.net",
+			Resolution:       1,
+			Status:           "down",
+		},
+	}
 
 	if !reflect.DeepEqual(checks, want) {
 		t.Errorf("ListChecks returned %+v, want %+v", checks, want)
@@ -173,7 +202,22 @@ func TestReadCheck(t *testing.T) {
 		t.Errorf("ReadCheck returned error: %v", err)
 	}
 
-	want := &Check{ID: 85975, Name: "My check 7"}
+	want := &Check{
+		ID:                       85975,
+		Name:                     "My check 7",
+		Resolution:               1,
+		SendToEmail:              false,
+		SendToTwitter:            false,
+		SendToIPhone:             false,
+		SendNotificationWhenDown: 0,
+		NotifyAgainEvery:         0,
+		NotifyWhenBackup:         false,
+		Created:                  1240394682,
+		Hostname:                 "s7.mydomain.com",
+		Status:                   "up",
+		LastErrorTime:            1293143467,
+		LastTestTime:             1294064823,
+	}
 	if !reflect.DeepEqual(check, want) {
 		t.Errorf("ReadCheck returned %+v, want %+v", check, want)
 	}

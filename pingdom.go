@@ -25,8 +25,21 @@ type HttpCheck struct {
 }
 
 type Check struct {
-	ID   int    `json:"id"`
-	Name string `json:"name,omitempty"`
+	ID                       int    `json:"id"`
+	Name                     string `json:"name"`
+	Resolution               int    `json:"resolution,omitempty"`
+	SendToEmail              bool   `json:"sendtoemail,omitempty"`
+	SendToTwitter            bool   `json:"sendtotwitter,omitempty"`
+	SendToIPhone             bool   `json:"sendtoiphone,omitempty"`
+	SendNotificationWhenDown int    `json:"sendnotificationwhendown,omitempty"`
+	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
+	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
+	Created                  int64  `json:"created,omitempty"`
+	Hostname                 string `json:"hostname,omitempty"`
+	Status                   string `json:"status,omitempty"`
+	LastErrorTime            int64  `json:"lasterrortime,omitempty"`
+	LastTestTime             int64  `json:"lasttesttime,omitempty"`
+	LastResponseTime         int64  `json:"lastresponsetime,omitempty"`
 }
 
 type Message struct {
