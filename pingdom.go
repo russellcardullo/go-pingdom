@@ -81,7 +81,11 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 }
 
 func (pc *Client) ListChecks() ([]Check, error) {
-	req, _ := pc.NewRequest("GET", "/api/2.0/checks", nil)
+	req, err := pc.NewRequest("GET", "/api/2.0/checks", nil)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
@@ -109,7 +113,11 @@ func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
 		"host": check.Host,
 		"type": "http",
 	}
-	req, _ := pc.NewRequest("POST", "/api/2.0/checks", params)
+	req, err := pc.NewRequest("POST", "/api/2.0/checks", params)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
@@ -133,7 +141,11 @@ func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
 }
 
 func (pc *Client) ReadCheck(id string) (*Check, error) {
-	req, _ := pc.NewRequest("GET", "/api/2.0/checks/"+id, nil)
+	req, err := pc.NewRequest("GET", "/api/2.0/checks/"+id, nil)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
@@ -161,7 +173,11 @@ func (pc *Client) UpdateCheck(id string, name string, host string) (*PingdomResp
 		"name": name,
 		"host": host,
 	}
-	req, _ := pc.NewRequest("PUT", "/api/2.0/checks/"+id, params)
+	req, err := pc.NewRequest("PUT", "/api/2.0/checks/"+id, params)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
@@ -185,7 +201,11 @@ func (pc *Client) UpdateCheck(id string, name string, host string) (*PingdomResp
 }
 
 func (pc *Client) DeleteCheck(id string) (*PingdomResponse, error) {
-	req, _ := pc.NewRequest("DELETE", "/api/2.0/checks/"+id, nil)
+	req, err := pc.NewRequest("DELETE", "/api/2.0/checks/"+id, nil)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
