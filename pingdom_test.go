@@ -47,6 +47,24 @@ func TestNewClient(t *testing.T) {
 	}
 }
 
+func TestNewRequest(t *testing.T) {
+	setup()
+	defer teardown()
+
+	req, err := client.NewRequest("GET", "/checks", nil)
+	if err != nil {
+		t.Errorf("NewRequest returned error: %v", err)
+	}
+
+	if req.Method != "GET" {
+		t.Errorf("NewRequest Method returned %+v, want %+v", req.Method, "GET")
+	}
+
+	if req.URL.String() != client.BaseURL.String()+"/checks" {
+		t.Errorf("NewRequest URL returned %+v, want %+v", req.URL.String(), client.BaseURL.String()+"/checks")
+	}
+}
+
 func TestListChecks(t *testing.T) {
 	setup()
 	defer teardown()

@@ -60,10 +60,28 @@ func NewClient(user string, password string, key string) *Client {
 	return c
 }
 
-func (pc *Client) ListChecks() ([]Check, error) {
-	req, _ := http.NewRequest("GET", pc.BaseURL.String()+"/api/2.0/checks", nil)
+func (pc *Client) NewRequest(method string, rsc string, params map[string]string) (*http.Request, error) {
+	baseUrl, err := url.Parse(pc.BaseURL.String() + rsc)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		ps := url.Values{}
+		for k, v := range params {
+			ps.Set(k, v)
+		}
+		baseUrl.RawQuery = ps.Encode()
+	}
+
+	req, err := http.NewRequest(method, baseUrl.String(), nil)
 	req.SetBasicAuth(pc.User, pc.Password)
 	req.Header.Add("App-Key", pc.Key)
+	return req, err
+}
+
+func (pc *Client) ListChecks() ([]Check, error) {
+	req, _ := pc.NewRequest("GET", "/api/2.0/checks", nil)
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
@@ -86,23 +104,12 @@ func (pc *Client) ListChecks() ([]Check, error) {
 }
 
 func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
-	baseUrl, err := url.Parse(pc.BaseURL.String() + "/api/2.0/checks")
-	if err != nil {
-		return nil, err
+	params := map[string]string{
+		"name": check.Name,
+		"host": check.Host,
+		"type": "http",
 	}
-
-	params := url.Values{}
-	params.Set("name", check.Name)
-	params.Set("host", check.Host)
-	params.Set("type", "http")
-
-	baseUrl.RawQuery = params.Encode()
-
-	req, _ := http.NewRequest("POST", baseUrl.String(), nil)
-	req.SetBasicAuth(pc.User, pc.Password)
-	req.Header.Add("App-Key", pc.Key)
-	//fmt.Println("Req:", req)
-
+	req, _ := pc.NewRequest("POST", "/api/2.0/checks", params)
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
@@ -126,16 +133,7 @@ func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
 }
 
 func (pc *Client) ReadCheck(id string) (*Check, error) {
-	baseUrl, err := url.Parse(pc.BaseURL.String() + "/api/2.0/checks/" + id)
-	if err != nil {
-		return nil, err
-	}
-
-	req, _ := http.NewRequest("GET", baseUrl.String(), nil)
-	req.SetBasicAuth(pc.User, pc.Password)
-	req.Header.Add("App-Key", pc.Key)
-	//fmt.Println("Req:", req)
-
+	req, _ := pc.NewRequest("GET", "/api/2.0/checks/"+id, nil)
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
@@ -159,21 +157,11 @@ func (pc *Client) ReadCheck(id string) (*Check, error) {
 }
 
 func (pc *Client) UpdateCheck(id string, name string, host string) (*PingdomResponse, error) {
-	baseUrl, err := url.Parse(pc.BaseURL.String() + "/api/2.0/checks/" + id)
-	if err != nil {
-		return nil, err
+	params := map[string]string{
+		"name": name,
+		"host": host,
 	}
-
-	params := url.Values{}
-	params.Set("name", name)
-	params.Set("host", host)
-	baseUrl.RawQuery = params.Encode()
-
-	req, _ := http.NewRequest("PUT", baseUrl.String(), nil)
-	req.SetBasicAuth(pc.User, pc.Password)
-	req.Header.Add("App-Key", pc.Key)
-	//fmt.Println("Req:", req)
-
+	req, _ := pc.NewRequest("PUT", "/api/2.0/checks/"+id, params)
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
@@ -197,16 +185,7 @@ func (pc *Client) UpdateCheck(id string, name string, host string) (*PingdomResp
 }
 
 func (pc *Client) DeleteCheck(id string) (*PingdomResponse, error) {
-	baseUrl, err := url.Parse(pc.BaseURL.String() + "/api/2.0/checks/" + id)
-	if err != nil {
-		return nil, err
-	}
-
-	req, _ := http.NewRequest("DELETE", baseUrl.String(), nil)
-	req.SetBasicAuth(pc.User, pc.Password)
-	req.Header.Add("App-Key", pc.Key)
-	//fmt.Println("Req:", req)
-
+	req, _ := pc.NewRequest("DELETE", "/api/2.0/checks/"+id, nil)
 	resp, err := pc.client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
