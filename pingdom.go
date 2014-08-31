@@ -42,7 +42,7 @@ type Check struct {
 	LastResponseTime         int64  `json:"lastresponsetime,omitempty"`
 }
 
-type Message struct {
+type CheckResponse struct {
 	Check Check `json:"check"`
 }
 
@@ -115,7 +115,7 @@ func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
 		bodyString := string(bodyBytes)
 		//fmt.Println("Body:", bodyString)
 
-		m := &Message{}
+		m := &CheckResponse{}
 		err := json.Unmarshal([]byte(bodyString), &m)
 		if err != nil {
 			return nil, err
@@ -148,7 +148,7 @@ func (pc *Client) ReadCheck(id string) (*Check, error) {
 		bodyString := string(bodyBytes)
 		//fmt.Println("Body:", bodyString)
 
-		m := &Message{}
+		m := &CheckResponse{}
 		err := json.Unmarshal([]byte(bodyString), &m)
 		if err != nil {
 			return nil, err
