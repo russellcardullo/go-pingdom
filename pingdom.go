@@ -92,16 +92,11 @@ func (pc *Client) ListChecks() ([]Check, error) {
 		return nil, err
 	}
 
-	//fmt.Println("Status:", resp.Status)
-	if resp.StatusCode == 200 { // OK
+	if resp.StatusCode == 200 {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		bodyString := string(bodyBytes)
-		//fmt.Println("Body:", bodyString)
 		m := &ListChecksResponse{}
 		err := json.Unmarshal([]byte(bodyString), &m)
-		if err != nil {
-			return nil, err
-		}
 		return m.Checks, err
 	}
 	return nil, err
@@ -124,17 +119,12 @@ func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
 		return nil, err
 	}
 
-	//fmt.Println("Status:", resp.Status)
 	if resp.StatusCode == 200 {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		bodyString := string(bodyBytes)
-		//fmt.Println("Body:", bodyString)
 
 		m := &CheckResponse{}
 		err := json.Unmarshal([]byte(bodyString), &m)
-		if err != nil {
-			return nil, err
-		}
 		return &m.Check, err
 	}
 	return nil, err
@@ -152,17 +142,12 @@ func (pc *Client) ReadCheck(id string) (*Check, error) {
 		return nil, err
 	}
 
-	//fmt.Println("Status:", resp.Status)
 	if resp.StatusCode == 200 {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		bodyString := string(bodyBytes)
-		//fmt.Println("Body:", bodyString)
 
 		m := &CheckResponse{}
 		err := json.Unmarshal([]byte(bodyString), &m)
-		if err != nil {
-			return nil, err
-		}
 		return &m.Check, err
 	}
 	return nil, err
@@ -184,17 +169,12 @@ func (pc *Client) UpdateCheck(id string, name string, host string) (*PingdomResp
 		return nil, err
 	}
 
-	//fmt.Println("Status:", resp.Status)
 	if resp.StatusCode == 200 {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		bodyString := string(bodyBytes)
-		//fmt.Println("Body:", bodyString)
 
 		m := &PingdomResponse{}
 		err := json.Unmarshal([]byte(bodyString), &m)
-		if err != nil {
-			return nil, err
-		}
 		return m, err
 	}
 	return nil, err
@@ -212,17 +192,12 @@ func (pc *Client) DeleteCheck(id string) (*PingdomResponse, error) {
 		return nil, err
 	}
 
-	//fmt.Println("Status:", resp.Status)
 	if resp.StatusCode == 200 {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		bodyString := string(bodyBytes)
-		//fmt.Println("Body:", bodyString)
 
 		m := &PingdomResponse{}
 		err := json.Unmarshal([]byte(bodyString), &m)
-		if err != nil {
-			return nil, err
-		}
 		return m, err
 	}
 	return nil, err
