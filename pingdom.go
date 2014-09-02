@@ -15,7 +15,7 @@ const (
 type Client struct {
 	User     string
 	Password string
-	Key      string
+	APIKey   string
 	BaseURL  *url.URL
 	client   *http.Client
 }
@@ -77,7 +77,7 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 
 	req, err := http.NewRequest(method, baseUrl.String(), nil)
 	req.SetBasicAuth(pc.User, pc.Password)
-	req.Header.Add("App-Key", pc.Key)
+	req.Header.Add("App-Key", pc.APIKey)
 	return req, err
 }
 
