@@ -2,10 +2,12 @@ package pingdom
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -63,6 +65,36 @@ func TestNewRequest(t *testing.T) {
 	if req.URL.String() != client.BaseURL.String()+"/checks" {
 		t.Errorf("NewRequest URL returned %+v, want %+v", req.URL.String(), client.BaseURL.String()+"/checks")
 	}
+}
+
+func TestValidateResponse(t *testing.T) {
+	valid := &http.Response{
+		Request:    &http.Request{},
+		StatusCode: http.StatusOK,
+		Body:       ioutil.NopCloser(strings.NewReader("OK")),
+	}
+
+	if err := ValidateResponse(valid); err != nil {
+		t.Errorf("ValidateResponse with valid response returned error %+v", err)
+	}
+
+	invalid := &http.Response{
+		Request:    &http.Request{},
+		StatusCode: http.StatusBadRequest,
+		Body: ioutil.NopCloser(strings.NewReader(`{
+			"error" : {
+				"statuscode": 400,
+				"statusdesc": "Bad Request",
+				"errormessage": "This is an error"
+			}
+		}`)),
+	}
+
+	want := &PingdomError{400, "Bad Request", "This is an error"}
+	if err := ValidateResponse(invalid); !reflect.DeepEqual(err, want) {
+		t.Errorf("ValidateResponse with invalid response returned %+v, want %+v", err, want)
+	}
+
 }
 
 func TestListChecks(t *testing.T) {
