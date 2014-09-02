@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 const (
@@ -130,8 +131,8 @@ func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
 	return nil, err
 }
 
-func (pc *Client) ReadCheck(id string) (*Check, error) {
-	req, err := pc.NewRequest("GET", "/api/2.0/checks/"+id, nil)
+func (pc *Client) ReadCheck(id int) (*Check, error) {
+	req, err := pc.NewRequest("GET", "/api/2.0/checks/"+strconv.Itoa(id), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -153,12 +154,12 @@ func (pc *Client) ReadCheck(id string) (*Check, error) {
 	return nil, err
 }
 
-func (pc *Client) UpdateCheck(id string, name string, host string) (*PingdomResponse, error) {
+func (pc *Client) UpdateCheck(id int, name string, host string) (*PingdomResponse, error) {
 	params := map[string]string{
 		"name": name,
 		"host": host,
 	}
-	req, err := pc.NewRequest("PUT", "/api/2.0/checks/"+id, params)
+	req, err := pc.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), params)
 	if err != nil {
 		return nil, err
 	}
@@ -180,8 +181,8 @@ func (pc *Client) UpdateCheck(id string, name string, host string) (*PingdomResp
 	return nil, err
 }
 
-func (pc *Client) DeleteCheck(id string) (*PingdomResponse, error) {
-	req, err := pc.NewRequest("DELETE", "/api/2.0/checks/"+id, nil)
+func (pc *Client) DeleteCheck(id int) (*PingdomResponse, error) {
+	req, err := pc.NewRequest("DELETE", "/api/2.0/checks/"+strconv.Itoa(id), nil)
 	if err != nil {
 		return nil, err
 	}

@@ -215,7 +215,7 @@ func TestReadCheck(t *testing.T) {
 		}`)
 	})
 
-	check, err := client.ReadCheck("85975")
+	check, err := client.ReadCheck(85975)
 	if err != nil {
 		t.Errorf("ReadCheck returned error: %v", err)
 	}
@@ -251,7 +251,7 @@ func TestUpdateCheck(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
 
-	msg, err := client.UpdateCheck("12345", "updated_check", "example2.com")
+	msg, err := client.UpdateCheck(12345, "updated_check", "example2.com")
 	if err != nil {
 		t.Errorf("UpdateCheck returned error: %v", err)
 	}
@@ -271,7 +271,7 @@ func TestDeleteCheck(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Deletion of check was successful!"}`)
 	})
 
-	msg, err := client.DeleteCheck("12345")
+	msg, err := client.DeleteCheck(12345)
 	if err != nil {
 		t.Errorf("DeleteCheck returned error: %v", err)
 	}

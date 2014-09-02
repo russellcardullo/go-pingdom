@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/russellcardullo/pingdom"
 )
@@ -19,14 +18,14 @@ func main() {
 	fmt.Println("Created check:", check)
 
 	// Get details for a check
-	details, _ := client.ReadCheck(strconv.Itoa(check.ID))
+	details, _ := client.ReadCheck(check.ID)
 	fmt.Println("Details:", details)
 
 	// Update a check
-	upMsg, _ := client.UpdateCheck(strconv.Itoa(check.ID), "modified_check", "foo.com")
+	upMsg, _ := client.UpdateCheck(check.ID, "modified_check", "foo.com")
 	fmt.Println("Modified check, message:", upMsg)
 
 	// Delete a check
-	delMsg, _ := client.DeleteCheck(strconv.Itoa(check.ID))
+	delMsg, _ := client.DeleteCheck(check.ID)
 	fmt.Println("Deleted check, message:", delMsg)
 }
