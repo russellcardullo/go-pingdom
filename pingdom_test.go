@@ -97,6 +97,20 @@ func TestValidateResponse(t *testing.T) {
 
 }
 
+func TestHttpCheckParams(t *testing.T) {
+	check := HttpCheck{Name: "fake check", Host: "example.com"}
+	params := check.Params()
+	want := map[string]string{
+		"name": "fake check",
+		"host": "example.com",
+		"type": "http",
+	}
+
+	if !reflect.DeepEqual(params, want) {
+		t.Errorf("HttpCheck.Params() returned %+v, want %+v", params, want)
+	}
+}
+
 func TestListChecks(t *testing.T) {
 	setup()
 	defer teardown()

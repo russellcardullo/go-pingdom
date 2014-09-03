@@ -112,6 +112,14 @@ func ValidateResponse(r *http.Response) error {
 	return &m.Error
 }
 
+func (ck *HttpCheck) Params() map[string]string {
+	return map[string]string{
+		"name": ck.Name,
+		"host": ck.Host,
+		"type": "http",
+	}
+}
+
 func (pc *Client) ListChecks() ([]Check, error) {
 	req, err := pc.NewRequest("GET", "/api/2.0/checks", nil)
 	if err != nil {
@@ -136,12 +144,7 @@ func (pc *Client) ListChecks() ([]Check, error) {
 }
 
 func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
-	params := map[string]string{
-		"name": check.Name,
-		"host": check.Host,
-		"type": "http",
-	}
-	req, err := pc.NewRequest("POST", "/api/2.0/checks", params)
+	req, err := pc.NewRequest("POST", "/api/2.0/checks", check.Params())
 	if err != nil {
 		return nil, err
 	}
