@@ -21,11 +21,6 @@ type Client struct {
 	client   *http.Client
 }
 
-type HttpCheck struct {
-	Name string
-	Host string
-}
-
 type Check struct {
 	ID                       int    `json:"id"`
 	Name                     string `json:"name"`
@@ -112,10 +107,10 @@ func ValidateResponse(r *http.Response) error {
 	return &m.Error
 }
 
-func (ck *HttpCheck) Params() map[string]string {
+func (ck *Check) Params() map[string]string {
 	return map[string]string{
 		"name": ck.Name,
-		"host": ck.Host,
+		"host": ck.Hostname,
 		"type": "http",
 	}
 }
@@ -143,7 +138,7 @@ func (pc *Client) ListChecks() ([]Check, error) {
 	return m.Checks, err
 }
 
-func (pc *Client) CreateCheck(check HttpCheck) (*Check, error) {
+func (pc *Client) CreateCheck(check Check) (*Check, error) {
 	req, err := pc.NewRequest("POST", "/api/2.0/checks", check.Params())
 	if err != nil {
 		return nil, err
@@ -192,7 +187,7 @@ func (pc *Client) ReadCheck(id int) (*Check, error) {
 	return &m.Check, err
 }
 
-func (pc *Client) UpdateCheck(id int, check HttpCheck) (*PingdomResponse, error) {
+func (pc *Client) UpdateCheck(id int, check Check) (*PingdomResponse, error) {
 	params := check.Params()
 	delete(params, "type")
 	req, err := pc.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), params)

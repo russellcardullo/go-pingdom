@@ -97,8 +97,8 @@ func TestValidateResponse(t *testing.T) {
 
 }
 
-func TestHttpCheckParams(t *testing.T) {
-	check := HttpCheck{Name: "fake check", Host: "example.com"}
+func TestCheckParams(t *testing.T) {
+	check := Check{Name: "fake check", Hostname: "example.com"}
 	params := check.Params()
 	want := map[string]string{
 		"name": "fake check",
@@ -107,7 +107,7 @@ func TestHttpCheckParams(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(params, want) {
-		t.Errorf("HttpCheck.Params() returned %+v, want %+v", params, want)
+		t.Errorf("Check.Params() returned %+v, want %+v", params, want)
 	}
 }
 
@@ -213,7 +213,7 @@ func TestCreateCheck(t *testing.T) {
 		}`)
 	})
 
-	newCheck := HttpCheck{"My new HTTP check", "example.com"}
+	newCheck := Check{Name: "My new HTTP check", Hostname: "example.com"}
 	check, err := client.CreateCheck(newCheck)
 	if err != nil {
 		t.Errorf("CreateCheck returned error: %v", err)
@@ -297,7 +297,7 @@ func TestUpdateCheck(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
 
-	updateCheck := HttpCheck{"Updated Check", "example2.com"}
+	updateCheck := Check{Name: "Updated Check", Hostname: "example2.com"}
 	msg, err := client.UpdateCheck(12345, updateCheck)
 	if err != nil {
 		t.Errorf("UpdateCheck returned error: %v", err)

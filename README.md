@@ -16,14 +16,15 @@ Get a list of all checks:
 
 ```go
 checks, err := client.ListChecks()
+fmt.Println("Checks:", checks) // [{ID Name} ...]
 ```
 
 Create a new HTTP check:
 
 ```go
-newCheck := pingdom.HttpCheck{"test_check", "example.com"}
+newCheck := pingdom.Check{Name: "Test Check", "example.com"}
 check, err := client.CreateCheck(newCheck)
-fmt.Println("Created check:", check) // Check{ID, Name, Host}
+fmt.Println("Created check:", check) // {ID, Name}
 ```
 
 Get details for a specific check
@@ -35,7 +36,8 @@ check, err := client.GetCheck(12345)
 Update a check
 
 ```go
-msg, err := client.UpdateCheck(12345, "my check name", "example2.com")
+updatedCheck := pingdom.Check{Name: "Updated Check", "example2.com"}
+msg, err := client.UpdateCheck(12345, updatedCheck)
 ```
 
 Delete a check
