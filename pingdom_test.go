@@ -97,17 +97,39 @@ func TestValidateResponse(t *testing.T) {
 
 }
 
-func TestCheckParams(t *testing.T) {
+func TestParams(t *testing.T) {
 	check := Check{Name: "fake check", Hostname: "example.com"}
 	params := check.Params()
 	want := map[string]string{
-		"name": "fake check",
-		"host": "example.com",
-		"type": "http",
+		"name":                     "fake check",
+		"host":                     "example.com",
+		"paused":                   "false",
+		"resolution":               "0",
+		"sendtoemail":              "false",
+		"sendtosms":                "false",
+		"sendtotwitter":            "false",
+		"sendtoiphone":             "false",
+		"sendtoandroid":            "false",
+		"sendnotificationwhendown": "0",
+		"notifyagainevery":         "0",
+		"notifywhenbackup":         "false",
+		"type":                     "http",
 	}
 
 	if !reflect.DeepEqual(params, want) {
 		t.Errorf("Check.Params() returned %+v, want %+v", params, want)
+	}
+}
+
+func TestValidate(t *testing.T) {
+	check := Check{Name: "fake check", Hostname: "example.com", Resolution: 15}
+	if err := Validate(&check); err != nil {
+		t.Errorf("Validate with valid check returned error %+v", err)
+	}
+
+	check = Check{Name: "fake check", Hostname: "example.com"}
+	if err := Validate(&check); err == nil {
+		t.Errorf("Validate with invalid check expected error, returned nil")
 	}
 }
 
@@ -213,7 +235,7 @@ func TestCreateCheck(t *testing.T) {
 		}`)
 	})
 
-	newCheck := Check{Name: "My new HTTP check", Hostname: "example.com"}
+	newCheck := Check{Name: "My new HTTP check", Hostname: "example.com", Resolution: 5}
 	check, err := client.CreateCheck(newCheck)
 	if err != nil {
 		t.Errorf("CreateCheck returned error: %v", err)
@@ -297,7 +319,7 @@ func TestUpdateCheck(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
 
-	updateCheck := Check{Name: "Updated Check", Hostname: "example2.com"}
+	updateCheck := Check{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
 	msg, err := client.UpdateCheck(12345, updateCheck)
 	if err != nil {
 		t.Errorf("UpdateCheck returned error: %v", err)
