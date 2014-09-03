@@ -297,7 +297,8 @@ func TestUpdateCheck(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
 
-	msg, err := client.UpdateCheck(12345, "updated_check", "example2.com")
+	updateCheck := HttpCheck{"Updated Check", "example2.com"}
+	msg, err := client.UpdateCheck(12345, updateCheck)
 	if err != nil {
 		t.Errorf("UpdateCheck returned error: %v", err)
 	}

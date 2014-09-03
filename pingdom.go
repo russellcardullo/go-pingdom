@@ -192,11 +192,9 @@ func (pc *Client) ReadCheck(id int) (*Check, error) {
 	return &m.Check, err
 }
 
-func (pc *Client) UpdateCheck(id int, name string, host string) (*PingdomResponse, error) {
-	params := map[string]string{
-		"name": name,
-		"host": host,
-	}
+func (pc *Client) UpdateCheck(id int, check HttpCheck) (*PingdomResponse, error) {
+	params := check.Params()
+	delete(params, "type")
 	req, err := pc.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), params)
 	if err != nil {
 		return nil, err
