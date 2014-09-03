@@ -171,8 +171,8 @@ func (pc *Client) ListChecks() ([]Check, error) {
 	return m.Checks, err
 }
 
-func (pc *Client) CreateCheck(check Check) (*Check, error) {
-	if err := Validate(&check); err != nil {
+func (pc *Client) CreateCheck(check *Check) (*Check, error) {
+	if err := Validate(check); err != nil {
 		return nil, err
 	}
 
@@ -224,8 +224,8 @@ func (pc *Client) ReadCheck(id int) (*Check, error) {
 	return &m.Check, err
 }
 
-func (pc *Client) UpdateCheck(id int, check Check) (*PingdomResponse, error) {
-	if err := Validate(&check); err != nil {
+func (pc *Client) UpdateCheck(id int, check *Check) (*PingdomResponse, error) {
+	if err := Validate(check); err != nil {
 		return nil, err
 	}
 

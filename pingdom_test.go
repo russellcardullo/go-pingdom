@@ -236,7 +236,7 @@ func TestCreateCheck(t *testing.T) {
 	})
 
 	newCheck := Check{Name: "My new HTTP check", Hostname: "example.com", Resolution: 5}
-	check, err := client.CreateCheck(newCheck)
+	check, err := client.CreateCheck(&newCheck)
 	if err != nil {
 		t.Errorf("CreateCheck returned error: %v", err)
 	}
@@ -320,7 +320,7 @@ func TestUpdateCheck(t *testing.T) {
 	})
 
 	updateCheck := Check{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
-	msg, err := client.UpdateCheck(12345, updateCheck)
+	msg, err := client.UpdateCheck(12345, &updateCheck)
 	if err != nil {
 		t.Errorf("UpdateCheck returned error: %v", err)
 	}

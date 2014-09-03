@@ -22,8 +22,8 @@ fmt.Println("Checks:", checks) // [{ID Name} ...]
 Create a new HTTP check:
 
 ```go
-newCheck := pingdom.Check{Name: "Test Check", "example.com"}
-check, err := client.CreateCheck(newCheck)
+newCheck := pingdom.Check{Name: "Test Check", Hostname: "example.com", Resolution: 5}
+check, err := client.CreateCheck(&newCheck)
 fmt.Println("Created check:", check) // {ID, Name}
 ```
 
@@ -36,8 +36,8 @@ check, err := client.GetCheck(12345)
 Update a check
 
 ```go
-updatedCheck := pingdom.Check{Name: "Updated Check", "example2.com"}
-msg, err := client.UpdateCheck(12345, updatedCheck)
+updatedCheck := pingdom.Check{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
+msg, err := client.UpdateCheck(12345, &updatedCheck)
 ```
 
 Delete a check
