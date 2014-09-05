@@ -74,7 +74,7 @@ func TestValidateResponse(t *testing.T) {
 		Body:       ioutil.NopCloser(strings.NewReader("OK")),
 	}
 
-	if err := ValidateResponse(valid); err != nil {
+	if err := validateResponse(valid); err != nil {
 		t.Errorf("ValidateResponse with valid response returned error %+v", err)
 	}
 
@@ -90,8 +90,8 @@ func TestValidateResponse(t *testing.T) {
 		}`)),
 	}
 
-	want := &PingdomError{400, "Bad Request", "This is an error"}
-	if err := ValidateResponse(invalid); !reflect.DeepEqual(err, want) {
+	want := &pingdomError{400, "Bad Request", "This is an error"}
+	if err := validateResponse(invalid); !reflect.DeepEqual(err, want) {
 		t.Errorf("ValidateResponse with invalid response returned %+v, want %+v", err, want)
 	}
 
