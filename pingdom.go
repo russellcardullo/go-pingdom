@@ -131,7 +131,7 @@ func (ck *Check) Params() map[string]string {
 }
 
 // Check for valid params in Check
-func Validate(ck *Check) error {
+func (ck *Check) Valid() error {
 	if ck.Name == "" {
 		return errors.New("Invalid value for `Name`.  Must contain non-empty string")
 	}
@@ -172,7 +172,7 @@ func (pc *Client) ListChecks() ([]Check, error) {
 }
 
 func (pc *Client) CreateCheck(check *Check) (*Check, error) {
-	if err := Validate(check); err != nil {
+	if err := check.Valid(); err != nil {
 		return nil, err
 	}
 
@@ -225,7 +225,7 @@ func (pc *Client) ReadCheck(id int) (*Check, error) {
 }
 
 func (pc *Client) UpdateCheck(id int, check *Check) (*PingdomResponse, error) {
-	if err := Validate(check); err != nil {
+	if err := check.Valid(); err != nil {
 		return nil, err
 	}
 

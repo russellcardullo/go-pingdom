@@ -121,15 +121,15 @@ func TestParams(t *testing.T) {
 	}
 }
 
-func TestValidate(t *testing.T) {
+func TestValid(t *testing.T) {
 	check := Check{Name: "fake check", Hostname: "example.com", Resolution: 15}
-	if err := Validate(&check); err != nil {
-		t.Errorf("Validate with valid check returned error %+v", err)
+	if err := check.Valid(); err != nil {
+		t.Errorf("Valid with valid check returned error %+v", err)
 	}
 
 	check = Check{Name: "fake check", Hostname: "example.com"}
-	if err := Validate(&check); err == nil {
-		t.Errorf("Validate with invalid check expected error, returned nil")
+	if err := check.Valid(); err == nil {
+		t.Errorf("Valid with invalid check expected error, returned nil")
 	}
 }
 
