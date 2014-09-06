@@ -4,6 +4,8 @@ pingdom-go is a Go client library for the Pingdom API.
 
 This currently only supports working with basic HTTP checks.
 
+**Build Status:** [![Build Status](https://travis-ci.org/russellcardullo/go-pingdom.svg?branch=master)](https://travis-ci.org/russellcardullo/go-pingdom)
+
 ## Usage ##
 
 ### Client ###
