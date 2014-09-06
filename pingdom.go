@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
 )
 
 const (
@@ -22,6 +21,7 @@ type Client struct {
 	APIKey   string
 	BaseURL  *url.URL
 	client   *http.Client
+	Checks   *CheckService
 }
 
 // PingdomResponse represents a general response from the Pingdom API
@@ -32,7 +32,7 @@ type PingdomResponse struct {
 // private types used to unmarshall json responses from pingdom
 
 type checkResponse struct {
-	Check Check `json:"check"`
+	Check *Check `json:"check"`
 }
 
 type listChecksResponse struct {
@@ -40,7 +40,7 @@ type listChecksResponse struct {
 }
 
 type pingdomErrorResponse struct {
-	Error pingdomError `json:"error"`
+	Error *pingdomError `json:"error"`
 }
 
 type pingdomError struct {
@@ -56,7 +56,9 @@ func (r *pingdomError) Error() string {
 // NewClient returns a Pingdom client with a default base URL and HTTP client
 func NewClient(user string, password string, key string) *Client {
 	baseURL, _ := url.Parse(defaultBaseURL)
-	c := &Client{user, password, key, baseURL, http.DefaultClient}
+	c := &Client{User: user, Password: password, APIKey: key, BaseURL: baseURL}
+	c.client = http.DefaultClient
+	c.Checks = &CheckService{client: c}
 	return c
 }
 
@@ -86,6 +88,30 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 	return req, err
 }
 
+// Do makes an HTTP request and will unmarshal the JSON response in to the
+// passed in interface.  If the HTTP response is outside of the 2xx range the
+// response will be returned along with the error.
+func (pc *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
+	resp, err := pc.client.Do(req)
+	defer resp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	if err := validateResponse(resp); err != nil {
+		return resp, err
+	}
+
+	if v != nil {
+		bodyBytes, _ := ioutil.ReadAll(resp.Body)
+		bodyString := string(bodyBytes)
+
+		err = json.Unmarshal([]byte(bodyString), &v)
+	}
+	return resp, err
+
+}
+
 // Takes an HTTP response and determines whether it was successful.
 // Returns nil if the HTTP status code is within the 2xx range.  Returns
 // an error otherwise.
@@ -102,146 +128,5 @@ func validateResponse(r *http.Response) error {
 		return err
 	}
 
-	return &m.Error
-}
-
-// Return a list of checks from Pingdom.
-func (pc *Client) ListChecks() ([]Check, error) {
-	req, err := pc.NewRequest("GET", "/api/2.0/checks", nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := pc.client.Do(req)
-	defer resp.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	if err := validateResponse(resp); err != nil {
-		return nil, err
-	}
-
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	bodyString := string(bodyBytes)
-	m := &listChecksResponse{}
-	err = json.Unmarshal([]byte(bodyString), &m)
-	return m.Checks, err
-}
-
-// Create a new check.  This function will validate the given check param
-// to ensure that it contains correct values before submitting the request
-// Returns a Check object representing the response from Pingdom.  Note
-// that Pingdom does not return a full check object so in the returned
-// object you should only use the ID field.
-func (pc *Client) CreateCheck(check *Check) (*Check, error) {
-	if err := check.Valid(); err != nil {
-		return nil, err
-	}
-
-	req, err := pc.NewRequest("POST", "/api/2.0/checks", check.Params())
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := pc.client.Do(req)
-	defer resp.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	if err := validateResponse(resp); err != nil {
-		return nil, err
-	}
-
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	bodyString := string(bodyBytes)
-
-	m := &checkResponse{}
-	err = json.Unmarshal([]byte(bodyString), &m)
-	return &m.Check, err
-
-}
-
-// ReadCheck returns detailed information about a pingdom check given its ID.
-func (pc *Client) ReadCheck(id int) (*Check, error) {
-	req, err := pc.NewRequest("GET", "/api/2.0/checks/"+strconv.Itoa(id), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := pc.client.Do(req)
-	defer resp.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	if err := validateResponse(resp); err != nil {
-		return nil, err
-	}
-
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	bodyString := string(bodyBytes)
-
-	m := &checkResponse{}
-	err = json.Unmarshal([]byte(bodyString), &m)
-	return &m.Check, err
-}
-
-// UpdateCheck will update the check represented by the given ID with the values
-// in the given check.  You should submit the complete list of values in
-// the given check parameter, not just those that have changed.
-func (pc *Client) UpdateCheck(id int, check *Check) (*PingdomResponse, error) {
-	if err := check.Valid(); err != nil {
-		return nil, err
-	}
-
-	params := check.Params()
-	delete(params, "type")
-	req, err := pc.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), params)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := pc.client.Do(req)
-	defer resp.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	if err := validateResponse(resp); err != nil {
-		return nil, err
-	}
-
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	bodyString := string(bodyBytes)
-
-	m := &PingdomResponse{}
-	err = json.Unmarshal([]byte(bodyString), &m)
-	return m, err
-}
-
-// DeleteCheck will delete the check for the given ID.
-func (pc *Client) DeleteCheck(id int) (*PingdomResponse, error) {
-	req, err := pc.NewRequest("DELETE", "/api/2.0/checks/"+strconv.Itoa(id), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := pc.client.Do(req)
-	defer resp.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	if err := validateResponse(resp); err != nil {
-		return nil, err
-	}
-
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
-	bodyString := string(bodyBytes)
-
-	m := &PingdomResponse{}
-	err = json.Unmarshal([]byte(bodyString), &m)
-	return m, err
+	return m.Error
 }

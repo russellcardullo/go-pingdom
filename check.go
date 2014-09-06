@@ -1,12 +1,19 @@
 package pingdom
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"strconv"
 )
 
-// Check represents a Pingdom Check
+// CheckService provides an interface to Pingdom checks
+type CheckService struct {
+	client *Client
+}
+
+// Check represents a Pingdom Check.
 type Check struct {
 	ID                       int    `json:"id"`
 	Name                     string `json:"name"`
@@ -27,6 +34,106 @@ type Check struct {
 	LastResponseTime         int64  `json:"lastresponsetime,omitempty"`
 	Paused                   bool   `json:"paused,omitempty"`
 	ContactIds               []int  `json:"contactids,omitempty"`
+}
+
+// Return a list of checks from Pingdom.
+func (cs *CheckService) List() ([]Check, error) {
+	req, err := cs.client.NewRequest("GET", "/api/2.0/checks", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := cs.client.client.Do(req)
+	defer resp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	if err := validateResponse(resp); err != nil {
+		return nil, err
+	}
+
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	bodyString := string(bodyBytes)
+	m := &listChecksResponse{}
+	err = json.Unmarshal([]byte(bodyString), &m)
+	return m.Checks, err
+}
+
+// Create a new check.  This function will validate the given check param
+// to ensure that it contains correct values before submitting the request
+// Returns a Check object representing the response from Pingdom.  Note
+// that Pingdom does not return a full check object so in the returned
+// object you should only use the ID field.
+func (cs *CheckService) Create(check *Check) (*Check, error) {
+	if err := check.Valid(); err != nil {
+		return nil, err
+	}
+
+	req, err := cs.client.NewRequest("POST", "/api/2.0/checks", check.Params())
+	if err != nil {
+		return nil, err
+	}
+
+	m := &checkResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m.Check, err
+}
+
+// ReadCheck returns detailed information about a pingdom check given its ID.
+func (cs *CheckService) Read(id int) (*Check, error) {
+	req, err := cs.client.NewRequest("GET", "/api/2.0/checks/"+strconv.Itoa(id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	m := &checkResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m.Check, err
+}
+
+// UpdateCheck will update the check represented by the given ID with the values
+// in the given check.  You should submit the complete list of values in
+// the given check parameter, not just those that have changed.
+func (cs *CheckService) Update(id int, check *Check) (*PingdomResponse, error) {
+	if err := check.Valid(); err != nil {
+		return nil, err
+	}
+
+	params := check.Params()
+	delete(params, "type")
+	req, err := cs.client.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), params)
+	if err != nil {
+		return nil, err
+	}
+
+	m := &PingdomResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m, err
+}
+
+// DeleteCheck will delete the check for the given ID.
+func (cs *CheckService) Delete(id int) (*PingdomResponse, error) {
+	req, err := cs.client.NewRequest("DELETE", "/api/2.0/checks/"+strconv.Itoa(id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	m := &PingdomResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m, err
 }
 
 // Params returns a map of parameters for a Check that can be sent along

@@ -10,22 +10,24 @@ func main() {
 	client := pingdom.NewClient("username", "password", "api_key")
 
 	// List all checks
-	checks, _ := client.ListChecks()
+	checks, _ := client.Checks.List()
 	fmt.Println("All checks:", checks)
 
 	// Create a new check
-	check, _ := client.CreateCheck(&pingdom.Check{Name: "Test Check", Hostname: "example.com", Resolution: 5})
-	fmt.Println("Created check:", check)
+	newCheck := pingdom.Check{Name: "Test Check", Hostname: "example.com", Resolution: 5}
+	check, _ := client.Checks.Create(&newCheck)
+	fmt.Println("Created check:", check) // {ID, Name}
 
 	// Get details for a check
-	details, _ := client.ReadCheck(check.ID)
+	details, _ := client.Checks.Read(check.ID)
 	fmt.Println("Details:", details)
 
 	// Update a check
-	upMsg, _ := client.UpdateCheck(check.ID, &pingdom.Check{Name: "Modified Check", Hostname: "example2.com", Resolution: 5})
+	updatedCheck := pingdom.Check{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
+	upMsg, _ := client.Checks.Update(check.ID, &updatedCheck)
 	fmt.Println("Modified check, message:", upMsg)
 
 	// Delete a check
-	delMsg, _ := client.DeleteCheck(check.ID)
+	delMsg, _ := client.Checks.Delete(check.ID)
 	fmt.Println("Deleted check, message:", delMsg)
 }
