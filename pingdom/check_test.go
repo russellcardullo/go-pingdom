@@ -57,8 +57,8 @@ func TestCheckServiceList(t *testing.T) {
 		t.Errorf("ListChecks returned error: %v", err)
 	}
 
-	want := []Check{
-		Check{
+	want := []CheckResponse{
+		CheckResponse{
 			ID:               85975,
 			Name:             "My check 1",
 			LastErrorTime:    1297446423,
@@ -68,7 +68,7 @@ func TestCheckServiceList(t *testing.T) {
 			Resolution:       1,
 			Status:           "up",
 		},
-		Check{
+		CheckResponse{
 			ID:               161748,
 			Name:             "My check 2",
 			LastErrorTime:    1299194968,
@@ -78,7 +78,7 @@ func TestCheckServiceList(t *testing.T) {
 			Resolution:       5,
 			Status:           "up",
 		},
-		Check{
+		CheckResponse{
 			ID:               208655,
 			Name:             "My check 3",
 			LastErrorTime:    1300527997,
@@ -115,7 +115,7 @@ func TestCheckServiceCreate(t *testing.T) {
 		t.Errorf("CreateCheck returned error: %v", err)
 	}
 
-	want := &Check{ID: 138631, Name: "My new HTTP check"}
+	want := &CheckResponse{ID: 138631, Name: "My new HTTP check"}
 	if !reflect.DeepEqual(check, want) {
 		t.Errorf("CreateCheck returned %+v, want %+v", check, want)
 	}
@@ -162,7 +162,7 @@ func TestCheckServiceRead(t *testing.T) {
 		t.Errorf("ReadCheck returned error: %v", err)
 	}
 
-	want := &Check{
+	want := &CheckResponse{
 		ID:                       85975,
 		Name:                     "My check 7",
 		Resolution:               1,

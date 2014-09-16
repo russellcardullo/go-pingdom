@@ -37,7 +37,7 @@ type Check struct {
 }
 
 // Return a list of checks from Pingdom.
-func (cs *CheckService) List() ([]Check, error) {
+func (cs *CheckService) List() ([]CheckResponse, error) {
 	req, err := cs.client.NewRequest("GET", "/api/2.0/checks", nil)
 	if err != nil {
 		return nil, err
@@ -57,6 +57,7 @@ func (cs *CheckService) List() ([]Check, error) {
 	bodyString := string(bodyBytes)
 	m := &listChecksJsonResponse{}
 	err = json.Unmarshal([]byte(bodyString), &m)
+
 	return m.Checks, err
 }
 
@@ -65,7 +66,7 @@ func (cs *CheckService) List() ([]Check, error) {
 // Returns a Check object representing the response from Pingdom.  Note
 // that Pingdom does not return a full check object so in the returned
 // object you should only use the ID field.
-func (cs *CheckService) Create(check *Check) (*Check, error) {
+func (cs *CheckService) Create(check *Check) (*CheckResponse, error) {
 	if err := check.Valid(); err != nil {
 		return nil, err
 	}
@@ -75,7 +76,7 @@ func (cs *CheckService) Create(check *Check) (*Check, error) {
 		return nil, err
 	}
 
-	m := &checkJsonResponse{}
+	m := &checkDetailsJsonResponse{}
 	_, err = cs.client.Do(req, m)
 	if err != nil {
 		return nil, err
@@ -84,17 +85,18 @@ func (cs *CheckService) Create(check *Check) (*Check, error) {
 }
 
 // ReadCheck returns detailed information about a pingdom check given its ID.
-func (cs *CheckService) Read(id int) (*Check, error) {
+func (cs *CheckService) Read(id int) (*CheckResponse, error) {
 	req, err := cs.client.NewRequest("GET", "/api/2.0/checks/"+strconv.Itoa(id), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	m := &checkJsonResponse{}
+	m := &checkDetailsJsonResponse{}
 	_, err = cs.client.Do(req, m)
 	if err != nil {
 		return nil, err
 	}
+
 	return m.Check, err
 }
 

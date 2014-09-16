@@ -2,6 +2,7 @@ package pingdom
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -72,14 +73,20 @@ func (pc *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 		return resp, err
 	}
 
-	if v != nil {
-		bodyBytes, _ := ioutil.ReadAll(resp.Body)
-		bodyString := string(bodyBytes)
-
-		err = json.Unmarshal([]byte(bodyString), &v)
-	}
+	err = decodeResponse(resp, v)
 	return resp, err
 
+}
+
+func decodeResponse(r *http.Response, v interface{}) error {
+	if v == nil {
+		return errors.New("nil interface provided to decodeResponse")
+	}
+
+	bodyBytes, _ := ioutil.ReadAll(r.Body)
+	bodyString := string(bodyBytes)
+	err := json.Unmarshal([]byte(bodyString), &v)
+	return err
 }
 
 // Takes an HTTP response and determines whether it was successful.
