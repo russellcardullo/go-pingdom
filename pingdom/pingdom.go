@@ -2,7 +2,6 @@ package pingdom
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -22,35 +21,6 @@ type Client struct {
 	BaseURL  *url.URL
 	client   *http.Client
 	Checks   *CheckService
-}
-
-// PingdomResponse represents a general response from the Pingdom API
-type PingdomResponse struct {
-	Message string `json:"message"`
-}
-
-// private types used to unmarshall json responses from pingdom
-
-type checkResponse struct {
-	Check *Check `json:"check"`
-}
-
-type listChecksResponse struct {
-	Checks []Check `json:"checks"`
-}
-
-type pingdomErrorResponse struct {
-	Error *pingdomError `json:"error"`
-}
-
-type pingdomError struct {
-	StatusCode int    `json:"statuscode"`
-	StatusDesc string `json:"statusdesc"`
-	Message    string `json:"errormessage"`
-}
-
-func (r *pingdomError) Error() string {
-	return fmt.Sprintf("%d %v: %v", r.StatusCode, r.StatusDesc, r.Message)
 }
 
 // NewClient returns a Pingdom client with a default base URL and HTTP client
