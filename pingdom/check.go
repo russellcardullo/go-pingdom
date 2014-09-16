@@ -55,7 +55,7 @@ func (cs *CheckService) List() ([]Check, error) {
 
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	bodyString := string(bodyBytes)
-	m := &listChecksResponse{}
+	m := &listChecksJsonResponse{}
 	err = json.Unmarshal([]byte(bodyString), &m)
 	return m.Checks, err
 }
@@ -75,7 +75,7 @@ func (cs *CheckService) Create(check *Check) (*Check, error) {
 		return nil, err
 	}
 
-	m := &checkResponse{}
+	m := &checkJsonResponse{}
 	_, err = cs.client.Do(req, m)
 	if err != nil {
 		return nil, err
@@ -90,7 +90,7 @@ func (cs *CheckService) Read(id int) (*Check, error) {
 		return nil, err
 	}
 
-	m := &checkResponse{}
+	m := &checkJsonResponse{}
 	_, err = cs.client.Do(req, m)
 	if err != nil {
 		return nil, err

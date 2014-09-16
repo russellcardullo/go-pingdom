@@ -119,7 +119,7 @@ func TestValidateResponse(t *testing.T) {
 		}`)),
 	}
 
-	want := &pingdomError{400, "Bad Request", "This is an error"}
+	want := &PingdomError{400, "Bad Request", "This is an error"}
 	if err := validateResponse(invalid); !reflect.DeepEqual(err, want) {
 		t.Errorf("ValidateResponse with invalid response returned %+v, want %+v", err, want)
 	}

@@ -92,7 +92,7 @@ func validateResponse(r *http.Response) error {
 
 	bodyBytes, _ := ioutil.ReadAll(r.Body)
 	bodyString := string(bodyBytes)
-	m := &pingdomErrorResponse{}
+	m := &errorJsonResponse{}
 	err := json.Unmarshal([]byte(bodyString), &m)
 	if err != nil {
 		return err
