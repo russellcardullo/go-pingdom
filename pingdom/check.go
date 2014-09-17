@@ -13,12 +13,14 @@ type CheckService struct {
 	client *Client
 }
 
+// Check is an interface representing a pingdom check.
+// Specific check types should implement the methods of this interface
 type Check interface {
 	Params() map[string]string
 	Valid() error
 }
 
-// Check represents a Pingdom http check.
+// HttpCheck represents a Pingdom http check.
 type HttpCheck struct {
 	Name                     string `json:"name"`
 	Hostname                 string `json:"hostname,omitempty"`
@@ -34,7 +36,25 @@ type HttpCheck struct {
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
 }
 
+// PingCheck represents a Pingdom ping check
+type PingCheck struct {
+	Name                     string `json:"name"`
+	Hostname                 string `json:"hostname,omitempty"`
+	Resolution               int    `json:"resolution,omitempty"`
+	Paused                   bool   `json:"paused,omitempty"`
+	SendToAndroid            bool   `json:"sendtoandroid,omitempty"`
+	SendToEmail              bool   `json:"sendtoemail,omitempty"`
+	SendToIPhone             bool   `json:"sendtoiphone,omitempty"`
+	SendToSms                bool   `json:"sendtosms,omitempty"`
+	SendToTwitter            bool   `json:"sendtotwitter,omitempty"`
+	SendNotificationWhenDown int    `json:"sendnotificationwhendown,omitempty"`
+	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
+	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
+}
+
 // Return a list of checks from Pingdom.
+// This returns type CheckResponse rather than Check since the
+// pingdom API does not return a complete representation of a check.
 func (cs *CheckService) List() ([]CheckResponse, error) {
 	req, err := cs.client.NewRequest("GET", "/api/2.0/checks", nil)
 	if err != nil {
@@ -61,8 +81,8 @@ func (cs *CheckService) List() ([]CheckResponse, error) {
 
 // Create a new check.  This function will validate the given check param
 // to ensure that it contains correct values before submitting the request
-// Returns a Check object representing the response from Pingdom.  Note
-// that Pingdom does not return a full check object so in the returned
+// Returns a CheckResponse object representing the response from Pingdom.
+// Note that Pingdom does not return a full check object so in the returned
 // object you should only use the ID field.
 func (cs *CheckService) Create(check Check) (*CheckResponse, error) {
 	if err := check.Valid(); err != nil {
@@ -83,6 +103,8 @@ func (cs *CheckService) Create(check Check) (*CheckResponse, error) {
 }
 
 // ReadCheck returns detailed information about a pingdom check given its ID.
+// This returns type CheckResponse rather than Check since the
+// pingdom API does not return a complete representation of a check.
 func (cs *CheckService) Read(id int) (*CheckResponse, error) {
 	req, err := cs.client.NewRequest("GET", "/api/2.0/checks/"+strconv.Itoa(id), nil)
 	if err != nil {
@@ -136,7 +158,7 @@ func (cs *CheckService) Delete(id int) (*PingdomResponse, error) {
 	return m, err
 }
 
-// Params returns a map of parameters for a Check that can be sent along
+// Params returns a map of parameters for an HttpCheck that can be sent along
 // with an HTTP POST or PUT request
 func (ck *HttpCheck) Params() map[string]string {
 	return map[string]string{
@@ -156,9 +178,48 @@ func (ck *HttpCheck) Params() map[string]string {
 	}
 }
 
-// Determine whether the Check contains valid fields.  This can be
+// Determine whether the HttpCheck contains valid fields.  This can be
 // used to guard against sending illegal values to the Pingdom API
 func (ck *HttpCheck) Valid() error {
+	if ck.Name == "" {
+		return errors.New("Invalid value for `Name`.  Must contain non-empty string")
+	}
+
+	if ck.Hostname == "" {
+		return errors.New("Invalid value for `Hostname`.  Must contain non-empty string")
+	}
+
+	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
+		ck.Resolution != 30 && ck.Resolution != 60 {
+		err := fmt.Sprintf("Invalid value %v for `Resolution`.  Allowed values are [1,5,15,30,60].", ck.Resolution)
+		return errors.New(err)
+	}
+	return nil
+}
+
+// Params returns a map of parameters for a PingCheck that can be sent along
+// with an HTTP POST or PUT request
+func (ck *PingCheck) Params() map[string]string {
+	return map[string]string{
+		"name":                     ck.Name,
+		"host":                     ck.Hostname,
+		"resolution":               strconv.Itoa(ck.Resolution),
+		"paused":                   strconv.FormatBool(ck.Paused),
+		"sendtoemail":              strconv.FormatBool(ck.SendToEmail),
+		"sendtosms":                strconv.FormatBool(ck.SendToSms),
+		"sendtotwitter":            strconv.FormatBool(ck.SendToTwitter),
+		"sendtoiphone":             strconv.FormatBool(ck.SendToIPhone),
+		"sendtoandroid":            strconv.FormatBool(ck.SendToAndroid),
+		"sendnotificationwhendown": strconv.Itoa(ck.SendNotificationWhenDown),
+		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
+		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
+		"type":                     "ping",
+	}
+}
+
+// Determine whether the PingCheck contains valid fields.  This can be
+// used to guard against sending illegal values to the Pingdom API
+func (ck *PingCheck) Valid() error {
 	if ck.Name == "" {
 		return errors.New("Invalid value for `Name`.  Must contain non-empty string")
 	}

@@ -2,7 +2,7 @@
 
 pingdom-go is a Go client library for the Pingdom API.
 
-This currently only supports working with basic HTTP checks.
+This currently only supports working with basic HTTP and ping checks.
 
 **Build Status:** [![Build Status](https://travis-ci.org/russellcardullo/go-pingdom.svg?branch=master)](https://travis-ci.org/russellcardullo/go-pingdom)
 
@@ -43,10 +43,17 @@ check, err := client.Checks.Create(&newCheck)
 fmt.Println("Created check:", check) // {ID, Name}
 ```
 
+Create a new Ping check:
+```go
+newCheck := pingdom.PingCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5}
+check, err := client.Checks.Create(&newCheck)
+fmt.Println("Created check:", check) // {ID, Name}
+```
+
 Get details for a specific check:
 
 ```go
-check, err := client.Checks.Read(12345)
+checkDetails, err := client.Checks.Read(12345)
 ```
 
 Update a check:

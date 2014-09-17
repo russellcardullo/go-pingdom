@@ -13,10 +13,15 @@ func main() {
 	checks, _ := client.Checks.List()
 	fmt.Println("All checks:", checks)
 
-	// Create a new check
+	// Create a new http check
 	newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5}
 	check, _ := client.Checks.Create(&newCheck)
 	fmt.Println("Created check:", check) // {ID, Name}
+
+	// Create a new ping check
+	newPingCheck := pingdom.PingCheck{Name: "Test Ping", Hostname: "example.com", Resolution: 1}
+	pingcheck, _ := client.Checks.Create(&newPingCheck)
+	fmt.Println("Created check:", pingcheck) // {ID, Name}
 
 	// Get details for a check
 	details, _ := client.Checks.Read(check.ID)
@@ -30,4 +35,5 @@ func main() {
 	// Delete a check
 	delMsg, _ := client.Checks.Delete(check.ID)
 	fmt.Println("Deleted check, message:", delMsg)
+
 }
