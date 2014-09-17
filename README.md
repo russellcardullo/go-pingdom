@@ -38,7 +38,7 @@ fmt.Println("Checks:", checks) // [{ID Name} ...]
 Create a new HTTP check:
 
 ```go
-newCheck := pingdom.Check{Name: "Test Check", Hostname: "example.com", Resolution: 5}
+newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5}
 check, err := client.Checks.Create(&newCheck)
 fmt.Println("Created check:", check) // {ID, Name}
 ```
@@ -52,7 +52,7 @@ check, err := client.Checks.Read(12345)
 Update a check:
 
 ```go
-updatedCheck := pingdom.Check{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
+updatedCheck := pingdom.HttpCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
 msg, err := client.Checks.Update(12345, &updatedCheck)
 ```
 

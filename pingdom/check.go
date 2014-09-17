@@ -13,11 +13,17 @@ type CheckService struct {
 	client *Client
 }
 
-// Check represents a Pingdom Check.
-type Check struct {
-	ID                       int    `json:"id"`
+type Check interface {
+	Params() map[string]string
+	Valid() error
+}
+
+// Check represents a Pingdom http check.
+type HttpCheck struct {
 	Name                     string `json:"name"`
+	Hostname                 string `json:"hostname,omitempty"`
 	Resolution               int    `json:"resolution,omitempty"`
+	Paused                   bool   `json:"paused,omitempty"`
 	SendToAndroid            bool   `json:"sendtoandroid,omitempty"`
 	SendToEmail              bool   `json:"sendtoemail,omitempty"`
 	SendToIPhone             bool   `json:"sendtoiphone,omitempty"`
@@ -26,14 +32,6 @@ type Check struct {
 	SendNotificationWhenDown int    `json:"sendnotificationwhendown,omitempty"`
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
-	Created                  int64  `json:"created,omitempty"`
-	Hostname                 string `json:"hostname,omitempty"`
-	Status                   string `json:"status,omitempty"`
-	LastErrorTime            int64  `json:"lasterrortime,omitempty"`
-	LastTestTime             int64  `json:"lasttesttime,omitempty"`
-	LastResponseTime         int64  `json:"lastresponsetime,omitempty"`
-	Paused                   bool   `json:"paused,omitempty"`
-	ContactIds               []int  `json:"contactids,omitempty"`
 }
 
 // Return a list of checks from Pingdom.
@@ -66,7 +64,7 @@ func (cs *CheckService) List() ([]CheckResponse, error) {
 // Returns a Check object representing the response from Pingdom.  Note
 // that Pingdom does not return a full check object so in the returned
 // object you should only use the ID field.
-func (cs *CheckService) Create(check *Check) (*CheckResponse, error) {
+func (cs *CheckService) Create(check Check) (*CheckResponse, error) {
 	if err := check.Valid(); err != nil {
 		return nil, err
 	}
@@ -103,7 +101,7 @@ func (cs *CheckService) Read(id int) (*CheckResponse, error) {
 // UpdateCheck will update the check represented by the given ID with the values
 // in the given check.  You should submit the complete list of values in
 // the given check parameter, not just those that have changed.
-func (cs *CheckService) Update(id int, check *Check) (*PingdomResponse, error) {
+func (cs *CheckService) Update(id int, check Check) (*PingdomResponse, error) {
 	if err := check.Valid(); err != nil {
 		return nil, err
 	}
@@ -140,12 +138,12 @@ func (cs *CheckService) Delete(id int) (*PingdomResponse, error) {
 
 // Params returns a map of parameters for a Check that can be sent along
 // with an HTTP POST or PUT request
-func (ck *Check) Params() map[string]string {
+func (ck *HttpCheck) Params() map[string]string {
 	return map[string]string{
 		"name":                     ck.Name,
 		"host":                     ck.Hostname,
-		"paused":                   strconv.FormatBool(ck.Paused),
 		"resolution":               strconv.Itoa(ck.Resolution),
+		"paused":                   strconv.FormatBool(ck.Paused),
 		"sendtoemail":              strconv.FormatBool(ck.SendToEmail),
 		"sendtosms":                strconv.FormatBool(ck.SendToSms),
 		"sendtotwitter":            strconv.FormatBool(ck.SendToTwitter),
@@ -160,7 +158,7 @@ func (ck *Check) Params() map[string]string {
 
 // Determine whether the Check contains valid fields.  This can be
 // used to guard against sending illegal values to the Pingdom API
-func (ck *Check) Valid() error {
+func (ck *HttpCheck) Valid() error {
 	if ck.Name == "" {
 		return errors.New("Invalid value for `Name`.  Must contain non-empty string")
 	}

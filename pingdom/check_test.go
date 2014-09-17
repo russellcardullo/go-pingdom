@@ -109,7 +109,7 @@ func TestCheckServiceCreate(t *testing.T) {
 		}`)
 	})
 
-	newCheck := Check{Name: "My new HTTP check", Hostname: "example.com", Resolution: 5}
+	newCheck := HttpCheck{Name: "My new HTTP check", Hostname: "example.com", Resolution: 5}
 	check, err := client.Checks.Create(&newCheck)
 	if err != nil {
 		t.Errorf("CreateCheck returned error: %v", err)
@@ -193,7 +193,7 @@ func TestCheckServiceUpdate(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
 
-	updateCheck := Check{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
+	updateCheck := HttpCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
 	msg, err := client.Checks.Update(12345, &updateCheck)
 	if err != nil {
 		t.Errorf("UpdateCheck returned error: %v", err)
@@ -225,8 +225,8 @@ func TestCheckServiceDelete(t *testing.T) {
 	}
 }
 
-func TestParams(t *testing.T) {
-	check := Check{Name: "fake check", Hostname: "example.com"}
+func TestHttpCheckParams(t *testing.T) {
+	check := HttpCheck{Name: "fake check", Hostname: "example.com"}
 	params := check.Params()
 	want := map[string]string{
 		"name":                     "fake check",
@@ -249,13 +249,13 @@ func TestParams(t *testing.T) {
 	}
 }
 
-func TestValid(t *testing.T) {
-	check := Check{Name: "fake check", Hostname: "example.com", Resolution: 15}
+func TestHttpCheckValid(t *testing.T) {
+	check := HttpCheck{Name: "fake check", Hostname: "example.com", Resolution: 15}
 	if err := check.Valid(); err != nil {
 		t.Errorf("Valid with valid check returned error %+v", err)
 	}
 
-	check = Check{Name: "fake check", Hostname: "example.com"}
+	check = HttpCheck{Name: "fake check", Hostname: "example.com"}
 	if err := check.Valid(); err == nil {
 		t.Errorf("Valid with invalid check expected error, returned nil")
 	}

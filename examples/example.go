@@ -14,7 +14,7 @@ func main() {
 	fmt.Println("All checks:", checks)
 
 	// Create a new check
-	newCheck := pingdom.Check{Name: "Test Check", Hostname: "example.com", Resolution: 5}
+	newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5}
 	check, _ := client.Checks.Create(&newCheck)
 	fmt.Println("Created check:", check) // {ID, Name}
 
@@ -23,7 +23,7 @@ func main() {
 	fmt.Println("Details:", details)
 
 	// Update a check
-	updatedCheck := pingdom.Check{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
+	updatedCheck := pingdom.HttpCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
 	upMsg, _ := client.Checks.Update(check.ID, &updatedCheck)
 	fmt.Println("Modified check, message:", upMsg)
 
