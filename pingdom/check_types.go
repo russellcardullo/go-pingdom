@@ -20,6 +20,7 @@ type HttpCheck struct {
 	SendNotificationWhenDown int    `json:"sendnotificationwhendown,omitempty"`
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
+	UseLegacyNotifications   bool   `json:"use_legacy_notifications,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check
@@ -36,6 +37,7 @@ type PingCheck struct {
 	SendNotificationWhenDown int    `json:"sendnotificationwhendown,omitempty"`
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
+	UseLegacyNotifications   bool   `json:"use_legacy_notifications,omitempty"`
 }
 
 // Params returns a map of parameters for an HttpCheck that can be sent along
@@ -54,7 +56,8 @@ func (ck *HttpCheck) Params() map[string]string {
 		"sendnotificationwhendown": strconv.Itoa(ck.SendNotificationWhenDown),
 		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
-		"type":                     "http",
+		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
+		"type": "http",
 	}
 }
 
@@ -93,7 +96,8 @@ func (ck *PingCheck) Params() map[string]string {
 		"sendnotificationwhendown": strconv.Itoa(ck.SendNotificationWhenDown),
 		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
-		"type":                     "ping",
+		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
+		"type": "ping",
 	}
 }
 
