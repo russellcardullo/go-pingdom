@@ -21,7 +21,8 @@ func TestHttpCheckParams(t *testing.T) {
 		"sendnotificationwhendown": "0",
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
-		"type":                     "http",
+		"use_legacy_notifications": "false",
+		"type": "http",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -57,7 +58,8 @@ func TestPingCheckParams(t *testing.T) {
 		"sendnotificationwhendown": "0",
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
-		"type":                     "ping",
+		"use_legacy_notifications": "false",
+		"type": "ping",
 	}
 
 	if !reflect.DeepEqual(params, want) {
