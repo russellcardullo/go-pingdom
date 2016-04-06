@@ -53,6 +53,13 @@ func TestNewClient(t *testing.T) {
 	}
 }
 
+func TestNewMultiUserClient(t *testing.T) {
+	c := NewMultiUserClient("user", "password", "key", "account_email")
+	if c.AccountEmail == "" {
+		t.Errorf("NewMultiUserClient failed to set AccountEmail property")
+	}
+}
+
 func TestNewRequest(t *testing.T) {
 	setup()
 	defer teardown()
