@@ -11,11 +11,22 @@ This currently only supports working with basic HTTP and ping checks.
 ## Usage ##
 
 ### Client ###
-Construct a new Pingdom client:
+
+Pingdom handles single-user and multi-user accounts differently.
+
+Construct a new single-user Pingdom client:
 
 ```go
 client := pingdom.NewClient("pingdom_username", "pingdom_password", "pingdom_api_key")
 ```
+
+Construct a multi-user Pingdom client:
+
+```go
+client := pingdom.NewMultiUserClient("pingdom_username", "pingdom_password", "pingdom_api_key", "pingdom_account_email")
+```
+
+The `pingdom_account_email` variable is the email address of the owner of the multi-user account. This is passed in the `Account-Email` header to the Pingdom API.
 
 Using a Pingdom client, you can access supported services.
 

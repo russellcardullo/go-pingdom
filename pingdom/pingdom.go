@@ -16,12 +16,13 @@ const (
 // provides a NewClient function for convenience to initialize a client
 // with default parameters.
 type Client struct {
-	User     string
-	Password string
-	APIKey   string
-	BaseURL  *url.URL
-	client   *http.Client
-	Checks   *CheckService
+	User         string
+	Password     string
+	APIKey       string
+	AccountEmail string
+	BaseURL      *url.URL
+	client       *http.Client
+	Checks       *CheckService
 }
 
 // NewClient returns a Pingdom client with a default base URL and HTTP client
@@ -30,6 +31,13 @@ func NewClient(user string, password string, key string) *Client {
 	c := &Client{User: user, Password: password, APIKey: key, BaseURL: baseURL}
 	c.client = http.DefaultClient
 	c.Checks = &CheckService{client: c}
+	return c
+}
+
+// NewMultiUserClient extends NewClient to allow Multi-User authentication
+func NewMultiUserClient(user string, password string, key string, accountEmail string) *Client {
+	c := NewClient(user, password, key)
+	c.AccountEmail = accountEmail
 	return c
 }
 
@@ -56,6 +64,9 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 	req, err := http.NewRequest(method, baseUrl.String(), nil)
 	req.SetBasicAuth(pc.User, pc.Password)
 	req.Header.Add("App-Key", pc.APIKey)
+	if pc.AccountEmail != "" {
+		req.Header.Add("Account-Email", pc.AccountEmail)
+	}
 	return req, err
 }
 
