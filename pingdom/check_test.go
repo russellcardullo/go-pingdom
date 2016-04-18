@@ -67,6 +67,9 @@ func TestCheckServiceList(t *testing.T) {
 			Hostname:         "example.com",
 			Resolution:       1,
 			Status:           "up",
+			Type: CheckResponseType{
+				Name: "http",
+			},
 		},
 		CheckResponse{
 			ID:               161748,
@@ -77,6 +80,9 @@ func TestCheckServiceList(t *testing.T) {
 			Hostname:         "mydomain.com",
 			Resolution:       5,
 			Status:           "up",
+			Type: CheckResponseType{
+				Name: "ping",
+			},
 		},
 		CheckResponse{
 			ID:               208655,
@@ -87,6 +93,9 @@ func TestCheckServiceList(t *testing.T) {
 			Hostname:         "example.net",
 			Resolution:       1,
 			Status:           "down",
+			Type: CheckResponseType{
+				Name: "http",
+			},
 		},
 	}
 
@@ -177,7 +186,24 @@ func TestCheckServiceRead(t *testing.T) {
 		Status:                   "up",
 		LastErrorTime:            1293143467,
 		LastTestTime:             1294064823,
+		Type: CheckResponseType{
+			Name: "http",
+			HTTP: &CheckResponseHTTPDetails{
+				Url:              "/",
+				Encryption:       false,
+				Port:             80,
+				Username:         "",
+				Password:         "",
+				ShouldContain:    "",
+				ShouldNotContain: "",
+				PostData:         "",
+				RequestHeaders: map[string]string{
+					"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+				},
+			},
+		},
 	}
+
 	if !reflect.DeepEqual(check, want) {
 		t.Errorf("ReadCheck returned %+v, want %+v", check, want)
 	}
