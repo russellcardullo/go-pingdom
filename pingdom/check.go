@@ -14,7 +14,8 @@ type CheckService struct {
 // Check is an interface representing a pingdom check.
 // Specific check types should implement the methods of this interface
 type Check interface {
-	Params() map[string]string
+	PutParams() map[string]string
+	PostParams() map[string]string
 	Valid() error
 }
 
@@ -55,7 +56,7 @@ func (cs *CheckService) Create(check Check) (*CheckResponse, error) {
 		return nil, err
 	}
 
-	req, err := cs.client.NewRequest("POST", "/api/2.0/checks", check.Params())
+	req, err := cs.client.NewRequest("POST", "/api/2.0/checks", check.PostParams())
 	if err != nil {
 		return nil, err
 	}
@@ -94,9 +95,7 @@ func (cs *CheckService) Update(id int, check Check) (*PingdomResponse, error) {
 		return nil, err
 	}
 
-	params := check.Params()
-	delete(params, "type")
-	req, err := cs.client.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), params)
+	req, err := cs.client.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), check.PutParams())
 	if err != nil {
 		return nil, err
 	}
