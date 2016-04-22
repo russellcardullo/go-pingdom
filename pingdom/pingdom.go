@@ -2,7 +2,7 @@ package pingdom
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -91,7 +91,7 @@ func (pc *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 
 func decodeResponse(r *http.Response, v interface{}) error {
 	if v == nil {
-		return errors.New("nil interface provided to decodeResponse")
+		return fmt.Errorf("nil interface provided to decodeResponse")
 	}
 
 	bodyBytes, _ := ioutil.ReadAll(r.Body)

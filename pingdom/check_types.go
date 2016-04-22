@@ -1,7 +1,6 @@
 package pingdom
 
 import (
-	"errors"
 	"fmt"
 	"sort"
 	"strconv"
@@ -123,11 +122,11 @@ func (ck *HttpCheck) PostParams() map[string]string {
 // used to guard against sending illegal values to the Pingdom API
 func (ck *HttpCheck) Valid() error {
 	if ck.Name == "" {
-		return errors.New("Invalid value for `Name`.  Must contain non-empty string")
+		return fmt.Errorf("Invalid value for `Name`.  Must contain non-empty string")
 	}
 
 	if ck.Hostname == "" {
-		return errors.New("Invalid value for `Hostname`.  Must contain non-empty string")
+		return fmt.Errorf("Invalid value for `Hostname`.  Must contain non-empty string")
 	}
 
 	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
@@ -174,17 +173,16 @@ func (ck *PingCheck) PostParams() map[string]string {
 // used to guard against sending illegal values to the Pingdom API
 func (ck *PingCheck) Valid() error {
 	if ck.Name == "" {
-		return errors.New("Invalid value for `Name`.  Must contain non-empty string")
+		return fmt.Errorf("Invalid value for `Name`.  Must contain non-empty string")
 	}
 
 	if ck.Hostname == "" {
-		return errors.New("Invalid value for `Hostname`.  Must contain non-empty string")
+		return fmt.Errorf("Invalid value for `Hostname`.  Must contain non-empty string")
 	}
 
 	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
 		ck.Resolution != 30 && ck.Resolution != 60 {
-		err := fmt.Sprintf("Invalid value %v for `Resolution`.  Allowed values are [1,5,15,30,60].", ck.Resolution)
-		return errors.New(err)
+		return fmt.Errorf("Invalid value %v for `Resolution`.  Allowed values are [1,5,15,30,60].", ck.Resolution)
 	}
 	return nil
 }
