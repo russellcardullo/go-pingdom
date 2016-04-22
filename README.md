@@ -2,7 +2,8 @@
 
 pingdom-go is a Go client library for the Pingdom API.
 
-This currently only supports working with basic HTTP and ping checks.
+This currently only supports working with basic HTTP (with specific details)
+and ping checks.
 
 **Build Status:** [![Build Status](https://travis-ci.org/russellcardullo/go-pingdom.svg?branch=master)](https://travis-ci.org/russellcardullo/go-pingdom)
 
@@ -66,6 +67,9 @@ Get details for a specific check:
 ```go
 checkDetails, err := client.Checks.Read(12345)
 ```
+
+For checks with detailed information, check the specific details in
+the field `Type` (e.g. `checkDetails.Type.HTTP`).
 
 Update a check:
 

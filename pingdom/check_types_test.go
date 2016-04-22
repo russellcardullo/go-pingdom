@@ -5,9 +5,19 @@ import (
 	"testing"
 )
 
-func TestHttpCheckParams(t *testing.T) {
-	check := HttpCheck{Name: "fake check", Hostname: "example.com"}
-	params := check.Params()
+func TestHttpCheckPutParams(t *testing.T) {
+	check := HttpCheck{
+		Name:     "fake check",
+		Hostname: "example.com",
+		Url:      "/foo",
+		RequestHeaders: map[string]string{
+			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+			"Pragma":     "no-cache",
+		},
+		Username: "user",
+		Password: "pass",
+	}
+	params := check.PutParams()
 	want := map[string]string{
 		"name":                     "fake check",
 		"host":                     "example.com",
@@ -22,11 +32,57 @@ func TestHttpCheckParams(t *testing.T) {
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
 		"use_legacy_notifications": "false",
-		"type": "http",
+		"url":              "/foo",
+		"requestheader0":   "Pragma:no-cache",
+		"requestheader1":   "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+		"auth":             "user:pass",
+		"encryption":       "false",
+		"shouldnotcontain": "",
+		"postdata":         "",
 	}
 
 	if !reflect.DeepEqual(params, want) {
-		t.Errorf("Check.Params() returned %+v, want %+v", params, want)
+		t.Errorf("Check.PutParams() returned %+v, want %+v", params, want)
+	}
+}
+
+func TestHttpCheckPostParams(t *testing.T) {
+	check := HttpCheck{
+		Name:     "fake check",
+		Hostname: "example.com",
+		Url:      "/foo",
+		RequestHeaders: map[string]string{
+			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+			"Pragma":     "no-cache",
+		},
+		Username: "user",
+		Password: "pass",
+	}
+	params := check.PostParams()
+	want := map[string]string{
+		"name":                     "fake check",
+		"host":                     "example.com",
+		"paused":                   "false",
+		"resolution":               "0",
+		"sendtoemail":              "false",
+		"sendtosms":                "false",
+		"sendtotwitter":            "false",
+		"sendtoiphone":             "false",
+		"sendtoandroid":            "false",
+		"sendnotificationwhendown": "0",
+		"notifyagainevery":         "0",
+		"notifywhenbackup":         "false",
+		"use_legacy_notifications": "false",
+		"type":           "http",
+		"url":            "/foo",
+		"requestheader0": "Pragma:no-cache",
+		"requestheader1": "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+		"auth":           "user:pass",
+		"encryption":     "false",
+	}
+
+	if !reflect.DeepEqual(params, want) {
+		t.Errorf("Check.PostParams() returned %+v, want %+v", params, want)
 	}
 }
 
@@ -38,13 +94,25 @@ func TestHttpCheckValid(t *testing.T) {
 
 	check = HttpCheck{Name: "fake check", Hostname: "example.com"}
 	if err := check.Valid(); err == nil {
-		t.Errorf("Valid with invalid check expected error, returned nil")
+		t.Errorf("Valid with invalid check (`Resolution` == 0) expected error, returned nil")
 	}
+
+	check = HttpCheck{
+		Name:             "fake check",
+		Hostname:         "example.com",
+		Resolution:       15,
+		ShouldContain:    "foo",
+		ShouldNotContain: "bar",
+	}
+	if err := check.Valid(); err == nil {
+		t.Errorf("Valid with invalid check (`ShouldContain` and `ShouldNotContain` defined) expected error, returned nil")
+	}
+
 }
 
-func TestPingCheckParams(t *testing.T) {
+func TestPingCheckPostParams(t *testing.T) {
 	check := PingCheck{Name: "fake check", Hostname: "example.com"}
-	params := check.Params()
+	params := check.PostParams()
 	want := map[string]string{
 		"name":                     "fake check",
 		"host":                     "example.com",
@@ -63,7 +131,7 @@ func TestPingCheckParams(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(params, want) {
-		t.Errorf("Check.Params() returned %+v, want %+v", params, want)
+		t.Errorf("Check.PostParams() returned %+v, want %+v", params, want)
 	}
 }
 
