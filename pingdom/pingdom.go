@@ -23,6 +23,7 @@ type Client struct {
 	BaseURL      *url.URL
 	client       *http.Client
 	Checks       *CheckService
+	Contacts     *ContactService
 }
 
 // NewClient returns a Pingdom client with a default base URL and HTTP client
@@ -31,6 +32,7 @@ func NewClient(user string, password string, key string) *Client {
 	c := &Client{User: user, Password: password, APIKey: key, BaseURL: baseURL}
 	c.client = http.DefaultClient
 	c.Checks = &CheckService{client: c}
+	c.Contacts = &ContactService{client: c}
 	return c
 }
 
