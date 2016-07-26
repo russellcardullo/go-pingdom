@@ -118,7 +118,12 @@ func TestCheckServiceCreate(t *testing.T) {
 		}`)
 	})
 
-	newCheck := HttpCheck{Name: "My new HTTP check", Hostname: "example.com", Resolution: 5}
+	newCheck := HttpCheck{
+		Name:       "My new HTTP check",
+		Hostname:   "example.com",
+		Resolution: 5,
+		ContactIds: []int{11111111, 22222222},
+	}
 	check, err := client.Checks.Create(&newCheck)
 	if err != nil {
 		t.Errorf("CreateCheck returned error: %v", err)
@@ -138,30 +143,40 @@ func TestCheckServiceRead(t *testing.T) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
 			"check" : {
-				"id" : 85975,
-				"name" : "My check 7",
-				"resolution" : 1,
-				"sendtoemail" : false,
-				"sendtosms" : false,
-				"sendtotwitter" : false,
-				"sendtoiphone" : false,
-				"sendnotificationwhendown" : 0,
-				"notifyagainevery" : 0,
-				"notifywhenbackup" : false,
-				"created" : 1240394682,
-				"type" : {
-				  "http" : {
-					"url" : "/",
-					"port" : 80,
-					"requestheaders" : {
-					  "User-Agent" : "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)"
-					}
-				  }
-				},
-				"hostname" : "s7.mydomain.com",
-				"status" : "up",
-				"lasterrortime" : 1293143467,
-				"lasttesttime" : 1294064823
+        "contactids": [
+            11111111,
+            22222222
+        ],
+        "created" : 1240394682,
+        "hostname" : "s7.mydomain.com",
+        "id" : 85975,
+        "integrationids": [],
+        "ipv6": false,
+        "lasterrortime" : 1293143467,
+        "lasttesttime" : 1294064823,
+        "name" : "My check 7",
+        "notifyagainevery" : 0,
+        "notifywhenbackup" : false,
+        "probe_filters": [],
+        "resolution" : 1,
+        "sendnotificationwhendown" : 0,
+        "sendtoandroid" : false,
+        "sendtoemail" : false,
+        "sendtoiphone" : false,
+        "sendtosms" : false,
+        "sendtotwitter" : false,
+        "status" : "up",
+        "tags": [],
+        "type" : {
+          "http" : {
+            "encryption": false,
+            "port" : 80,
+            "requestheaders" : {
+              "User-Agent" : "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)"
+            },
+            "url" : "/"
+          }
+        }
 			}
 		}`)
 	})
@@ -202,6 +217,7 @@ func TestCheckServiceRead(t *testing.T) {
 				},
 			},
 		},
+		ContactIds: []int{11111111, 22222222},
 	}
 
 	if !reflect.DeepEqual(check, want) {
