@@ -2,8 +2,8 @@
 
 pingdom-go is a Go client library for the Pingdom API.
 
-This currently only supports working with basic HTTP (with specific details)
-and ping checks.
+This currently supports working with basic HTTP (with specific details)
+and ping checks. It can also manage contacts who will be alerted in case of downtime.
 
 **Build Status:** [![Build Status](https://travis-ci.org/russellcardullo/go-pingdom.svg?branch=master)](https://travis-ci.org/russellcardullo/go-pingdom)
 
@@ -84,3 +84,16 @@ Delete a check:
 msg, err := client.Checks.Delete(12345)
 ```
 
+Create a notification contact:
+
+```go
+newContact := pingdom.Contact{ Name: "John Doe", Email: "john.doe@example.com", Defaultsmsprovider: "nexmo" }
+contactResponse, err := client.Contacts.Create(&newContact)
+```
+
+Create a check with basic alert notification to a contact. Note that you must set ContactIds, UseLegacyNotifications, SendNotificationWhenDown and at least one of the SendTo* parameters:
+
+```go
+newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5, ContactIds: []int{contactResponse.ID}, UseLegacyNotifications: true, SendNotificationWhenDown: 2, SendToEmail: true}
+checkResponse, err := client.Checks.Create(&newCheck)
+```
