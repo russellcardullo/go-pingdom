@@ -30,6 +30,7 @@ type HttpCheck struct {
 	ShouldNotContain         string            `json:"shouldnotcontain,omitempty"`
 	PostData                 string            `json:"postdata,omitempty"`
 	RequestHeaders           map[string]string `json:"requestheaders,omitempty"`
+	ContactIds               []int             `json:"contactids,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check
@@ -47,6 +48,7 @@ type PingCheck struct {
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
 	UseLegacyNotifications   bool   `json:"use_legacy_notifications,omitempty"`
+	ContactIds               []int  `json:"contactids,omitempty"`
 }
 
 // Params returns a map of parameters for an HttpCheck that can be sent along
@@ -69,6 +71,7 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"url":        ck.Url,
 		"encryption": strconv.FormatBool(ck.Encryption),
 		"postdata":   ck.PostData,
+		"contactids": intListToCDString(ck.ContactIds),
 	}
 
 	// Ignore port is not defined
@@ -158,6 +161,7 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
 		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
+		"contactids":               intListToCDString(ck.ContactIds),
 	}
 }
 
@@ -185,4 +189,16 @@ func (ck *PingCheck) Valid() error {
 		return fmt.Errorf("Invalid value %v for `Resolution`.  Allowed values are [1,5,15,30,60].", ck.Resolution)
 	}
 	return nil
+}
+
+func intListToCDString(integers []int) string {
+	var CDString string
+	for i, item := range integers {
+		if i == 0 {
+			CDString = strconv.Itoa(item)
+		} else {
+			CDString = fmt.Sprintf("%v,%d", CDString, item)
+		}
+	}
+	return CDString
 }
