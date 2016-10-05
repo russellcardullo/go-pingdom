@@ -46,7 +46,7 @@ func (cs *CheckService) List() ([]CheckResponse, error) {
 	return m.Checks, err
 }
 
-// Create a new check.  This function will validate the given check param
+// Create a new check. This function will validate the given check param
 // to ensure that it contains correct values before submitting the request
 // Returns a CheckResponse object representing the response from Pingdom.
 // Note that Pingdom does not return a full check object so in the returned
