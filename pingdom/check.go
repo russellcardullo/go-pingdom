@@ -29,10 +29,10 @@ func (cs *CheckService) List() ([]CheckResponse, error) {
 	}
 
 	resp, err := cs.client.client.Do(req)
-	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	if err := validateResponse(resp); err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (cs *CheckService) List() ([]CheckResponse, error) {
 	return m.Checks, err
 }
 
-// Create a new check.  This function will validate the given check param
+// Create a new check. This function will validate the given check param
 // to ensure that it contains correct values before submitting the request
 // Returns a CheckResponse object representing the response from Pingdom.
 // Note that Pingdom does not return a full check object so in the returned
