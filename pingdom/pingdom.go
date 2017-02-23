@@ -77,10 +77,10 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 // response will be returned along with the error.
 func (pc *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 	resp, err := pc.client.Do(req)
-	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	if err := validateResponse(resp); err != nil {
 		return resp, err

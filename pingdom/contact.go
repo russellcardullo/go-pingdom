@@ -21,10 +21,10 @@ func (cs *ContactService) List() ([]ContactResponse, error) {
 	}
 
 	resp, err := cs.client.client.Do(req)
-	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	if err := validateResponse(resp); err != nil {
 		return nil, err
