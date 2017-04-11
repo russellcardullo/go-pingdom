@@ -41,6 +41,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"shouldnotcontain": "",
 		"postdata":         "",
 		"contactids":       "11111111,22222222",
+		"tags":             "",
 	}
 
 	if !reflect.DeepEqual(params, want) {

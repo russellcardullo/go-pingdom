@@ -31,6 +31,7 @@ type HttpCheck struct {
 	PostData                 string            `json:"postdata,omitempty"`
 	RequestHeaders           map[string]string `json:"requestheaders,omitempty"`
 	ContactIds               []int             `json:"contactids,omitempty"`
+	Tags                     string            `json:"tags,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check
@@ -72,6 +73,7 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"encryption": strconv.FormatBool(ck.Encryption),
 		"postdata":   ck.PostData,
 		"contactids": intListToCDString(ck.ContactIds),
+		"tags":       ck.Tags,
 	}
 
 	// Ignore port is not defined
