@@ -7,9 +7,10 @@ import (
 
 func TestHttpCheckPutParams(t *testing.T) {
 	check := HttpCheck{
-		Name:     "fake check",
-		Hostname: "example.com",
-		Url:      "/foo",
+		Name:        "fake check",
+		Hostname:    "example.com",
+		AlertPolicy: 1,
+		Url:         "/foo",
 		RequestHeaders: map[string]string{
 			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 			"Pragma":     "no-cache",
@@ -22,6 +23,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 	want := map[string]string{
 		"name":                     "fake check",
 		"host":                     "example.com",
+		"alert_policy":             "1",
 		"paused":                   "false",
 		"resolution":               "0",
 		"sendtoemail":              "false",
@@ -51,9 +53,10 @@ func TestHttpCheckPutParams(t *testing.T) {
 
 func TestHttpCheckPostParams(t *testing.T) {
 	check := HttpCheck{
-		Name:     "fake check",
-		Hostname: "example.com",
-		Url:      "/foo",
+		Name:        "fake check",
+		Hostname:    "example.com",
+		AlertPolicy: 1,
+		Url:         "/foo",
 		RequestHeaders: map[string]string{
 			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 			"Pragma":     "no-cache",
@@ -66,6 +69,7 @@ func TestHttpCheckPostParams(t *testing.T) {
 	want := map[string]string{
 		"name":                     "fake check",
 		"host":                     "example.com",
+		"alert_policy":             "1",
 		"paused":                   "false",
 		"resolution":               "0",
 		"sendtoemail":              "false",
