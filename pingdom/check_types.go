@@ -11,6 +11,7 @@ type HttpCheck struct {
 	Name                     string            `json:"name"`
 	Hostname                 string            `json:"hostname,omitempty"`
 	Resolution               int               `json:"resolution,omitempty"`
+	AlertPolicy              int               `json:"alert_policy,omitempty"`
 	Paused                   bool              `json:"paused,omitempty"`
 	SendToAndroid            bool              `json:"sendtoandroid,omitempty"`
 	SendToEmail              bool              `json:"sendtoemail,omitempty"`
@@ -59,6 +60,7 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"name":                     ck.Name,
 		"host":                     ck.Hostname,
 		"resolution":               strconv.Itoa(ck.Resolution),
+		"alert_policy":             strconv.Itoa(ck.AlertPolicy),
 		"paused":                   strconv.FormatBool(ck.Paused),
 		"sendtoemail":              strconv.FormatBool(ck.SendToEmail),
 		"sendtosms":                strconv.FormatBool(ck.SendToSms),
