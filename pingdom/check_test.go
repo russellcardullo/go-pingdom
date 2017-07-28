@@ -25,7 +25,13 @@ func TestCheckServiceList(t *testing.T) {
 					"resolution": 1,
 					"status": "up",
 					"type": "http",
-					"tags": []
+					"tags": [
+						{
+							"name": "apache",
+							"type": "a",
+							"count": 2
+						}
+					]
 				},
 				{
 					"hostname": "mydomain.com",
@@ -37,7 +43,13 @@ func TestCheckServiceList(t *testing.T) {
 					"resolution": 5,
 					"status": "up",
 					"type": "ping",
-					"tags": []
+					"tags": [
+						{
+							"name": "nginx",
+							"type": "u",
+							"count": 1
+						}
+					]
 				},
 				{
 					"hostname": "example.net",
@@ -51,9 +63,9 @@ func TestCheckServiceList(t *testing.T) {
 					"type": "http",
 					"tags": [
 						{
-							"name": "foo",
+							"name": "apache",
 							"type": "a",
-							"count": "1"
+							"count": 2
 						}
 					]
 				}
@@ -61,13 +73,8 @@ func TestCheckServiceList(t *testing.T) {
 		}`)
 	})
 
-	checks, err := client.Checks.List()
-	if err != nil {
-		t.Errorf("ListChecks returned error: %v", err)
-	}
-
 	want := []CheckResponse{
-		CheckResponse{
+		{
 			ID:               85975,
 			Name:             "My check 1",
 			LastErrorTime:    1297446423,
@@ -79,9 +86,15 @@ func TestCheckServiceList(t *testing.T) {
 			Type: CheckResponseType{
 				Name: "http",
 			},
-			Tags: []CheckResponseTag{},
+			Tags: []CheckResponseTag{
+				{
+					Name:  "apache",
+					Type:  "a",
+					Count: 2,
+				},
+			},
 		},
-		CheckResponse{
+		{
 			ID:               161748,
 			Name:             "My check 2",
 			LastErrorTime:    1299194968,
@@ -93,9 +106,15 @@ func TestCheckServiceList(t *testing.T) {
 			Type: CheckResponseType{
 				Name: "ping",
 			},
-			Tags: []CheckResponseTag{},
+			Tags: []CheckResponseTag{
+				{
+					Name:  "nginx",
+					Type:  "u",
+					Count: 1,
+				},
+			},
 		},
-		CheckResponse{
+		{
 			ID:               208655,
 			Name:             "My check 3",
 			LastErrorTime:    1300527997,
@@ -108,15 +127,20 @@ func TestCheckServiceList(t *testing.T) {
 				Name: "http",
 			},
 			Tags: []CheckResponseTag{
-				CheckResponseTag{
-					Name:  "foo",
+				{
+					Name:  "apache",
 					Type:  "a",
-					Count: "1",
+					Count: 2,
 				},
 			},
 		},
 	}
 
+	checks, err := client.Checks.List()
+	if err != nil {
+		t.Errorf("ListChecks returned error: %v", err)
+	}
+	// remove tags to check separately
 	if !reflect.DeepEqual(checks, want) {
 		t.Errorf("ListChecks returned %+v, want %+v", checks, want)
 	}

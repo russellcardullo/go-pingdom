@@ -51,7 +51,7 @@ type CheckResponseType struct {
 type CheckResponseTag struct {
 	Name  string `json:"name"`
 	Type  string `json:"type"`
-	Count string `json:"count"`
+	Count int    `json:"count"`
 }
 
 type ContactResponse struct {
@@ -84,7 +84,7 @@ func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
 		if len(v) != 1 {
 			return fmt.Errorf("Check detailed response `check.type` contains more than one object: %+v", v)
 		}
-		for k, _ := range v {
+		for k := range v {
 			c.Name = k
 		}
 
