@@ -123,6 +123,7 @@ func TestCheckServiceCreate(t *testing.T) {
 		Hostname:   "example.com",
 		Resolution: 5,
 		ContactIds: []int{11111111, 22222222},
+		IntegrationIds: []int{33333333, 44444444},
 	}
 	check, err := client.Checks.Create(&newCheck)
 	if err != nil {
@@ -150,7 +151,10 @@ func TestCheckServiceRead(t *testing.T) {
         "created" : 1240394682,
         "hostname" : "s7.mydomain.com",
         "id" : 85975,
-        "integrationids": [],
+        "integrationids": [
+            33333333,
+            44444444
+        ],
         "ipv6": false,
         "lasterrortime" : 1293143467,
         "lasttesttime" : 1294064823,
@@ -218,6 +222,7 @@ func TestCheckServiceRead(t *testing.T) {
 			},
 		},
 		ContactIds: []int{11111111, 22222222},
+		IntegrationIds: []int{33333333, 44444444},
 	}
 
 	if !reflect.DeepEqual(check, want) {

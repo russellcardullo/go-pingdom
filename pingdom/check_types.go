@@ -31,6 +31,7 @@ type HttpCheck struct {
 	PostData                 string            `json:"postdata,omitempty"`
 	RequestHeaders           map[string]string `json:"requestheaders,omitempty"`
 	ContactIds               []int             `json:"contactids,omitempty"`
+	IntegrationIds           []int             `json:"integrationids,omitempty"`
 	Tags                     string            `json:"tags,omitempty"`
 }
 
@@ -50,6 +51,7 @@ type PingCheck struct {
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
 	UseLegacyNotifications   bool   `json:"use_legacy_notifications,omitempty"`
 	ContactIds               []int  `json:"contactids,omitempty"`
+	IntegrationIds           []int  `json:"integrationids,omitempty"`
 }
 
 // Params returns a map of parameters for an HttpCheck that can be sent along
@@ -73,6 +75,7 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"encryption": strconv.FormatBool(ck.Encryption),
 		"postdata":   ck.PostData,
 		"contactids": intListToCDString(ck.ContactIds),
+		"integrationids": intListToCDString(ck.IntegrationIds),
 		"tags":       ck.Tags,
 	}
 
@@ -164,6 +167,7 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
 		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
 		"contactids":               intListToCDString(ck.ContactIds),
+		"integrationids":           intListToCDString(ck.IntegrationIds),
 	}
 }
 
