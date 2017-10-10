@@ -42,6 +42,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"postdata":         "",
 		"contactids":       "11111111,22222222",
 		"tags":             "",
+    "probe_filters":    "",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -134,6 +135,7 @@ func TestPingCheckPostParams(t *testing.T) {
 		"use_legacy_notifications": "false",
 		"type":       "ping",
 		"contactids": "11111111,22222222",
+    "probe_filters":    "",
 	}
 
 	if !reflect.DeepEqual(params, want) {
