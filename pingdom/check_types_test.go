@@ -14,9 +14,10 @@ func TestHttpCheckPutParams(t *testing.T) {
 			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 			"Pragma":     "no-cache",
 		},
-		Username:   "user",
-		Password:   "pass",
-		ContactIds: []int{11111111, 22222222},
+		Username:       "user",
+		Password:       "pass",
+		ContactIds:     []int{11111111, 22222222},
+		IntegrationIds: []int{11111111, 22222222},
 	}
 	params := check.PutParams()
 	want := map[string]string{
@@ -42,6 +43,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"postdata":         "",
 		"contactids":       "11111111,22222222",
 		"tags":             "",
+		"integrationids":   "11111111,22222222",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -58,9 +60,10 @@ func TestHttpCheckPostParams(t *testing.T) {
 			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 			"Pragma":     "no-cache",
 		},
-		Username:   "user",
-		Password:   "pass",
-		ContactIds: []int{11111111, 22222222},
+		Username:       "user",
+		Password:       "pass",
+		ContactIds:     []int{11111111, 22222222},
+		IntegrationIds: []int{11111111, 22222222},
 	}
 	params := check.PostParams()
 	want := map[string]string{
@@ -84,6 +87,7 @@ func TestHttpCheckPostParams(t *testing.T) {
 		"auth":           "user:pass",
 		"encryption":     "false",
 		"contactids":     "11111111,22222222",
+		"integrationids": "11111111,22222222",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -116,7 +120,7 @@ func TestHttpCheckValid(t *testing.T) {
 }
 
 func TestPingCheckPostParams(t *testing.T) {
-	check := PingCheck{Name: "fake check", Hostname: "example.com", ContactIds: []int{11111111, 22222222}}
+	check := PingCheck{Name: "fake check", Hostname: "example.com", ContactIds: []int{11111111, 22222222}, IntegrationIds: []int{11111111, 22222222}}
 	params := check.PostParams()
 	want := map[string]string{
 		"name":                     "fake check",
@@ -132,8 +136,9 @@ func TestPingCheckPostParams(t *testing.T) {
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
 		"use_legacy_notifications": "false",
-		"type":       "ping",
-		"contactids": "11111111,22222222",
+		"type":           "ping",
+		"contactids":     "11111111,22222222",
+		"integrationids": "11111111,22222222",
 	}
 
 	if !reflect.DeepEqual(params, want) {
