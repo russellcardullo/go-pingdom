@@ -44,6 +44,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"contactids":       "11111111,22222222",
 		"integrationids":   "33333333,44444444",
 		"tags":             "",
+    "probe_filters":    "",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -139,6 +140,7 @@ func TestPingCheckPostParams(t *testing.T) {
 		"type":       "ping",
 		"contactids": "11111111,22222222",
 		"integrationids": "33333333,44444444",
+    "probe_filters":    "",
 	}
 
 	if !reflect.DeepEqual(params, want) {
