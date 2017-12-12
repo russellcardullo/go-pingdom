@@ -32,6 +32,7 @@ type HttpCheck struct {
 	RequestHeaders           map[string]string `json:"requestheaders,omitempty"`
 	ContactIds               []int             `json:"contactids,omitempty"`
 	Tags                     string            `json:"tags,omitempty"`
+  ProbeFilters             string            `json:"probe_filters,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check
@@ -50,6 +51,7 @@ type PingCheck struct {
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
 	UseLegacyNotifications   bool   `json:"use_legacy_notifications,omitempty"`
 	ContactIds               []int  `json:"contactids,omitempty"`
+  ProbeFilters             string `json:"probe_filters,omitempty"`
 }
 
 // Params returns a map of parameters for an HttpCheck that can be sent along
@@ -74,6 +76,7 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"postdata":   ck.PostData,
 		"contactids": intListToCDString(ck.ContactIds),
 		"tags":       ck.Tags,
+    "probe_filters": ck.ProbeFilters,
 	}
 
 	// Ignore port is not defined
@@ -164,6 +167,7 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
 		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
 		"contactids":               intListToCDString(ck.ContactIds),
+    "probe_filters":            ck.ProbeFilters,
 	}
 }
 
