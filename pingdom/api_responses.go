@@ -38,6 +38,7 @@ type CheckResponse struct {
 	LastResponseTime         int64             `json:"lastresponsetime,omitempty"`
 	Paused                   bool              `json:"paused,omitempty"`
 	ContactIds               []int             `json:"contactids,omitempty"`
+	IntegrationIds           []int             `json:"integrationids,omitempty"`
 	Type                     CheckResponseType `json:"type,omitempty"`
 }
 

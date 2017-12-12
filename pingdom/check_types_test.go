@@ -17,6 +17,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 		Username:   "user",
 		Password:   "pass",
 		ContactIds: []int{11111111, 22222222},
+		IntegrationIds: []int{33333333, 44444444},
 	}
 	params := check.PutParams()
 	want := map[string]string{
@@ -41,6 +42,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"shouldnotcontain": "",
 		"postdata":         "",
 		"contactids":       "11111111,22222222",
+		"integrationids":   "33333333,44444444",
 		"tags":             "",
     "probe_filters":    "",
 	}
@@ -62,6 +64,7 @@ func TestHttpCheckPostParams(t *testing.T) {
 		Username:   "user",
 		Password:   "pass",
 		ContactIds: []int{11111111, 22222222},
+		IntegrationIds: []int{33333333, 44444444},
 	}
 	params := check.PostParams()
 	want := map[string]string{
@@ -85,6 +88,7 @@ func TestHttpCheckPostParams(t *testing.T) {
 		"auth":           "user:pass",
 		"encryption":     "false",
 		"contactids":     "11111111,22222222",
+		"integrationids": "33333333,44444444",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -117,7 +121,7 @@ func TestHttpCheckValid(t *testing.T) {
 }
 
 func TestPingCheckPostParams(t *testing.T) {
-	check := PingCheck{Name: "fake check", Hostname: "example.com", ContactIds: []int{11111111, 22222222}}
+	check := PingCheck{Name: "fake check", Hostname: "example.com", ContactIds: []int{11111111, 22222222}, IntegrationIds: []int{33333333, 44444444}}
 	params := check.PostParams()
 	want := map[string]string{
 		"name":                     "fake check",
@@ -135,6 +139,7 @@ func TestPingCheckPostParams(t *testing.T) {
 		"use_legacy_notifications": "false",
 		"type":       "ping",
 		"contactids": "11111111,22222222",
+		"integrationids": "33333333,44444444",
     "probe_filters":    "",
 	}
 
