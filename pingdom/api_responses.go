@@ -22,22 +22,16 @@ type CheckResponse struct {
 	ID                       int               `json:"id"`
 	Name                     string            `json:"name"`
 	Resolution               int               `json:"resolution,omitempty"`
-	SendToAndroid            bool              `json:"sendtoandroid,omitempty"`
-	SendToEmail              bool              `json:"sendtoemail,omitempty"`
-	SendToIPhone             bool              `json:"sendtoiphone,omitempty"`
-	SendToSms                bool              `json:"sendtosms,omitempty"`
-	SendToTwitter            bool              `json:"sendtotwitter,omitempty"`
 	SendNotificationWhenDown int               `json:"sendnotificationwhendown,omitempty"`
-	NotifyAgainEvery         int               `json:"notifyagainevery,omitempty"`
+	NotifyAgainEvery         *int              `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool              `json:"notifywhenbackup,omitempty"`
 	Created                  int64             `json:"created,omitempty"`
 	Hostname                 string            `json:"hostname,omitempty"`
 	Status                   string            `json:"status,omitempty"`
-	LastErrorTime            int64             `json:"lasterrortime,omitempty"`
-	LastTestTime             int64             `json:"lasttesttime,omitempty"`
-	LastResponseTime         int64             `json:"lastresponsetime,omitempty"`
-	Paused                   bool              `json:"paused,omitempty"`
-	ContactIds               []int             `json:"contactids,omitempty"`
+	LastErrorTime            *int64            `json:"lasterrortime,omitempty"`
+	LastTestTime             *int64            `json:"lasttesttime,omitempty"`
+	LastResponseTime         *int64            `json:"lastresponsetime,omitempty"`
+	Paused                   *bool             `json:"paused,omitempty"`
 	IntegrationIds           []int             `json:"integrationids,omitempty"`
 	Type                     CheckResponseType `json:"type,omitempty"`
 }
@@ -100,11 +94,11 @@ type CheckResponseHTTPDetails struct {
 	Url              string            `json:"url,omitempty"`
 	Encryption       bool              `json:"encryption,omitempty"`
 	Port             int               `json:"port,omitempty"`
-	Username         string            `json:"username,omitempty"`
-	Password         string            `json:"password,omitempty"`
-	ShouldContain    string            `json:"shouldcontain,omitempty"`
-	ShouldNotContain string            `json:"shouldnotcontain,omitempty"`
-	PostData         string            `json:"postdata,omitempty"`
+	Username         *string           `json:"username,omitempty"`
+	Password         *string           `json:"password,omitempty"`
+	ShouldContain    *string           `json:"shouldcontain,omitempty"`
+	ShouldNotContain *string           `json:"shouldnotcontain,omitempty"`
+	PostData         *string           `json:"postdata,omitempty"`
 	RequestHeaders   map[string]string `json:"requestheaders,omitempty"`
 }
 

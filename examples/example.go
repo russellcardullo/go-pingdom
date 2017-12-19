@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/russellcardullo/go-pingdom/pingdom"
+	"github.com/heroku/go-pingdom/pingdom"
 )
 
 func main() {
@@ -14,12 +14,12 @@ func main() {
 	fmt.Println("All checks:", checks)
 
 	// Create a new http check
-	newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5}
+	newCheck := pingdom.HttpCheck{BaseCheck: pingdom.BaseCheck{Name: "Test Check", Host: "example.com", Resolution: pingdom.OptInt(5)}}
 	check, _ := client.Checks.Create(&newCheck)
 	fmt.Println("Created check:", check) // {ID, Name}
 
 	// Create a new ping check
-	newPingCheck := pingdom.PingCheck{Name: "Test Ping", Hostname: "example.com", Resolution: 1}
+	newPingCheck := pingdom.PingCheck{BaseCheck: pingdom.BaseCheck{Name: "Test Ping", Host: "example.com", Resolution: pingdom.OptInt(1)}}
 	pingcheck, _ := client.Checks.Create(&newPingCheck)
 	fmt.Println("Created check:", pingcheck) // {ID, Name}
 
@@ -28,7 +28,7 @@ func main() {
 	fmt.Println("Details:", details)
 
 	// Update a check
-	updatedCheck := pingdom.HttpCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
+	updatedCheck := pingdom.HttpCheck{BaseCheck: pingdom.BaseCheck{Name: "Updated Check", Host: "example2.com", Resolution: pingdom.OptInt(5)}}
 	upMsg, _ := client.Checks.Update(check.ID, &updatedCheck)
 	fmt.Println("Modified check, message:", upMsg)
 

@@ -43,6 +43,18 @@ func NewMultiUserClient(user string, password string, key string, accountEmail s
 	return c
 }
 
+// OptStr returns an optional string value.
+func OptStr(s string) *string { return &s }
+
+// OptBool returns an optional bool value.
+func OptBool(b bool) *bool { return &b }
+
+// OptInt returns an optional int value.
+func OptInt(i int) *int { return &i }
+
+// OptInt64 returns an optional int64 value.
+func OptInt64(i int64) *int64 { return &i }
+
 // NewRequest makes a new HTTP Request.  The method param should be an HTTP method in
 // all caps such as GET, POST, PUT, DELETE.  The rsc param should correspond with
 // a restful resource.  Params can be passed in as a map of strings

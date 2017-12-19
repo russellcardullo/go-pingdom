@@ -11,7 +11,7 @@ func TestCheckServiceList(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/checks", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
 			"checks": [
@@ -61,9 +61,9 @@ func TestCheckServiceList(t *testing.T) {
 		CheckResponse{
 			ID:               85975,
 			Name:             "My check 1",
-			LastErrorTime:    1297446423,
-			LastResponseTime: 355,
-			LastTestTime:     1300977363,
+			LastErrorTime:    OptInt64(1297446423),
+			LastResponseTime: OptInt64(355),
+			LastTestTime:     OptInt64(1300977363),
 			Hostname:         "example.com",
 			Resolution:       1,
 			Status:           "up",
@@ -74,9 +74,9 @@ func TestCheckServiceList(t *testing.T) {
 		CheckResponse{
 			ID:               161748,
 			Name:             "My check 2",
-			LastErrorTime:    1299194968,
-			LastResponseTime: 1141,
-			LastTestTime:     1300977268,
+			LastErrorTime:    OptInt64(1299194968),
+			LastResponseTime: OptInt64(1141),
+			LastTestTime:     OptInt64(1300977268),
 			Hostname:         "mydomain.com",
 			Resolution:       5,
 			Status:           "up",
@@ -87,9 +87,9 @@ func TestCheckServiceList(t *testing.T) {
 		CheckResponse{
 			ID:               208655,
 			Name:             "My check 3",
-			LastErrorTime:    1300527997,
-			LastResponseTime: 800,
-			LastTestTime:     1300977337,
+			LastErrorTime:    OptInt64(1300527997),
+			LastResponseTime: OptInt64(800),
+			LastTestTime:     OptInt64(1300977337),
 			Hostname:         "example.net",
 			Resolution:       1,
 			Status:           "down",
@@ -108,7 +108,7 @@ func TestCheckServiceCreate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/checks", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		fmt.Fprint(w, `{
 			"check":{
@@ -119,11 +119,13 @@ func TestCheckServiceCreate(t *testing.T) {
 	})
 
 	newCheck := HttpCheck{
-		Name:       "My new HTTP check",
-		Hostname:   "example.com",
-		Resolution: 5,
-		ContactIds: []int{11111111, 22222222},
-		IntegrationIds: []int{33333333, 44444444},
+		BaseCheck: BaseCheck{
+			Name:           "My new HTTP check",
+			Host:           "example.com",
+			Resolution:     OptInt(5),
+			UserIds:        &[]int{11111111, 22222222},
+			IntegrationIds: &[]int{33333333, 44444444},
+		},
 	}
 	check, err := client.Checks.Create(&newCheck)
 	if err != nil {
@@ -140,14 +142,10 @@ func TestCheckServiceRead(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/85975", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/checks/85975", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
 			"check" : {
-        "contactids": [
-            11111111,
-            22222222
-        ],
         "created" : 1240394682,
         "hostname" : "s7.mydomain.com",
         "id" : 85975,
@@ -164,11 +162,6 @@ func TestCheckServiceRead(t *testing.T) {
         "probe_filters": [],
         "resolution" : 1,
         "sendnotificationwhendown" : 0,
-        "sendtoandroid" : false,
-        "sendtoemail" : false,
-        "sendtoiphone" : false,
-        "sendtosms" : false,
-        "sendtotwitter" : false,
         "status" : "up",
         "tags": [],
         "type" : {
@@ -194,34 +187,25 @@ func TestCheckServiceRead(t *testing.T) {
 		ID:                       85975,
 		Name:                     "My check 7",
 		Resolution:               1,
-		SendToEmail:              false,
-		SendToTwitter:            false,
-		SendToIPhone:             false,
 		SendNotificationWhenDown: 0,
-		NotifyAgainEvery:         0,
+		NotifyAgainEvery:         OptInt(0),
 		NotifyWhenBackup:         false,
 		Created:                  1240394682,
 		Hostname:                 "s7.mydomain.com",
 		Status:                   "up",
-		LastErrorTime:            1293143467,
-		LastTestTime:             1294064823,
+		LastErrorTime:            OptInt64(1293143467),
+		LastTestTime:             OptInt64(1294064823),
 		Type: CheckResponseType{
 			Name: "http",
 			HTTP: &CheckResponseHTTPDetails{
-				Url:              "/",
-				Encryption:       false,
-				Port:             80,
-				Username:         "",
-				Password:         "",
-				ShouldContain:    "",
-				ShouldNotContain: "",
-				PostData:         "",
+				Url:        "/",
+				Encryption: false,
+				Port:       80,
 				RequestHeaders: map[string]string{
 					"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 				},
 			},
 		},
-		ContactIds: []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
 	}
 
@@ -235,12 +219,12 @@ func TestCheckServiceUpdate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/12345", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/checks/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
 		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
 
-	updateCheck := HttpCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
+	updateCheck := HttpCheck{BaseCheck: BaseCheck{Name: "Updated Check", Host: "example2.com", Resolution: OptInt(5)}}
 	msg, err := client.Checks.Update(12345, &updateCheck)
 	if err != nil {
 		t.Errorf("UpdateCheck returned error: %v", err)
@@ -256,7 +240,7 @@ func TestCheckServiceDelete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/12345", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/checks/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		fmt.Fprint(w, `{"message":"Deletion of check was successful!"}`)
 	})

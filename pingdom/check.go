@@ -12,18 +12,17 @@ type CheckService struct {
 }
 
 // Check is an interface representing a pingdom check.
-// Specific check types should implement the methods of this interface
+// Specific check types should implement the methods of this interface.
 type Check interface {
-	PutParams() map[string]string
-	PostParams() map[string]string
-	Valid() error
+	toParams() map[string]string
+	valid() error
 }
 
 // Return a list of checks from Pingdom.
 // This returns type CheckResponse rather than Check since the
 // pingdom API does not return a complete representation of a check.
 func (cs *CheckService) List() ([]CheckResponse, error) {
-	req, err := cs.client.NewRequest("GET", "/api/2.0/checks", nil)
+	req, err := cs.client.NewRequest("GET", "/api/2.1/checks", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -52,11 +51,11 @@ func (cs *CheckService) List() ([]CheckResponse, error) {
 // Note that Pingdom does not return a full check object so in the returned
 // object you should only use the ID field.
 func (cs *CheckService) Create(check Check) (*CheckResponse, error) {
-	if err := check.Valid(); err != nil {
+	if err := check.valid(); err != nil {
 		return nil, err
 	}
 
-	req, err := cs.client.NewRequest("POST", "/api/2.0/checks", check.PostParams())
+	req, err := cs.client.NewRequest("POST", "/api/2.1/checks", check.toParams())
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +72,7 @@ func (cs *CheckService) Create(check Check) (*CheckResponse, error) {
 // This returns type CheckResponse rather than Check since the
 // pingdom API does not return a complete representation of a check.
 func (cs *CheckService) Read(id int) (*CheckResponse, error) {
-	req, err := cs.client.NewRequest("GET", "/api/2.0/checks/"+strconv.Itoa(id), nil)
+	req, err := cs.client.NewRequest("GET", "/api/2.1/checks/"+strconv.Itoa(id), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -91,11 +90,11 @@ func (cs *CheckService) Read(id int) (*CheckResponse, error) {
 // in the given check.  You should submit the complete list of values in
 // the given check parameter, not just those that have changed.
 func (cs *CheckService) Update(id int, check Check) (*PingdomResponse, error) {
-	if err := check.Valid(); err != nil {
+	if err := check.valid(); err != nil {
 		return nil, err
 	}
 
-	req, err := cs.client.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), check.PutParams())
+	req, err := cs.client.NewRequest("PUT", "/api/2.1/checks/"+strconv.Itoa(id), check.toParams())
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +109,7 @@ func (cs *CheckService) Update(id int, check Check) (*PingdomResponse, error) {
 
 // DeleteCheck will delete the check for the given ID.
 func (cs *CheckService) Delete(id int) (*PingdomResponse, error) {
-	req, err := cs.client.NewRequest("DELETE", "/api/2.0/checks/"+strconv.Itoa(id), nil)
+	req, err := cs.client.NewRequest("DELETE", "/api/2.1/checks/"+strconv.Itoa(id), nil)
 	if err != nil {
 		return nil, err
 	}

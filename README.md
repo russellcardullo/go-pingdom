@@ -50,14 +50,14 @@ fmt.Println("Checks:", checks) // [{ID Name} ...]
 Create a new HTTP check:
 
 ```go
-newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5}
+newCheck := pingdom.HttpCheck{BaseCheck: pingdom.BaseCheck{Name: "Test Check", Hostname: "example.com", Resolution: pingdom.OptInt(5}}}
 check, err := client.Checks.Create(&newCheck)
 fmt.Println("Created check:", check) // {ID, Name}
 ```
 
 Create a new Ping check:
 ```go
-newCheck := pingdom.PingCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5}
+newCheck := pingdom.PingCheck{BaseCheck: pingdom.BaseCheck{Name: "Test Check", Hostname: "example.com", Resolution: pingdom.OptInt(5)}}
 check, err := client.Checks.Create(&newCheck)
 fmt.Println("Created check:", check) // {ID, Name}
 ```
@@ -74,7 +74,7 @@ the field `Type` (e.g. `checkDetails.Type.HTTP`).
 Update a check:
 
 ```go
-updatedCheck := pingdom.HttpCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
+updatedCheck := pingdom.HttpCheck{BaseCheck: pingdom.BaseCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: pingdom.OptInt(5)}}
 msg, err := client.Checks.Update(12345, &updatedCheck)
 ```
 
@@ -89,11 +89,3 @@ Create a notification contact:
 ```go
 newContact := pingdom.Contact{ Name: "John Doe", Email: "john.doe@example.com", Defaultsmsprovider: "nexmo" }
 contactResponse, err := client.Contacts.Create(&newContact)
-```
-
-Create a check with basic alert notification to a contact. Note that you must set ContactIds, UseLegacyNotifications, SendNotificationWhenDown and at least one of the SendTo* parameters:
-
-```go
-newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5, ContactIds: []int{contactResponse.ID}, UseLegacyNotifications: true, SendNotificationWhenDown: 2, SendToEmail: true}
-checkResponse, err := client.Checks.Create(&newCheck)
-```
