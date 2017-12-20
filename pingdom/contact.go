@@ -15,7 +15,7 @@ type ContactService struct {
 // This returns type ContactResponse rather than Contact since the
 // pingdom API does not return a complete representation of a contact.
 func (cs *ContactService) List() ([]ContactResponse, error) {
-	req, err := cs.client.NewRequest("GET", "/api/2.0/notification_contacts", nil)
+	req, err := cs.client.NewRequest("GET", "/api/2.1/notification_contacts", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (cs *ContactService) Create(contact *Contact) (*ContactResponse, error) {
 		return nil, err
 	}
 
-	req, err := cs.client.NewRequest("POST", "/api/2.0/notification_contacts", contact.PostParams())
+	req, err := cs.client.NewRequest("POST", "/api/2.1/notification_contacts", contact.PostParams())
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (cs *ContactService) Update(id int, contact *Contact) (*PingdomResponse, er
 		return nil, err
 	}
 
-	req, err := cs.client.NewRequest("PUT", "/api/2.0/notification_contacts/"+strconv.Itoa(id), contact.PutParams())
+	req, err := cs.client.NewRequest("PUT", "/api/2.1/notification_contacts/"+strconv.Itoa(id), contact.PutParams())
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (cs *ContactService) Update(id int, contact *Contact) (*PingdomResponse, er
 
 // DeleteCheck will delete the check for the given ID.
 func (cs *ContactService) Delete(id int) (*PingdomResponse, error) {
-	req, err := cs.client.NewRequest("DELETE", "/api/2.0/notification_contacts/"+strconv.Itoa(id), nil)
+	req, err := cs.client.NewRequest("DELETE", "/api/2.1/notification_contacts/"+strconv.Itoa(id), nil)
 	if err != nil {
 		return nil, err
 	}

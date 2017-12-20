@@ -11,7 +11,7 @@ func TestContactServiceList(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/notification_contacts", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/notification_contacts", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
       "contacts": [
@@ -56,7 +56,7 @@ func TestContactServiceCreate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/notification_contacts", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/notification_contacts", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		fmt.Fprint(w, `{
       "contact":{
@@ -86,7 +86,7 @@ func TestContactServiceUpdate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/notification_contacts/11111111", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/notification_contacts/11111111", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
 		fmt.Fprint(w, `{"message":"Modification of contact was successful!"}`)
 	})
@@ -107,7 +107,7 @@ func TestContactServiceDelete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/notification_contacts/33333333", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/2.1/notification_contacts/33333333", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		fmt.Fprint(w, `{"message":"Deletion of contact was successful!"}`)
 	})
