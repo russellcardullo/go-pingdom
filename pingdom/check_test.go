@@ -24,7 +24,8 @@ func TestCheckServiceList(t *testing.T) {
 					"name": "My check 1",
 					"resolution": 1,
 					"status": "up",
-					"type": "http"
+					"type": "http",
+					"tags": []
 				},
 				{
 					"hostname": "mydomain.com",
@@ -35,7 +36,8 @@ func TestCheckServiceList(t *testing.T) {
 					"name": "My check 2",
 					"resolution": 5,
 					"status": "up",
-					"type": "ping"
+					"type": "ping",
+					"tags": []
 				},
 				{
 					"hostname": "example.net",
@@ -46,7 +48,14 @@ func TestCheckServiceList(t *testing.T) {
 					"name": "My check 3",
 					"resolution": 1,
 					"status": "down",
-					"type": "http"
+					"type": "http",
+					"tags": [
+						{
+							"name": "foo",
+							"type": "a",
+							"count": "1"
+						}
+					]
 				}
 			]
 		}`)
@@ -70,6 +79,7 @@ func TestCheckServiceList(t *testing.T) {
 			Type: CheckResponseType{
 				Name: "http",
 			},
+			Tags: []CheckResponseTag{},
 		},
 		CheckResponse{
 			ID:               161748,
@@ -83,6 +93,7 @@ func TestCheckServiceList(t *testing.T) {
 			Type: CheckResponseType{
 				Name: "ping",
 			},
+			Tags: []CheckResponseTag{},
 		},
 		CheckResponse{
 			ID:               208655,
@@ -95,6 +106,13 @@ func TestCheckServiceList(t *testing.T) {
 			Status:           "down",
 			Type: CheckResponseType{
 				Name: "http",
+			},
+			Tags: []CheckResponseTag{
+				CheckResponseTag{
+					Name:  "foo",
+					Type:  "a",
+					Count: "1",
+				},
 			},
 		},
 	}
@@ -119,10 +137,10 @@ func TestCheckServiceCreate(t *testing.T) {
 	})
 
 	newCheck := HttpCheck{
-		Name:       "My new HTTP check",
-		Hostname:   "example.com",
-		Resolution: 5,
-		ContactIds: []int{11111111, 22222222},
+		Name:           "My new HTTP check",
+		Hostname:       "example.com",
+		Resolution:     5,
+		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
 	}
 	check, err := client.Checks.Create(&newCheck)
@@ -221,8 +239,9 @@ func TestCheckServiceRead(t *testing.T) {
 				},
 			},
 		},
-		ContactIds: []int{11111111, 22222222},
+		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
+		Tags:           []CheckResponseTag{},
 	}
 
 	if !reflect.DeepEqual(check, want) {
