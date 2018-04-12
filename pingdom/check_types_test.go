@@ -14,9 +14,9 @@ func TestHttpCheckPutParams(t *testing.T) {
 			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 			"Pragma":     "no-cache",
 		},
-		Username:   "user",
-		Password:   "pass",
-		ContactIds: []int{11111111, 22222222},
+		Username:       "user",
+		Password:       "pass",
+		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
 	}
 	params := check.PutParams()
@@ -44,7 +44,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"contactids":       "11111111,22222222",
 		"integrationids":   "33333333,44444444",
 		"tags":             "",
-    "probe_filters":    "",
+		"probe_filters":    "",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -61,9 +61,9 @@ func TestHttpCheckPostParams(t *testing.T) {
 			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 			"Pragma":     "no-cache",
 		},
-		Username:   "user",
-		Password:   "pass",
-		ContactIds: []int{11111111, 22222222},
+		Username:       "user",
+		Password:       "pass",
+		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
 	}
 	params := check.PostParams()
@@ -137,10 +137,10 @@ func TestPingCheckPostParams(t *testing.T) {
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
 		"use_legacy_notifications": "false",
-		"type":       "ping",
-		"contactids": "11111111,22222222",
+		"type":           "ping",
+		"contactids":     "11111111,22222222",
 		"integrationids": "33333333,44444444",
-    "probe_filters":    "",
+		"probe_filters":  "",
 	}
 
 	if !reflect.DeepEqual(params, want) {
