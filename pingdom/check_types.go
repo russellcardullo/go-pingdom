@@ -33,7 +33,7 @@ type HttpCheck struct {
 	ContactIds               []int             `json:"contactids,omitempty"`
 	IntegrationIds           []int             `json:"integrationids,omitempty"`
 	Tags                     string            `json:"tags,omitempty"`
-  ProbeFilters             string            `json:"probe_filters,omitempty"`
+	ProbeFilters             string            `json:"probe_filters,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check
@@ -53,7 +53,7 @@ type PingCheck struct {
 	UseLegacyNotifications   bool   `json:"use_legacy_notifications,omitempty"`
 	ContactIds               []int  `json:"contactids,omitempty"`
 	IntegrationIds           []int  `json:"integrationids,omitempty"`
-  ProbeFilters             string `json:"probe_filters,omitempty"`
+	ProbeFilters             string `json:"probe_filters,omitempty"`
 }
 
 // Params returns a map of parameters for an HttpCheck that can be sent along
@@ -73,13 +73,13 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
 		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
-		"url":        ck.Url,
-		"encryption": strconv.FormatBool(ck.Encryption),
-		"postdata":   ck.PostData,
-		"contactids": intListToCDString(ck.ContactIds),
+		"url":            ck.Url,
+		"encryption":     strconv.FormatBool(ck.Encryption),
+		"postdata":       ck.PostData,
+		"contactids":     intListToCDString(ck.ContactIds),
 		"integrationids": intListToCDString(ck.IntegrationIds),
-		"tags":       ck.Tags,
-    "probe_filters": ck.ProbeFilters,
+		"tags":           ck.Tags,
+		"probe_filters":  ck.ProbeFilters,
 	}
 
 	// Ignore port is not defined
@@ -171,7 +171,7 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
 		"contactids":               intListToCDString(ck.ContactIds),
 		"integrationids":           intListToCDString(ck.IntegrationIds),
-    "probe_filters":            ck.ProbeFilters,
+		"probe_filters":            ck.ProbeFilters,
 	}
 }
 
