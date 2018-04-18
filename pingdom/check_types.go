@@ -12,15 +12,9 @@ type HttpCheck struct {
 	Hostname                 string            `json:"hostname,omitempty"`
 	Resolution               int               `json:"resolution,omitempty"`
 	Paused                   bool              `json:"paused,omitempty"`
-	SendToAndroid            bool              `json:"sendtoandroid,omitempty"`
-	SendToEmail              bool              `json:"sendtoemail,omitempty"`
-	SendToIPhone             bool              `json:"sendtoiphone,omitempty"`
-	SendToSms                bool              `json:"sendtosms,omitempty"`
-	SendToTwitter            bool              `json:"sendtotwitter,omitempty"`
 	SendNotificationWhenDown int               `json:"sendnotificationwhendown,omitempty"`
 	NotifyAgainEvery         int               `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool              `json:"notifywhenbackup,omitempty"`
-	UseLegacyNotifications   bool              `json:"use_legacy_notifications,omitempty"`
 	Url                      string            `json:"url,omitempty"`
 	Encryption               bool              `json:"encryption,omitempty"`
 	Port                     int               `json:"port,omitempty"`
@@ -42,15 +36,9 @@ type PingCheck struct {
 	Hostname                 string `json:"hostname,omitempty"`
 	Resolution               int    `json:"resolution,omitempty"`
 	Paused                   bool   `json:"paused,omitempty"`
-	SendToAndroid            bool   `json:"sendtoandroid,omitempty"`
-	SendToEmail              bool   `json:"sendtoemail,omitempty"`
-	SendToIPhone             bool   `json:"sendtoiphone,omitempty"`
-	SendToSms                bool   `json:"sendtosms,omitempty"`
-	SendToTwitter            bool   `json:"sendtotwitter,omitempty"`
 	SendNotificationWhenDown int    `json:"sendnotificationwhendown,omitempty"`
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
-	UseLegacyNotifications   bool   `json:"use_legacy_notifications,omitempty"`
 	ContactIds               []int  `json:"contactids,omitempty"`
 	IntegrationIds           []int  `json:"integrationids,omitempty"`
 	ProbeFilters             string `json:"probe_filters,omitempty"`
@@ -64,22 +52,16 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"host":                     ck.Hostname,
 		"resolution":               strconv.Itoa(ck.Resolution),
 		"paused":                   strconv.FormatBool(ck.Paused),
-		"sendtoemail":              strconv.FormatBool(ck.SendToEmail),
-		"sendtosms":                strconv.FormatBool(ck.SendToSms),
-		"sendtotwitter":            strconv.FormatBool(ck.SendToTwitter),
-		"sendtoiphone":             strconv.FormatBool(ck.SendToIPhone),
-		"sendtoandroid":            strconv.FormatBool(ck.SendToAndroid),
 		"sendnotificationwhendown": strconv.Itoa(ck.SendNotificationWhenDown),
 		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
-		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
-		"url":            ck.Url,
-		"encryption":     strconv.FormatBool(ck.Encryption),
-		"postdata":       ck.PostData,
-		"contactids":     intListToCDString(ck.ContactIds),
-		"integrationids": intListToCDString(ck.IntegrationIds),
-		"tags":           ck.Tags,
-		"probe_filters":  ck.ProbeFilters,
+		"url":                      ck.Url,
+		"encryption":               strconv.FormatBool(ck.Encryption),
+		"postdata":                 ck.PostData,
+		"contactids":               intListToCDString(ck.ContactIds),
+		"integrationids":           intListToCDString(ck.IntegrationIds),
+		"tags":                     ck.Tags,
+		"probe_filters":            ck.ProbeFilters,
 	}
 
 	// Ignore port is not defined
@@ -160,15 +142,9 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"host":                     ck.Hostname,
 		"resolution":               strconv.Itoa(ck.Resolution),
 		"paused":                   strconv.FormatBool(ck.Paused),
-		"sendtoemail":              strconv.FormatBool(ck.SendToEmail),
-		"sendtosms":                strconv.FormatBool(ck.SendToSms),
-		"sendtotwitter":            strconv.FormatBool(ck.SendToTwitter),
-		"sendtoiphone":             strconv.FormatBool(ck.SendToIPhone),
-		"sendtoandroid":            strconv.FormatBool(ck.SendToAndroid),
 		"sendnotificationwhendown": strconv.Itoa(ck.SendNotificationWhenDown),
 		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
-		"use_legacy_notifications": strconv.FormatBool(ck.UseLegacyNotifications),
 		"contactids":               intListToCDString(ck.ContactIds),
 		"integrationids":           intListToCDString(ck.IntegrationIds),
 		"probe_filters":            ck.ProbeFilters,

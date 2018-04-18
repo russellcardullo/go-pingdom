@@ -22,11 +22,6 @@ type CheckResponse struct {
 	ID                       int                `json:"id"`
 	Name                     string             `json:"name"`
 	Resolution               int                `json:"resolution,omitempty"`
-	SendToAndroid            bool               `json:"sendtoandroid,omitempty"`
-	SendToEmail              bool               `json:"sendtoemail,omitempty"`
-	SendToIPhone             bool               `json:"sendtoiphone,omitempty"`
-	SendToSms                bool               `json:"sendtosms,omitempty"`
-	SendToTwitter            bool               `json:"sendtotwitter,omitempty"`
 	SendNotificationWhenDown int                `json:"sendnotificationwhendown,omitempty"`
 	NotifyAgainEvery         int                `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool               `json:"notifywhenbackup,omitempty"`
