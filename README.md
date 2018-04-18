@@ -97,3 +97,71 @@ Create a check with basic alert notification to a contact. Note that you must se
 newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5, ContactIds: []int{contactResponse.ID}, UseLegacyNotifications: true, SendNotificationWhenDown: 2, SendToEmail: true}
 checkResponse, err := client.Checks.Create(&newCheck)
 ```
+
+### MaintenanceService ###
+
+This service manages pingdom Maintenances which are represented by the `Maintenance` struct.
+When creating or updating Maintenances you must specify at a minimum the `Description`, `From`
+and `To`.  Other fields are optional but if not set will be given the zero
+values for the underlying type.
+
+More information on Maintenances from Pingdom: https://www.pingdom.com/resources/api/2.1#ResourceMaintenance
+
+Get a list of all maintenancess:
+
+```go
+maintenances, err := client.Maintenances.List()
+fmt.Println("Maintenances:", maintenances) // [{ID Description} ...]
+```
+
+Create a new Maintenance Window:
+
+```go
+m := pingdom.MaintenanceWindow{
+		Description: "My Maintenance",
+		From:        1,
+		To:          1234567899,
+	}
+maintenance, err := client.Maintenances.Create(&m)
+fmt.Println("Created MaintenanceWindow:", maintenance) // {ID Description}
+```
+
+Get details for a specific maintenance:
+
+```go
+maintenance, err := client.Maintenances.Read(12345)
+```
+
+Update a maintenance: (Please note, that based on experience, you are allowed to modify only `Description`, `EffectiveTo` and `To`)
+
+```go
+updatedMaintenance := pingdom.MaintenanceWindow{
+		Description: "My Maintenance",
+		To:          1234567999,
+	}
+msg, err := client.Maintenances.Update(12345, &updatedMaintenance)
+```
+
+Delete a check:
+
+Note: that only future maintenance window can be deleted. This means that both `To` and `From` should be in future.
+
+```go
+msg, err := client.Maintenances.Delete(12345)
+```
+
+After contacting Pingdom, the better approach would be to use update function and setting `To` and `EffectiveTo` to current time
+
+```go
+maintenance, _ := client.Maintenances.Read(12345)
+
+m := pingdom.MaintenanceWindow{
+		Description: maintenance.Description,
+		From:        maintenance.From,
+		To:          1,
+		EffectiveTo: 1,
+	}
+
+maintenanceUpdate, err := client.Maintenances.Update(12345, &m)
+```
+
