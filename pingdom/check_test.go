@@ -11,7 +11,7 @@ func TestCheckServiceList(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
 			"checks": [
@@ -150,7 +150,7 @@ func TestCheckServiceCreate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		fmt.Fprint(w, `{
 			"check":{
@@ -182,7 +182,7 @@ func TestCheckServiceRead(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/85975", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks/85975", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
 			"check" : {
@@ -278,7 +278,7 @@ func TestCheckServiceUpdate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/12345", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
 		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
@@ -299,7 +299,7 @@ func TestCheckServiceDelete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/12345", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		fmt.Fprint(w, `{"message":"Deletion of check was successful!"}`)
 	})

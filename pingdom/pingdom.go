@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://api.pingdom.com"
+	defaultBaseURL = "https://api.pingdom.com/api/2.0"
 )
 
 // Client represents a client to the Pingdom API.  This package also
