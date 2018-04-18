@@ -32,7 +32,6 @@ type CheckResponse struct {
 	LastTestTime             int64              `json:"lasttesttime,omitempty"`
 	LastResponseTime         int64              `json:"lastresponsetime,omitempty"`
 	Paused                   bool               `json:"paused,omitempty"`
-	ContactIds               []int              `json:"contactids,omitempty"`
 	IntegrationIds           []int              `json:"integrationids,omitempty"`
 	Type                     CheckResponseType  `json:"type,omitempty"`
 	Tags                     []CheckResponseTag `json:"tags,omitempty"`
@@ -47,21 +46,6 @@ type CheckResponseTag struct {
 	Name  string `json:"name"`
 	Type  string `json:"type"`
 	Count int    `json:"count"`
-}
-
-type ContactResponse struct {
-	ID                 int    `json:"id"`
-	Name               string `json:"name"`
-	Email              string `json:"email,omitempty"`
-	Cellphone          string `json:"cellphone,omitempty"`
-	CountryISO         string `json:"countryiso,omitempty"`
-	DefaultSMSProvider string `json:"defaultsmsprovider,omitempty"`
-	DirectTwitter      bool   `json:"directtwitter,omitempty"`
-	TwitterUser        string `json:"twitteruser,omitempty"`
-	IphoneTokens       string `json:"iphonetokens,omitempty"`
-	AndroidTokens      string `json:"androidtokens,omitempty"`
-	Paused             bool   `json:"paused,omitempty"`
-	Type               string `json:"type,omitempty"`
 }
 
 func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
@@ -123,14 +107,6 @@ type listChecksJsonResponse struct {
 
 type checkDetailsJsonResponse struct {
 	Check *CheckResponse `json:"check"`
-}
-
-type contactDetailsJsonResponse struct {
-	Contact *ContactResponse `json:"contact"`
-}
-
-type listContactsJsonResponse struct {
-	Contacts []ContactResponse `json:"contacts"`
 }
 
 type errorJsonResponse struct {

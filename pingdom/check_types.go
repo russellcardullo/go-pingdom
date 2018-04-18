@@ -24,7 +24,6 @@ type HttpCheck struct {
 	ShouldNotContain         string            `json:"shouldnotcontain,omitempty"`
 	PostData                 string            `json:"postdata,omitempty"`
 	RequestHeaders           map[string]string `json:"requestheaders,omitempty"`
-	ContactIds               []int             `json:"contactids,omitempty"`
 	IntegrationIds           []int             `json:"integrationids,omitempty"`
 	Tags                     string            `json:"tags,omitempty"`
 	ProbeFilters             string            `json:"probe_filters,omitempty"`
@@ -39,7 +38,6 @@ type PingCheck struct {
 	SendNotificationWhenDown int    `json:"sendnotificationwhendown,omitempty"`
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
-	ContactIds               []int  `json:"contactids,omitempty"`
 	IntegrationIds           []int  `json:"integrationids,omitempty"`
 	ProbeFilters             string `json:"probe_filters,omitempty"`
 }
@@ -58,7 +56,6 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"url":                      ck.Url,
 		"encryption":               strconv.FormatBool(ck.Encryption),
 		"postdata":                 ck.PostData,
-		"contactids":               intListToCDString(ck.ContactIds),
 		"integrationids":           intListToCDString(ck.IntegrationIds),
 		"tags":                     ck.Tags,
 		"probe_filters":            ck.ProbeFilters,
@@ -145,7 +142,6 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"sendnotificationwhendown": strconv.Itoa(ck.SendNotificationWhenDown),
 		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
-		"contactids":               intListToCDString(ck.ContactIds),
 		"integrationids":           intListToCDString(ck.IntegrationIds),
 		"probe_filters":            ck.ProbeFilters,
 	}

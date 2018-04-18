@@ -164,7 +164,6 @@ func TestCheckServiceCreate(t *testing.T) {
 		Name:           "My new HTTP check",
 		Hostname:       "example.com",
 		Resolution:     5,
-		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
 	}
 	check, err := client.Checks.Create(&newCheck)
@@ -186,10 +185,6 @@ func TestCheckServiceRead(t *testing.T) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
 			"check" : {
-        "contactids": [
-            11111111,
-            22222222
-        ],
         "created" : 1240394682,
         "hostname" : "s7.mydomain.com",
         "id" : 85975,
@@ -255,7 +250,6 @@ func TestCheckServiceRead(t *testing.T) {
 				},
 			},
 		},
-		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
 		Tags:           []CheckResponseTag{},
 	}
