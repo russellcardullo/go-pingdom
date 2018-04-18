@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCheckServiceList(t *testing.T) {
@@ -73,6 +75,8 @@ func TestCheckServiceList(t *testing.T) {
 		}`)
 	})
 
+	var countA, countB float64 = 1, 2
+
 	want := []CheckResponse{
 		{
 			ID:               85975,
@@ -90,7 +94,7 @@ func TestCheckServiceList(t *testing.T) {
 				{
 					Name:  "apache",
 					Type:  "a",
-					Count: 2,
+					Count: countB,
 				},
 			},
 		},
@@ -110,7 +114,7 @@ func TestCheckServiceList(t *testing.T) {
 				{
 					Name:  "nginx",
 					Type:  "u",
-					Count: 1,
+					Count: countA,
 				},
 			},
 		},
@@ -130,19 +134,17 @@ func TestCheckServiceList(t *testing.T) {
 				{
 					Name:  "apache",
 					Type:  "a",
-					Count: 2,
+					Count: countB,
 				},
 			},
 		},
 	}
 
 	checks, err := client.Checks.List()
-	if err != nil {
-		t.Errorf("ListChecks returned error: %v", err)
-	}
-	// remove tags to check separately
-	if !reflect.DeepEqual(checks, want) {
-		t.Errorf("ListChecks returned %+v, want %+v", checks, want)
+	if assert.Nil(t, err) {
+
+		// remove tags to check separately
+		assert.Equal(t, want, checks, "Checks.List() should return correct result")
 	}
 }
 
