@@ -17,6 +17,8 @@ func TestHttpCheckPutParams(t *testing.T) {
 		Username:       "user",
 		Password:       "pass",
 		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
 	}
 	params := check.PutParams()
 	want := map[string]string{
@@ -37,6 +39,8 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"integrationids":           "33333333,44444444",
 		"tags":                     "",
 		"probe_filters":            "",
+		"userids":                  "123,456",
+		"teamids":                  "789",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -56,6 +60,8 @@ func TestHttpCheckPostParams(t *testing.T) {
 		Username:       "user",
 		Password:       "pass",
 		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
 	}
 	params := check.PostParams()
 	want := map[string]string{
@@ -73,6 +79,8 @@ func TestHttpCheckPostParams(t *testing.T) {
 		"auth":                     "user:pass",
 		"encryption":               "false",
 		"integrationids":           "33333333,44444444",
+		"userids":                  "123,456",
+		"teamids":                  "789",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -105,7 +113,13 @@ func TestHttpCheckValid(t *testing.T) {
 }
 
 func TestPingCheckPostParams(t *testing.T) {
-	check := PingCheck{Name: "fake check", Hostname: "example.com", IntegrationIds: []int{33333333, 44444444}}
+	check := PingCheck{
+		Name:           "fake check",
+		Hostname:       "example.com",
+		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
+	}
 	params := check.PostParams()
 	want := map[string]string{
 		"name":                     "fake check",
@@ -118,6 +132,8 @@ func TestPingCheckPostParams(t *testing.T) {
 		"type":                     "ping",
 		"integrationids":           "33333333,44444444",
 		"probe_filters":            "",
+		"userids":                  "123,456",
+		"teamids":                  "789",
 	}
 
 	if !reflect.DeepEqual(params, want) {

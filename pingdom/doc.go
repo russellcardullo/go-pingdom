@@ -28,6 +28,12 @@ Create a new HTTP check:
 	check, err := client.Checks.Create(&newCheck)
 	fmt.Println("Created check:", check) // {ID, Name}
 
+Create a new HTTP check with alerts for specified users:
+
+	newCheck := pingdom.Check{Name: "Test Check", Hostname: "example.com", Resolution: 5, UserIds: []int{12345}}
+	check, err := client.Checks.Create(&newCheck)
+	fmt.Println("Created check:", check) // {ID, Name}
+
 Create a new Ping check:
 
 	newCheck := pingdom.PingCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5}

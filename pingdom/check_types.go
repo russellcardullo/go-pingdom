@@ -27,6 +27,8 @@ type HttpCheck struct {
 	IntegrationIds           []int             `json:"integrationids,omitempty"`
 	Tags                     string            `json:"tags,omitempty"`
 	ProbeFilters             string            `json:"probe_filters,omitempty"`
+	UserIds                  []int             `json:"userids,omitempty"`
+	TeamIds                  []int             `json:"teamids,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check
@@ -40,6 +42,8 @@ type PingCheck struct {
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
 	IntegrationIds           []int  `json:"integrationids,omitempty"`
 	ProbeFilters             string `json:"probe_filters,omitempty"`
+	UserIds                  []int  `json:"userids,omitempty"`
+	TeamIds                  []int  `json:"teamids,omitempty"`
 }
 
 // Params returns a map of parameters for an HttpCheck that can be sent along
@@ -59,6 +63,8 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"integrationids":           intListToCDString(ck.IntegrationIds),
 		"tags":                     ck.Tags,
 		"probe_filters":            ck.ProbeFilters,
+		"userids":                  intListToCDString(ck.UserIds),
+		"teamids":                  intListToCDString(ck.TeamIds),
 	}
 
 	// Ignore port is not defined
@@ -144,6 +150,8 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
 		"integrationids":           intListToCDString(ck.IntegrationIds),
 		"probe_filters":            ck.ProbeFilters,
+		"userids":                  intListToCDString(ck.UserIds),
+		"teamids":                  intListToCDString(ck.TeamIds),
 	}
 }
 

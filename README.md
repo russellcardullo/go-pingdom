@@ -87,6 +87,6 @@ msg, err := client.Checks.Delete(12345)
 Create a check with basic alert notification to a user.
 
 ```go
-newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5, SendNotificationWhenDown: 2}
+newCheck := pingdom.HttpCheck{Name: "Test Check", Hostname: "example.com", Resolution: 5, SendNotificationWhenDown: 2, UserIds []int{12345}}
 checkResponse, err := client.Checks.Create(&newCheck)
 ```
