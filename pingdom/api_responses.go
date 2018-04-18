@@ -60,9 +60,9 @@ type MaintenanceResponse struct {
 	Description    string                   `json:"description"`
 	From           int64                    `json:"from"`
 	To             int64                    `json:"to"`
-	Recurrencetype string                   `json:"recurrencetype"`
-	Repeatevery    int                      `json:"repeatevery"`
-	Effectiveto    int64                    `json:"effectiveto"`
+	RecurrenceType string                   `json:"recurrencetype"`
+	RepeatEvery    int                      `json:"repeatevery"`
+	EffectiveTo    int64                    `json:"effectiveto"`
 	Checks         MaintenanceCheckResponse `json:"checks"`
 }
 

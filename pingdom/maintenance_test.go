@@ -51,9 +51,9 @@ func TestMaintenanceServiceList(t *testing.T) {
 				Description:    "Maintenance N",
 				From:           1,
 				To:             1524048059,
-				Recurrencetype: "none",
-				Repeatevery:    0,
-				Effectiveto:    1524048059,
+				RecurrenceType: "none",
+				RepeatEvery:    0,
+				EffectiveTo:    1524048059,
 				Checks:         checks,
 			},
 		}
@@ -127,9 +127,9 @@ func TestMaintenanceServiceRead(t *testing.T) {
 			Description:    "Particular maintenance window",
 			From:           1497520800,
 			To:             1497574800,
-			Recurrencetype: "none",
-			Repeatevery:    0,
-			Effectiveto:    1497574800,
+			RecurrenceType: "none",
+			RepeatEvery:    0,
+			EffectiveTo:    1497574800,
 			Checks:         checks,
 		}
 
