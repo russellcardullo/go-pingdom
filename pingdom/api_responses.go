@@ -68,8 +68,8 @@ type MaintenanceResponse struct {
 
 // MaintenanceCheckResponse represents Check reply in json MaintenanceResponse
 type MaintenanceCheckResponse struct {
-	Uptime []int         `json:"uptime"`
-	Tms    []interface{} `json:"tms"`
+	Uptime []int `json:"uptime"`
+	Tms    []int `json:"tms"`
 }
 
 type ContactResponse struct {
