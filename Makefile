@@ -2,6 +2,7 @@ all: test install
 
 install:
 	go install ./...
+	go get github.com/stretchr/testify
 
 test:
 	go test ./...

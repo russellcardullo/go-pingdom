@@ -49,9 +49,27 @@ type CheckResponseType struct {
 }
 
 type CheckResponseTag struct {
-	Name  string `json:"name"`
-	Type  string `json:"type"`
-	Count int    `json:"count"`
+	Name  string      `json:"name"`
+	Type  string      `json:"type"`
+	Count interface{} `json:"count"`
+}
+
+// MaintenanceResponse represents the json response for a maintenance from the Pingdom API
+type MaintenanceResponse struct {
+	ID             int                      `json:"id"`
+	Description    string                   `json:"description"`
+	From           int64                    `json:"from"`
+	To             int64                    `json:"to"`
+	Recurrencetype string                   `json:"recurrencetype"`
+	Repeatevery    int                      `json:"repeatevery"`
+	Effectiveto    int64                    `json:"effectiveto"`
+	Checks         MaintenanceCheckResponse `json:"checks"`
+}
+
+// MaintenanceCheckResponse represents Check reply in json MaintenanceResponse
+type MaintenanceCheckResponse struct {
+	Uptime []int `json:"uptime"`
+	Tms    []int `json:"tms"`
 }
 
 type ContactResponse struct {
@@ -126,8 +144,16 @@ type listChecksJsonResponse struct {
 	Checks []CheckResponse `json:"checks"`
 }
 
+type listMaintenanceJsonResponse struct {
+	Maintenances []MaintenanceResponse `json:"maintenance"`
+}
+
 type checkDetailsJsonResponse struct {
 	Check *CheckResponse `json:"check"`
+}
+
+type maintenanceDetailsJsonResponse struct {
+	Maintenance *MaintenanceResponse `json:"maintenance"`
 }
 
 type contactDetailsJsonResponse struct {
