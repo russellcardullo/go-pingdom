@@ -3,4 +3,4 @@ language: go
 go:
   - 1.6
 
-script: make test
+script: make install && make test
