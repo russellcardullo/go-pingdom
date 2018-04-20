@@ -27,7 +27,7 @@ func (cs *CheckService) List(params ...map[string]string) ([]CheckResponse, erro
 	if len(params) == 1 {
 		param = params[0]
 	}
-	req, err := cs.client.NewRequest("GET", "/api/2.0/checks", param)
+	req, err := cs.client.NewRequest("GET", "/checks", param)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (cs *CheckService) Create(check Check) (*CheckResponse, error) {
 		return nil, err
 	}
 
-	req, err := cs.client.NewRequest("POST", "/api/2.0/checks", check.PostParams())
+	req, err := cs.client.NewRequest("POST", "/checks", check.PostParams())
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (cs *CheckService) Create(check Check) (*CheckResponse, error) {
 // This returns type CheckResponse rather than Check since the
 // pingdom API does not return a complete representation of a check.
 func (cs *CheckService) Read(id int) (*CheckResponse, error) {
-	req, err := cs.client.NewRequest("GET", "/api/2.0/checks/"+strconv.Itoa(id), nil)
+	req, err := cs.client.NewRequest("GET", "/checks/"+strconv.Itoa(id), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (cs *CheckService) Update(id int, check Check) (*PingdomResponse, error) {
 		return nil, err
 	}
 
-	req, err := cs.client.NewRequest("PUT", "/api/2.0/checks/"+strconv.Itoa(id), check.PutParams())
+	req, err := cs.client.NewRequest("PUT", "/checks/"+strconv.Itoa(id), check.PutParams())
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ func (cs *CheckService) Update(id int, check Check) (*PingdomResponse, error) {
 
 // DeleteCheck will delete the check for the given ID.
 func (cs *CheckService) Delete(id int) (*PingdomResponse, error) {
-	req, err := cs.client.NewRequest("DELETE", "/api/2.0/checks/"+strconv.Itoa(id), nil)
+	req, err := cs.client.NewRequest("DELETE", "/checks/"+strconv.Itoa(id), nil)
 	if err != nil {
 		return nil, err
 	}

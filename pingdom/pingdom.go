@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://api.pingdom.com"
+	defaultBaseURL = "https://api.pingdom.com/api/2.1"
 )
 
 // Client represents a client to the Pingdom API.  This package also
@@ -23,7 +23,6 @@ type Client struct {
 	BaseURL      *url.URL
 	client       *http.Client
 	Checks       *CheckService
-	Contacts     *ContactService
 }
 
 // NewClient returns a Pingdom client with a default base URL and HTTP client
@@ -32,7 +31,6 @@ func NewClient(user string, password string, key string) *Client {
 	c := &Client{User: user, Password: password, APIKey: key, BaseURL: baseURL}
 	c.client = http.DefaultClient
 	c.Checks = &CheckService{client: c}
-	c.Contacts = &ContactService{client: c}
 	return c
 }
 

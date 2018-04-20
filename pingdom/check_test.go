@@ -11,7 +11,7 @@ func TestCheckServiceList(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
 			"checks": [
@@ -150,7 +150,7 @@ func TestCheckServiceCreate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		fmt.Fprint(w, `{
 			"check":{
@@ -164,7 +164,6 @@ func TestCheckServiceCreate(t *testing.T) {
 		Name:           "My new HTTP check",
 		Hostname:       "example.com",
 		Resolution:     5,
-		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
 	}
 	check, err := client.Checks.Create(&newCheck)
@@ -182,14 +181,10 @@ func TestCheckServiceRead(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/85975", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks/85975", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		fmt.Fprint(w, `{
 			"check" : {
-        "contactids": [
-            11111111,
-            22222222
-        ],
         "created" : 1240394682,
         "hostname" : "s7.mydomain.com",
         "id" : 85975,
@@ -206,11 +201,6 @@ func TestCheckServiceRead(t *testing.T) {
         "probe_filters": [],
         "resolution" : 1,
         "sendnotificationwhendown" : 0,
-        "sendtoandroid" : false,
-        "sendtoemail" : false,
-        "sendtoiphone" : false,
-        "sendtosms" : false,
-        "sendtotwitter" : false,
         "status" : "up",
         "tags": [],
         "type" : {
@@ -236,9 +226,6 @@ func TestCheckServiceRead(t *testing.T) {
 		ID:                       85975,
 		Name:                     "My check 7",
 		Resolution:               1,
-		SendToEmail:              false,
-		SendToTwitter:            false,
-		SendToIPhone:             false,
 		SendNotificationWhenDown: 0,
 		NotifyAgainEvery:         0,
 		NotifyWhenBackup:         false,
@@ -263,7 +250,6 @@ func TestCheckServiceRead(t *testing.T) {
 				},
 			},
 		},
-		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
 		Tags:           []CheckResponseTag{},
 	}
@@ -278,7 +264,7 @@ func TestCheckServiceUpdate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/12345", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
 		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
@@ -299,7 +285,7 @@ func TestCheckServiceDelete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/2.0/checks/12345", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/checks/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		fmt.Fprint(w, `{"message":"Deletion of check was successful!"}`)
 	})

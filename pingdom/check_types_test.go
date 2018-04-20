@@ -16,8 +16,9 @@ func TestHttpCheckPutParams(t *testing.T) {
 		},
 		Username:       "user",
 		Password:       "pass",
-		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
 	}
 	params := check.PutParams()
 	want := map[string]string{
@@ -25,26 +26,21 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"host":                     "example.com",
 		"paused":                   "false",
 		"resolution":               "0",
-		"sendtoemail":              "false",
-		"sendtosms":                "false",
-		"sendtotwitter":            "false",
-		"sendtoiphone":             "false",
-		"sendtoandroid":            "false",
 		"sendnotificationwhendown": "0",
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
-		"use_legacy_notifications": "false",
-		"url":              "/foo",
-		"requestheader0":   "Pragma:no-cache",
-		"requestheader1":   "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
-		"auth":             "user:pass",
-		"encryption":       "false",
-		"shouldnotcontain": "",
-		"postdata":         "",
-		"contactids":       "11111111,22222222",
-		"integrationids":   "33333333,44444444",
-		"tags":             "",
-		"probe_filters":    "",
+		"url":                      "/foo",
+		"requestheader0":           "Pragma:no-cache",
+		"requestheader1":           "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+		"auth":                     "user:pass",
+		"encryption":               "false",
+		"shouldnotcontain":         "",
+		"postdata":                 "",
+		"integrationids":           "33333333,44444444",
+		"tags":                     "",
+		"probe_filters":            "",
+		"userids":                  "123,456",
+		"teamids":                  "789",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -63,8 +59,9 @@ func TestHttpCheckPostParams(t *testing.T) {
 		},
 		Username:       "user",
 		Password:       "pass",
-		ContactIds:     []int{11111111, 22222222},
 		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
 	}
 	params := check.PostParams()
 	want := map[string]string{
@@ -72,23 +69,18 @@ func TestHttpCheckPostParams(t *testing.T) {
 		"host":                     "example.com",
 		"paused":                   "false",
 		"resolution":               "0",
-		"sendtoemail":              "false",
-		"sendtosms":                "false",
-		"sendtotwitter":            "false",
-		"sendtoiphone":             "false",
-		"sendtoandroid":            "false",
 		"sendnotificationwhendown": "0",
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
-		"use_legacy_notifications": "false",
-		"type":           "http",
-		"url":            "/foo",
-		"requestheader0": "Pragma:no-cache",
-		"requestheader1": "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
-		"auth":           "user:pass",
-		"encryption":     "false",
-		"contactids":     "11111111,22222222",
-		"integrationids": "33333333,44444444",
+		"type":                     "http",
+		"url":                      "/foo",
+		"requestheader0":           "Pragma:no-cache",
+		"requestheader1":           "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+		"auth":                     "user:pass",
+		"encryption":               "false",
+		"integrationids":           "33333333,44444444",
+		"userids":                  "123,456",
+		"teamids":                  "789",
 	}
 
 	if !reflect.DeepEqual(params, want) {
@@ -121,26 +113,27 @@ func TestHttpCheckValid(t *testing.T) {
 }
 
 func TestPingCheckPostParams(t *testing.T) {
-	check := PingCheck{Name: "fake check", Hostname: "example.com", ContactIds: []int{11111111, 22222222}, IntegrationIds: []int{33333333, 44444444}}
+	check := PingCheck{
+		Name:           "fake check",
+		Hostname:       "example.com",
+		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
+	}
 	params := check.PostParams()
 	want := map[string]string{
 		"name":                     "fake check",
 		"host":                     "example.com",
 		"paused":                   "false",
 		"resolution":               "0",
-		"sendtoemail":              "false",
-		"sendtosms":                "false",
-		"sendtotwitter":            "false",
-		"sendtoiphone":             "false",
-		"sendtoandroid":            "false",
 		"sendnotificationwhendown": "0",
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
-		"use_legacy_notifications": "false",
-		"type":           "ping",
-		"contactids":     "11111111,22222222",
-		"integrationids": "33333333,44444444",
-		"probe_filters":  "",
+		"type":                     "ping",
+		"integrationids":           "33333333,44444444",
+		"probe_filters":            "",
+		"userids":                  "123,456",
+		"teamids":                  "789",
 	}
 
 	if !reflect.DeepEqual(params, want) {
