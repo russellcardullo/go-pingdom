@@ -1,8 +1,13 @@
-all: test install
+default: test
+
+vendor: Gopkg.toml Gopkg.lock
+	dep ensure
+
+vendor_update:
+	dep ensure -update
 
 install:
 	go install ./...
-	go get github.com/stretchr/testify
 
 test:
 	go test ./...
