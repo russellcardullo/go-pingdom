@@ -43,9 +43,27 @@ type CheckResponseType struct {
 }
 
 type CheckResponseTag struct {
-	Name  string `json:"name"`
-	Type  string `json:"type"`
-	Count int    `json:"count"`
+	Name  string      `json:"name"`
+	Type  string      `json:"type"`
+	Count interface{} `json:"count"`
+}
+
+// MaintenanceResponse represents the json response for a maintenance from the Pingdom API
+type MaintenanceResponse struct {
+	ID             int                      `json:"id"`
+	Description    string                   `json:"description"`
+	From           int64                    `json:"from"`
+	To             int64                    `json:"to"`
+	RecurrenceType string                   `json:"recurrencetype"`
+	RepeatEvery    int                      `json:"repeatevery"`
+	EffectiveTo    int64                    `json:"effectiveto"`
+	Checks         MaintenanceCheckResponse `json:"checks"`
+}
+
+// MaintenanceCheckResponse represents Check reply in json MaintenanceResponse
+type MaintenanceCheckResponse struct {
+	Uptime []int `json:"uptime"`
+	Tms    []int `json:"tms"`
 }
 
 func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
@@ -105,8 +123,16 @@ type listChecksJsonResponse struct {
 	Checks []CheckResponse `json:"checks"`
 }
 
+type listMaintenanceJsonResponse struct {
+	Maintenances []MaintenanceResponse `json:"maintenance"`
+}
+
 type checkDetailsJsonResponse struct {
 	Check *CheckResponse `json:"check"`
+}
+
+type maintenanceDetailsJsonResponse struct {
+	Maintenance *MaintenanceResponse `json:"maintenance"`
 }
 
 type errorJsonResponse struct {
