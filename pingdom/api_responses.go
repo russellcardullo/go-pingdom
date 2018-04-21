@@ -35,6 +35,8 @@ type CheckResponse struct {
 	IntegrationIds           []int              `json:"integrationids,omitempty"`
 	Type                     CheckResponseType  `json:"type,omitempty"`
 	Tags                     []CheckResponseTag `json:"tags,omitempty"`
+	UserIds                  []int              `json:"userids,omitempty"`
+	TeamIds                  []int              `json:"teamids,omitempty"`
 }
 
 type CheckResponseType struct {
