@@ -1,8 +1,9 @@
 package pingdom
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHttpCheckPutParams(t *testing.T) {
@@ -20,7 +21,6 @@ func TestHttpCheckPutParams(t *testing.T) {
 		UserIds:        []int{123, 456},
 		TeamIds:        []int{789},
 	}
-	params := check.PutParams()
 	want := map[string]string{
 		"name":                     "fake check",
 		"host":                     "example.com",
@@ -43,9 +43,8 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"teamids":                  "789",
 	}
 
-	if !reflect.DeepEqual(params, want) {
-		t.Errorf("Check.PutParams() returned %+v, want %+v", params, want)
-	}
+	params := check.PutParams()
+	assert.Equal(t, want, params)
 }
 
 func TestHttpCheckPostParams(t *testing.T) {
@@ -63,7 +62,6 @@ func TestHttpCheckPostParams(t *testing.T) {
 		UserIds:        []int{123, 456},
 		TeamIds:        []int{789},
 	}
-	params := check.PostParams()
 	want := map[string]string{
 		"name":                     "fake check",
 		"host":                     "example.com",
@@ -83,33 +81,25 @@ func TestHttpCheckPostParams(t *testing.T) {
 		"teamids":                  "789",
 	}
 
-	if !reflect.DeepEqual(params, want) {
-		t.Errorf("Check.PostParams() returned %+v, want %+v", params, want)
-	}
+	params := check.PostParams()
+	assert.Equal(t, want, params)
 }
 
 func TestHttpCheckValid(t *testing.T) {
 	check := HttpCheck{Name: "fake check", Hostname: "example.com", Resolution: 15}
-	if err := check.Valid(); err != nil {
-		t.Errorf("Valid with valid check returned error %+v", err)
-	}
+	assert.NoError(t, check.Valid())
 
-	check = HttpCheck{Name: "fake check", Hostname: "example.com"}
-	if err := check.Valid(); err == nil {
-		t.Errorf("Valid with invalid check (`Resolution` == 0) expected error, returned nil")
-	}
+	badCheck := HttpCheck{Name: "fake check", Hostname: "example.com"}
+	assert.Error(t, badCheck.Valid())
 
-	check = HttpCheck{
+	badContainsCheck := HttpCheck{
 		Name:             "fake check",
 		Hostname:         "example.com",
 		Resolution:       15,
 		ShouldContain:    "foo",
 		ShouldNotContain: "bar",
 	}
-	if err := check.Valid(); err == nil {
-		t.Errorf("Valid with invalid check (`ShouldContain` and `ShouldNotContain` defined) expected error, returned nil")
-	}
-
+	assert.Error(t, badContainsCheck.Valid())
 }
 
 func TestPingCheckPostParams(t *testing.T) {
@@ -120,7 +110,6 @@ func TestPingCheckPostParams(t *testing.T) {
 		UserIds:        []int{123, 456},
 		TeamIds:        []int{789},
 	}
-	params := check.PostParams()
 	want := map[string]string{
 		"name":                     "fake check",
 		"host":                     "example.com",
@@ -136,19 +125,14 @@ func TestPingCheckPostParams(t *testing.T) {
 		"teamids":                  "789",
 	}
 
-	if !reflect.DeepEqual(params, want) {
-		t.Errorf("Check.PostParams() returned %+v, want %+v", params, want)
-	}
+	params := check.PostParams()
+	assert.Equal(t, want, params)
 }
 
 func TestPingCheckValid(t *testing.T) {
 	check := PingCheck{Name: "fake check", Hostname: "example.com", Resolution: 15}
-	if err := check.Valid(); err != nil {
-		t.Errorf("Valid with valid check returned error %+v", err)
-	}
+	assert.NoError(t, check.Valid())
 
-	check = PingCheck{Name: "fake check", Hostname: "example.com"}
-	if err := check.Valid(); err == nil {
-		t.Errorf("Valid with invalid check expected error, returned nil")
-	}
+	badCheck := PingCheck{Name: "fake check", Hostname: "example.com"}
+	assert.Error(t, badCheck.Valid())
 }

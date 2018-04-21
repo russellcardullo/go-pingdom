@@ -3,7 +3,6 @@ package pingdom
 import (
 	"fmt"
 	"net/http"
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -141,11 +140,8 @@ func TestCheckServiceList(t *testing.T) {
 	}
 
 	checks, err := client.Checks.List()
-	if assert.Nil(t, err) {
-
-		// remove tags to check separately
-		assert.Equal(t, want, checks, "Checks.List() should return correct result")
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, want, checks)
 }
 
 func TestCheckServiceCreate(t *testing.T) {
@@ -168,15 +164,11 @@ func TestCheckServiceCreate(t *testing.T) {
 		Resolution:     5,
 		IntegrationIds: []int{33333333, 44444444},
 	}
-	check, err := client.Checks.Create(&newCheck)
-	if err != nil {
-		t.Errorf("CreateCheck returned error: %v", err)
-	}
-
 	want := &CheckResponse{ID: 138631, Name: "My new HTTP check"}
-	if !reflect.DeepEqual(check, want) {
-		t.Errorf("CreateCheck returned %+v, want %+v", check, want)
-	}
+
+	check, err := client.Checks.Create(&newCheck)
+	assert.NoError(t, err)
+	assert.Equal(t, want, check)
 }
 
 func TestCheckServiceRead(t *testing.T) {
@@ -219,11 +211,6 @@ func TestCheckServiceRead(t *testing.T) {
 		}`)
 	})
 
-	check, err := client.Checks.Read(85975)
-	if err != nil {
-		t.Errorf("ReadCheck returned error: %v", err)
-	}
-
 	want := &CheckResponse{
 		ID:                       85975,
 		Name:                     "My check 7",
@@ -256,10 +243,9 @@ func TestCheckServiceRead(t *testing.T) {
 		Tags:           []CheckResponseTag{},
 	}
 
-	if !reflect.DeepEqual(check, want) {
-		t.Errorf("ReadCheck returned %+v, want %+v", check, want)
-	}
-
+	check, err := client.Checks.Read(85975)
+	assert.NoError(t, err)
+	assert.Equal(t, want, check)
 }
 
 func TestCheckServiceUpdate(t *testing.T) {
@@ -272,15 +258,11 @@ func TestCheckServiceUpdate(t *testing.T) {
 	})
 
 	updateCheck := HttpCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
-	msg, err := client.Checks.Update(12345, &updateCheck)
-	if err != nil {
-		t.Errorf("UpdateCheck returned error: %v", err)
-	}
-
 	want := &PingdomResponse{Message: "Modification of check was successful!"}
-	if !reflect.DeepEqual(msg, want) {
-		t.Errorf("UpdateCheck returned %+v, want %+v", msg, want)
-	}
+
+	msg, err := client.Checks.Update(12345, &updateCheck)
+	assert.NoError(t, err)
+	assert.Equal(t, want, msg)
 }
 
 func TestCheckServiceDelete(t *testing.T) {
@@ -292,13 +274,9 @@ func TestCheckServiceDelete(t *testing.T) {
 		fmt.Fprint(w, `{"message":"Deletion of check was successful!"}`)
 	})
 
-	msg, err := client.Checks.Delete(12345)
-	if err != nil {
-		t.Errorf("DeleteCheck returned error: %v", err)
-	}
-
 	want := &PingdomResponse{Message: "Deletion of check was successful!"}
-	if !reflect.DeepEqual(msg, want) {
-		t.Errorf("DeleteCheck returned %+v, want %+v", msg, want)
-	}
+
+	msg, err := client.Checks.Delete(12345)
+	assert.NoError(t, err)
+	assert.Equal(t, want, msg)
 }
