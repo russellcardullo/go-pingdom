@@ -10,14 +10,6 @@ type ProbeService struct {
 	client *Client
 }
 
-// // Check is an interface representing a pingdom check.
-// // Specific check types should implement the methods of this interface
-// type Probe interface {
-// 	PutParams() map[string]string
-// 	PostParams() map[string]string
-// 	Valid() error
-// }
-
 // List return a list of probes from Pingdom.
 func (cs *ProbeService) List(params ...map[string]string) ([]ProbeResponse, error) {
 	param := map[string]string{}

@@ -158,3 +158,24 @@ m := pingdom.MaintenanceWindow{
 maintenanceUpdate, err := client.Maintenances.Update(12345, &m)
 ```
 
+### ProbeService ###
+
+This service gets pingdom Probes which are represented by the `Probes` struct.
+
+More information on Probes from Pingdom: https://www.pingdom.com/resources/api/2.1#ResourceProbes
+Several parameters are supported for filtering output. Please see them in Pingdom API documentation.
+
+**NOTE:** Official documentation does not specify that `region` is returned for every probe entry, but it does and you can use it.
+
+Get a list of all probes:
+
+```go
+params := make(map[string]string)
+
+probes, err := client.Probes.List(params)
+fmt.Println("Probes:", probes) // [{ID Name} ...]
+
+for _, probe := range probes {
+  fmt.Println("Probe region:", probe.Region)  // Probe region: EU
+}
+```
