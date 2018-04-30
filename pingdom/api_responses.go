@@ -68,6 +68,20 @@ type MaintenanceCheckResponse struct {
 	Tms    []int `json:"tms"`
 }
 
+// ProbeResponse represents the json response for probes from the PIngdom API
+type ProbeResponse struct {
+	ID         int    `json:"id"`
+	Country    string `json:"country"`
+	City       string `json:"city"`
+	Name       string `json:"name"`
+	Active     bool   `json:"active"`
+	Hostname   string `json:"hostname"`
+	IP         string `json:"ip"`
+	IPv6       string `json:"ipv6"`
+	CountryISO string `json:"countryiso"`
+	Region     string `json:"region"`
+}
+
 func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
 	var raw interface{}
 
@@ -127,6 +141,10 @@ type listChecksJsonResponse struct {
 
 type listMaintenanceJsonResponse struct {
 	Maintenances []MaintenanceResponse `json:"maintenance"`
+}
+
+type listProbesJsonResponse struct {
+	Probes []ProbeResponse `json:"probes"`
 }
 
 type checkDetailsJsonResponse struct {
