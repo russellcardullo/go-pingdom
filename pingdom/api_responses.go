@@ -82,6 +82,25 @@ type ProbeResponse struct {
 	Region     string `json:"region"`
 }
 
+// TeamResponse represents the json response for teams from the PIngdom API
+type TeamResponse struct {
+	ID    interface{} `json:"id"`
+	Name  string      `json:"name"`
+	Users []TeamUserResponse
+}
+
+// TeamUserResponse represents the json response for users in teams from the PIngdom API
+type TeamUserResponse struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
+}
+
+// TeamDeleteResponse represents the json response for delete team from the PIngdom API
+type TeamDeleteResponse struct {
+	Success bool `json:"success"`
+}
+
 func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
 	var raw interface{}
 
@@ -147,12 +166,20 @@ type listProbesJsonResponse struct {
 	Probes []ProbeResponse `json:"probes"`
 }
 
+type listTeamsJsonResponse struct {
+	Teams []TeamResponse `json:"teams"`
+}
+
 type checkDetailsJsonResponse struct {
 	Check *CheckResponse `json:"check"`
 }
 
 type maintenanceDetailsJsonResponse struct {
 	Maintenance *MaintenanceResponse `json:"maintenance"`
+}
+
+type teamDetailsJsonResponse struct {
+	Team *TeamResponse `json:"team"`
 }
 
 type errorJsonResponse struct {
