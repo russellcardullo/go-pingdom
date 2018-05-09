@@ -7,7 +7,7 @@ import (
 // TeamData represents a Pingdom Team Data.
 type TeamData struct {
 	Name    string `json:"name"`
-	UserIDs string `json:"userids,omitempty"`
+	UserIds string `json:"userids,omitempty"`
 }
 
 // PutParams returns a map of parameters for an Team that can be sent along
@@ -17,8 +17,8 @@ func (ck *TeamData) PutParams() map[string]string {
 	}
 
 	// Ignore if not defined
-	if ck.UserIDs != "" {
-		t["userids"] = ck.UserIDs
+	if ck.UserIds != "" {
+		t["userids"] = ck.UserIds
 	}
 
 	return t

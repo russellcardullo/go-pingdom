@@ -9,7 +9,7 @@ import (
 func TestTeamPutParams(t *testing.T) {
 	team := TeamData{
 		Name:    "fake team",
-		UserIDs: "1,2",
+		UserIds: "1,2",
 	}
 	params := team.PutParams()
 	want := map[string]string{
@@ -23,7 +23,7 @@ func TestTeamPutParams(t *testing.T) {
 func TestTeamPostParams(t *testing.T) {
 	team := TeamData{
 		Name:    "fake team",
-		UserIDs: "",
+		UserIds: "",
 	}
 	params := team.PostParams()
 	want := map[string]string{
@@ -36,17 +36,17 @@ func TestTeamPostParams(t *testing.T) {
 func TestTeamValid(t *testing.T) {
 	team := TeamData{
 		Name:    "fake team",
-		UserIDs: "",
+		UserIds: "",
 	}
 	params := team.Valid()
 
-	assert.Equal(t, nil, params, "Maintenance.Valid() should return nil if valid")
+	assert.Equal(t, nil, params, "Team.Valid() should return nil if valid")
 }
 
 func TestTeamNotValid(t *testing.T) {
 	team := TeamData{
 		Name:    "",
-		UserIDs: "1,3",
+		UserIds: "1,3",
 	}
 	params := team.Valid()
 

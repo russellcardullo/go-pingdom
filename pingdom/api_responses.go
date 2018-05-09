@@ -84,8 +84,8 @@ type ProbeResponse struct {
 
 // TeamResponse represents the json response for teams from the PIngdom API
 type TeamResponse struct {
-	ID    interface{} `json:"id"`
-	Name  string      `json:"name"`
+	ID    string `json:"id"`
+	Name  string `json:"name"`
 	Users []TeamUserResponse
 }
 

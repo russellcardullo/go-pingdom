@@ -88,7 +88,7 @@ func TestTeamServiceCreate(t *testing.T) {
 	mux.HandleFunc("/teams", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		fmt.Fprint(w, `{
-			"id": 65,
+			"id": "65",
 			"name": "Operations",
 			"users": [
 					{
@@ -107,12 +107,11 @@ func TestTeamServiceCreate(t *testing.T) {
 
 	team := TeamData{
 		Name:    "Operations",
-		UserIDs: "10034512,10043154",
+		UserIds: "10034512,10043154",
 	}
 
-	var ID float64 = 65
 	want := &TeamResponse{
-		ID:   ID,
+		ID:   "65",
 		Name: "Operations",
 		Users: []TeamUserResponse{
 			{
@@ -178,7 +177,7 @@ func TestTeamServiceUpdate(t *testing.T) {
 	mux.HandleFunc("/teams/65", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
 		fmt.Fprint(w, `{
-			"id": 65,
+			"id": "65",
 			"name": "Operations",
 			"users": [
 					{
@@ -197,12 +196,11 @@ func TestTeamServiceUpdate(t *testing.T) {
 
 	updateTeam := TeamData{
 		Name:    "Operations",
-		UserIDs: "10034512,10043154",
+		UserIds: "10034512,10043154",
 	}
 
-	var ID float64 = 65
 	want := &TeamResponse{
-		ID:   ID,
+		ID:   "65",
 		Name: "Operations",
 		Users: []TeamUserResponse{
 			{
@@ -233,7 +231,7 @@ func TestTeamServiceDelete(t *testing.T) {
 			"success": true
 	}`)
 	})
-	want := true
+	want := &TeamDeleteResponse{Success: true}
 
 	team, err := client.Teams.Delete(1234)
 	assert.NoError(t, err)

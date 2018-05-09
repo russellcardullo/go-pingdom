@@ -94,16 +94,16 @@ func (cs *TeamService) Update(id int, team Team) (*TeamResponse, error) {
 }
 
 // Delete will delete the Team for the given ID.
-func (cs *TeamService) Delete(id int) (bool, error) {
+func (cs *TeamService) Delete(id int) (*TeamDeleteResponse, error) {
 	req, err := cs.client.NewRequest("DELETE", "/teams/"+strconv.Itoa(id), nil)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	t := &TeamDeleteResponse{}
 	_, err = cs.client.Do(req, t)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
-	return t.Success, err
+	return t, err
 }
