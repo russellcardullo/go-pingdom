@@ -112,6 +112,35 @@ func (cs *CheckService) Update(id int, check Check) (*PingdomResponse, error) {
 	return m, err
 }
 
+// UpdateTarget will update the check represented by the given ID with the values
+// in the given check.  It will remove values which are empty ones.
+func (cs *CheckService) UpdateTarget(id int, check Check) (*PingdomResponse, error) {
+	if err := check.Valid(); err != nil {
+		return nil, err
+	}
+
+	targetValues := check.PutParams()
+
+	//To avoid modification of check into default values - remove unwanted params
+	for k, v := range targetValues {
+		if v == "" {
+			delete(targetValues, k)
+		}
+	}
+
+	req, err := cs.client.NewRequest("PUT", "/checks/"+strconv.Itoa(id), targetValues)
+	if err != nil {
+		return nil, err
+	}
+
+	m := &PingdomResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m, err
+}
+
 // DeleteCheck will delete the check for the given ID.
 func (cs *CheckService) Delete(id int) (*PingdomResponse, error) {
 	req, err := cs.client.NewRequest("DELETE", "/checks/"+strconv.Itoa(id), nil)
