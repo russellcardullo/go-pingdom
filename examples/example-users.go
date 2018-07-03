@@ -68,8 +68,15 @@ func main() {
 	c, _ := client.Users.CreateContact(u.Id, contact)
 	fmt.Println(c)
 
-	//List all users
+	//List all users and contacts
 	users, _ := client.Users.List()
 	fmt.Println("All users:", users)
 
+	//Delete our example User Cpmtact
+	rContact, _ := client.Users.DeleteContact(u.Id, c.Id)
+	fmt.Println(rContact)
+
+	//Delete our example User
+	rUser, _ := client.Users.Delete(u.Id)
+	fmt.Println(rUser)
 }

@@ -102,7 +102,7 @@ type TeamDeleteResponse struct {
 }
 
 type UserSmsResponse struct {
-	Id int64 `json:"id"`
+	Id int `json:"id"`
 	Severity string `json:"severity"`
 	CountryCode string `json:"country_code"`
 	Number string `json:"number"`
@@ -110,18 +110,18 @@ type UserSmsResponse struct {
 }
 
 type UserEmailResponse struct {
-	Id int64 `json:"id"`
+	Id int `json:"id"`
 	Severity string `json:"severity"`
 	Address string `json:"address"`
 }
 
 type CreateUserContactResponse struct {
-	Id int64 `json:"id"`
+	Id int `json:"id"`
 }
 
 // MaintenanceWindow represents a Pingdom Maintenance Window.
 type UsersResponse struct {
-	Id    		   int64  `json:"id"`
+	Id    		   int  `json:"id"`
 	Paused         string  `json:"paused,omitempty"`
 	Username       string `json:"name,omitempty"`
 	Sms			   []UserSmsResponse `json:"sms,omitempty"`

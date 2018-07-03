@@ -115,10 +115,9 @@ func TestUserServiceContactCreate(t *testing.T) {
 	setup()
 	defer teardown()
 
-	var userId int64
-	userId = 12941
+	userId := 12941
 
-	mux.HandleFunc("/users/" + strconv.FormatInt(userId, 10), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/users/" + strconv.Itoa(userId), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		fmt.Fprint(w, `{
 			"contact_target": {
@@ -140,4 +139,51 @@ func TestUserServiceContactCreate(t *testing.T) {
 	contact, err := client.Users.CreateContact(userId, c)
 	assert.NoError(t, err)
 	assert.Equal(t, want, contact, "Users.CreateContact() should return contact_target.id")
+}
+
+func TestUserServiceDelete(t *testing.T) {
+	setup()
+	defer teardown()
+
+	userId := 12941
+
+	mux.HandleFunc("/users/" + strconv.Itoa(userId), func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		fmt.Fprint(w, `{
+			"message":"Deletion of user was successful!"
+		}`)
+	})
+
+	want := &PingdomResponse{
+		Message: "Deletion of user was successful!",
+	}
+
+	response, err := client.Users.Delete(userId)
+	assert.NoError(t, err)
+	assert.Equal(t, want, response, "Users.Delete() should return PingdomResponse with message")
+
+}
+
+func TestUserService_DeleteContact(t *testing.T) {
+	setup()
+	defer teardown()
+
+	userId := 12941
+	contactId := 87655
+
+	mux.HandleFunc("/users/" + strconv.Itoa(userId)+"/" + strconv.Itoa(contactId), func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+		fmt.Fprint(w, `{
+			"message":"Deletion of contact target successful"
+		}`)
+	})
+
+	want := &PingdomResponse{
+		Message: "Deletion of contact target successful",
+	}
+
+	response, err := client.Users.DeleteContact(userId,contactId)
+	assert.NoError(t, err)
+	assert.Equal(t, want, response, "Users.DeleteContact() should return PingdomResponse with message")
+
 }

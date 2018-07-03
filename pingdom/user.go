@@ -20,8 +20,6 @@ type UserApi interface {
 	PostParams() map[string]string
 	//PutParams() map[string]string
 	//PutContactParams() map[string]string
-	//DeleteParams() map[string]string
-	//DeleteContactParams() map[string]string
 }
 
 
@@ -76,12 +74,12 @@ func (cs *UserService) Create(user UserApi) (*UsersResponse, error) {
 	return m.User, err
 }
 
-func (cs *UserService) CreateContact(userId int64, contact Contact) (*CreateUserContactResponse, error) {
+func (cs *UserService) CreateContact(userId int, contact Contact) (*CreateUserContactResponse, error) {
 	if err := contact.ValidCreateContact(); err != nil {
 		return nil, err
 	}
 
-	req, err := cs.client.NewRequest("POST", "/users/"+ strconv.FormatInt(userId, 10), contact.PostContactParams())
+	req, err := cs.client.NewRequest("POST", "/users/"+ strconv.Itoa(userId), contact.PostContactParams())
 	if err != nil {
 		return nil, err
 	}
@@ -97,14 +95,34 @@ func (cs *UserService) CreateContact(userId int64, contact Contact) (*CreateUser
 //func (cs *UserService) Update(id int, user UserApi) (*PingdomResponse, error) {
 //
 //}
-//func (cs *UserService) Delete(id int) (*PingdomResponse, error) {
-//
-//}
-//
+func (cs *UserService) Delete(id int) (*PingdomResponse, error) {
+	req, err := cs.client.NewRequest("DELETE", "/users/"+strconv.Itoa(id), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	m := &PingdomResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m, err
+}
+
 //func (cs *UserService) UpdateContact(id int, user UserApi) (*PingdomResponse, error) {
 //
 //}
 //
-//func (cs *UserService) DeleteContact(id int) (*PingdomResponse, error) {
-//
-//}
+func (cs *UserService) DeleteContact(userId int, contactId int) (*PingdomResponse, error) {
+	req, err := cs.client.NewRequest("DELETE", "/users/"+strconv.Itoa(userId)+"/"+strconv.Itoa(contactId), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	m := &PingdomResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m, err
+}

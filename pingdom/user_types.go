@@ -26,7 +26,7 @@ type Contact struct {
 
 // MaintenanceWindow represents a Pingdom Maintenance Window.
 type User struct {
-	Paused         int64  `json:"paused,omitempty"`
+	Paused         int  `json:"paused,omitempty"`
 	Username       string `json:"name,omitempty"`
 	Sms			   []UserSmsResponse `json:"sms,omitempty"`
 	Email 		   []UserEmailResponse `json:"email,omitempty"`
@@ -92,14 +92,6 @@ func (c *Contact) PostContactParams() map[string]string {
 //}
 //
 //func (u *User) PutContactParams() map[string]string {
-//
-//}
-//
-//func (u *User) DeleteParams() map[string]string {
-//
-//}
-//
-//func (u *User) DeleteContactParams() map[string]string {
 //
 //}
 //
