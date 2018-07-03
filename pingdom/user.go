@@ -11,13 +11,13 @@ type UserService struct {
 
 
 type UserApi interface {
-	PutParams() map[string]string
-	PutContactParams() map[string]string
+	ValidCreate() error
 	PostParams() map[string]string
-	PostContactParams() map[string]string
-	DeleteParams() map[string]string
-	DeleteContactParams() map[string]string
-	Valid() error
+	//PostContactParams() map[string]string
+	//PutParams() map[string]string
+	//PutContactParams() map[string]string
+	//DeleteParams() map[string]string
+	//DeleteContactParams() map[string]string
 }
 
 
@@ -54,14 +54,24 @@ func (cs *UserService) List(params ...map[string]string) ([]UsersResponse, error
 	return u.Users, err
 }
 
-//func (cs *UserService) Read(id int) (*UsersResponse, error) {
-//
-//}
-//
-//func (cs *UserService) Create(user UserApi) (*UsersResponse, error) {
-//
-//}
-//
+func (cs *UserService) Create(user UserApi) (*UsersResponse, error) {
+	if err := user.ValidCreate(); err != nil {
+		return nil, err
+	}
+
+	req, err := cs.client.NewRequest("POST", "/users", user.PostParams())
+	if err != nil {
+		return nil, err
+	}
+
+	m := &createUserJsonResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m.User, err
+}
+
 //func (cs *UserService) Update(id int, user UserApi) (*PingdomResponse, error) {
 //
 //}

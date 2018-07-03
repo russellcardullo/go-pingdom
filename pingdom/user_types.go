@@ -1,5 +1,9 @@
 package pingdom
 
+import (
+	"fmt"
+)
+
 type UserSms struct {
 	Severity string `json:"severity"`
 	CountryCode int64 `json:"country_code"`
@@ -14,27 +18,37 @@ type UserEmail struct {
 
 // MaintenanceWindow represents a Pingdom Maintenance Window.
 type User struct {
-	Id    		   int64  `json:"id"`
 	Paused         int64  `json:"paused,omitempty"`
 	Username       string `json:"name,omitempty"`
 	Sms			   []UserSmsResponse `json:"sms,omitempty"`
 	Email 		   []UserEmailResponse `json:"email,omitempty"`
 }
 
+func (u *User) ValidCreate() error {
+	if u.Username == "" {
+		return fmt.Errorf("Invalid value for `Username`.  Must contain non-empty string")
+	}
 
+	return nil
+}
+
+func (u *User) PostParams() map[string]string {
+	m := map[string]string{
+		"name": u.Username,
+	}
+
+	return m
+}
+
+//func (u *User) PostContactParams() map[string]string {
+//
+//}
+//
 //func (u *User) PutParams() map[string]string {
 //
 //}
 //
 //func (u *User) PutContactParams() map[string]string {
-//
-//}
-//
-//func (u *User) PostParams() map[string]string {
-//
-//}
-//
-//func (u *User) PostContactParams() map[string]string {
 //
 //}
 //
@@ -46,6 +60,3 @@ type User struct {
 //
 //}
 //
-//func (u *User) Valid() error {
-//
-//}

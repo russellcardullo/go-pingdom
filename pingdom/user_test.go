@@ -83,3 +83,29 @@ func TestUserServiceList(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, want, users, "Users.List() should return correct result")
 }
+
+func TestUserServiceCreate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "POST")
+		fmt.Fprint(w, `{
+			"user": {
+				"id": 23439
+			}
+		}`)
+	})
+
+	want := &UsersResponse{
+		Id: 23439,
+	}
+
+	u := User{
+		Username : "testUser",
+	}
+
+	user, err := client.Users.Create(&u)
+	assert.NoError(t, err)
+	assert.Equal(t, want, user, "Users.Create() should return correct result")
+}
