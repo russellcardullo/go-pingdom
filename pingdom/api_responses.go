@@ -210,7 +210,7 @@ type teamDetailsJsonResponse struct {
 }
 
 type createUserContactJsonResponse struct {
-	User *CreateUserContactResponse `json:"contact_target"`
+	Contact *CreateUserContactResponse `json:"contact_target"`
 }
 
 type createUserJsonResponse struct {

@@ -5,6 +5,7 @@ import (
 	"testing"
 	"net/http"
 	"fmt"
+	"strconv"
 )
 
 func TestUserServiceList(t *testing.T) {
@@ -108,4 +109,35 @@ func TestUserServiceCreate(t *testing.T) {
 	user, err := client.Users.Create(&u)
 	assert.NoError(t, err)
 	assert.Equal(t, want, user, "Users.Create() should return correct result")
+}
+
+func TestUserServiceContactCreate(t *testing.T) {
+	setup()
+	defer teardown()
+
+	var userId int64
+	userId = 12941
+
+	mux.HandleFunc("/users/" + strconv.FormatInt(userId, 10), func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "POST")
+		fmt.Fprint(w, `{
+			"contact_target": {
+				"id": 23439
+			}
+		}`)
+	})
+
+	want := &CreateUserContactResponse{
+		Id: 23439,
+	}
+
+	c := Contact{
+		Email: "test@example.com",
+		CountryCode: "1",
+		Number: "5559995555",
+	}
+
+	contact, err := client.Users.CreateContact(userId, c)
+	assert.NoError(t, err)
+	assert.Equal(t, want, contact, "Users.CreateContact() should return contact_target.id")
 }

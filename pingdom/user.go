@@ -3,17 +3,21 @@ package pingdom
 import (
 	"io/ioutil"
 	"encoding/json"
+	"strconv"
 )
 
 type UserService struct {
 	client *Client
 }
 
+type ContactApi interface {
+	ValidCreateContact() error
+	PostContactParams() map[string]string
+}
 
 type UserApi interface {
 	ValidCreate() error
 	PostParams() map[string]string
-	//PostContactParams() map[string]string
 	//PutParams() map[string]string
 	//PutContactParams() map[string]string
 	//DeleteParams() map[string]string
@@ -72,15 +76,28 @@ func (cs *UserService) Create(user UserApi) (*UsersResponse, error) {
 	return m.User, err
 }
 
+func (cs *UserService) CreateContact(userId int64, contact Contact) (*CreateUserContactResponse, error) {
+	if err := contact.ValidCreateContact(); err != nil {
+		return nil, err
+	}
+
+	req, err := cs.client.NewRequest("POST", "/users/"+ strconv.FormatInt(userId, 10), contact.PostContactParams())
+	if err != nil {
+		return nil, err
+	}
+
+	m := &createUserContactJsonResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m.Contact, err
+}
+
 //func (cs *UserService) Update(id int, user UserApi) (*PingdomResponse, error) {
 //
 //}
-//
 //func (cs *UserService) Delete(id int) (*PingdomResponse, error) {
-//
-//}
-//
-//func (cs *UserService) CreateContact(user UserApi) (*CreateUserContactResponse, error) {
 //
 //}
 //

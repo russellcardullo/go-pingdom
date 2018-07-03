@@ -54,14 +54,22 @@ func main() {
 	config := getConfig()
 	client := pingdom.NewMultiUserClient(config.User, config.Password, config.ApiKey, config.AccountEmail)
 
-	//List all checks
-	users, _ := client.Users.List()
-	fmt.Println("All users:", users)
-
-
+	//Create User
 	user := pingdom.User{
-		Username : "example-user",
+		Username : "exampleUser",
 	}
 	u, _ := client.Users.Create(&user)
 	fmt.Println(u)
+
+	// Create contact info
+	contact := pingdom.Contact{
+		Email: "test@example.com",
+	}
+	c, _ := client.Users.CreateContact(u.Id, contact)
+	fmt.Println(c)
+
+	//List all users
+	users, _ := client.Users.List()
+	fmt.Println("All users:", users)
+
 }
