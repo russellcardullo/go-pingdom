@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func TestUserServiceList(t *testing.T) {
+func TestUserService_List(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -85,7 +85,7 @@ func TestUserServiceList(t *testing.T) {
 	assert.Equal(t, want, users, "Users.List() should return correct result")
 }
 
-func TestUserServiceCreate(t *testing.T) {
+func TestUserService_Create(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -111,7 +111,7 @@ func TestUserServiceCreate(t *testing.T) {
 	assert.Equal(t, want, user, "Users.Create() should return correct result")
 }
 
-func TestUserServiceContactCreate(t *testing.T) {
+func TestUserService_CreateContact(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -141,7 +141,7 @@ func TestUserServiceContactCreate(t *testing.T) {
 	assert.Equal(t, want, contact, "Users.CreateContact() should return contact_target.id")
 }
 
-func TestUserServiceDelete(t *testing.T) {
+func TestUserService_Delete(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -185,5 +185,58 @@ func TestUserService_DeleteContact(t *testing.T) {
 	response, err := client.Users.DeleteContact(userId,contactId)
 	assert.NoError(t, err)
 	assert.Equal(t, want, response, "Users.DeleteContact() should return PingdomResponse with message")
+
+}
+
+func TestUserService_Update(t *testing.T) {
+	setup()
+	defer teardown()
+
+	userId := 12941
+	user := User{
+		Username: "updatedUsername",
+	}
+
+	mux.HandleFunc("/users/" + strconv.Itoa(userId), func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "PUT")
+		fmt.Fprint(w, `{
+			"message":"Modification of user was successful!"
+		}`)
+	})
+
+	want := &PingdomResponse{
+		Message: "Modification of user was successful!",
+	}
+
+	response, err := client.Users.Update(userId, &user)
+	assert.NoError(t, err)
+	assert.Equal(t, want, response, "Users.Update() should return PingdomResponse with message")
+
+}
+
+func TestUserService_UpdateContact(t *testing.T) {
+	setup()
+	defer teardown()
+
+	userId := 12941
+	contactId := 87655
+	contact := Contact{
+		Email: "test@example.com",
+	}
+
+	mux.HandleFunc("/users/" + strconv.Itoa(userId)+"/" + strconv.Itoa(contactId), func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "PUT")
+		fmt.Fprint(w, `{
+			"message":"Modification of contact target was successful!"
+		}`)
+	})
+
+	want := &PingdomResponse{
+		Message: "Modification of contact target was successful!",
+	}
+
+	response, err := client.Users.UpdateContact(userId,contactId,contact)
+	assert.NoError(t, err)
+	assert.Equal(t, want, response, "Users.UpdateContact() should return PingdomResponse with message")
 
 }

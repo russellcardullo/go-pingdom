@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func TestUserPostParams(t *testing.T) {
+func TestUser_PostParams(t *testing.T) {
 	name := "testUsername"
 
 	user := User{
@@ -20,85 +20,85 @@ func TestUserPostParams(t *testing.T) {
 	assert.Equal(t, want, params, "User.PostParams() should return correct map")
 }
 
-func TestUserValidCreatePositive(t *testing.T) {
+func TestUser_ValidUser_Positive(t *testing.T) {
 	name := "testUsername"
 	user := User{
 		Username : name,
 	}
 
-	err := user.ValidCreate()
+	err := user.ValidUser()
 
-	assert.Equal(t, nil, err, "User.ValidCreate() should return nil")
+	assert.Equal(t, nil, err, "User.ValidUser() should return nil")
 }
 
-func TestUserValidCreateNegative(t *testing.T) {
+func TestUser_ValidUser_Negative(t *testing.T) {
 	user := User{
 		Username : "",
 	}
 
 	want := fmt.Errorf("Invalid value for `Username`.  Must contain non-empty string")
 
-	err := user.ValidCreate()
+	err := user.ValidUser()
 
-	assert.Equal(t, want, err, "User.ValidCreate() should return error")
+	assert.Equal(t, want, err, "User.ValidUser() should return error")
 }
 
-func TestUserValidCreateContactPositive1(t *testing.T) {
+func TestContact_ValidContact_Positive1(t *testing.T) {
 	contact := Contact{
 		Email: "test@example.com",
 		CountryCode: "1",
 		Number: "5559995555",
 	}
 
-	err := contact.ValidCreateContact()
-	assert.Equal(t, nil, err, "contact.ValidCreateContact() should return nil")
+	err := contact.ValidContact()
+	assert.Equal(t, nil, err, "contact.ValidContact() should return nil")
 }
 
-func TestUserValidCreateContactPositive2(t *testing.T) {
+func TestContact_ValidContact_Positive2(t *testing.T) {
 	contact := Contact{
 		Email: "test@example.com",
 	}
 
-	err := contact.ValidCreateContact()
-	assert.Equal(t, nil, err, "contact.ValidCreateContact() should return nil")
+	err := contact.ValidContact()
+	assert.Equal(t, nil, err, "contact.ValidContact() should return nil")
 }
 
-func TestUserValidCreateContactPositive3(t *testing.T) {
+func TestContact_ValidContact_Positive3(t *testing.T) {
 	contact := Contact{
 		CountryCode: "1",
 		Number: "5559995555",
 	}
 
-	err := contact.ValidCreateContact()
-	assert.Equal(t, nil, err, "contact.ValidCreateContact() should return nil")
+	err := contact.ValidContact()
+	assert.Equal(t, nil, err, "contact.ValidContact() should return nil")
 }
 
 
-func TestUserValidCreateContactNegative1(t *testing.T) {
+func TestContact_ValidContact_Negative1(t *testing.T) {
 	contact := Contact{
 		CountryCode: "1",
 	}
 
 	want := fmt.Errorf("you must provide either an Email or a Phone Number to create a contact target")
 
-	err := contact.ValidCreateContact()
+	err := contact.ValidContact()
 
-	assert.Equal(t, want, err, "contact.ValidCreateContact() should return error")
+	assert.Equal(t, want, err, "contact.ValidContact() should return error")
 }
 
-func TestUserValidCreateContactNegative2(t *testing.T) {
+func TestContact_ValidContact_Negative2(t *testing.T) {
 	contact := Contact{
 		Number: "5559995555",
 	}
 
 	want := fmt.Errorf("you must provide a Country Code if providing a phone number")
 
-	err := contact.ValidCreateContact()
+	err := contact.ValidContact()
 
-	assert.Equal(t, want, err, "contact.ValidCreateContact() should return error")
+	assert.Equal(t, want, err, "contact.ValidContact() should return error")
 }
 
-func TestPostContactParams(t *testing.T) {
+func TestContact_PostContactParams(t *testing.T) {
 	email := "test@example.com"
 	countrycode := "1"
 	number := "5559995555"
@@ -116,4 +116,45 @@ func TestPostContactParams(t *testing.T) {
 	}
 
 	assert.Equal(t, want, params, "Contact.PostContactParams() should return correct map")
+}
+
+func TestContact_PutContactParams(t *testing.T) {
+	email := "test@example.com"
+	countrycode := "1"
+	number := "5559995555"
+
+	contact := Contact{
+		Email: email,
+		CountryCode: countrycode,
+		Number: number,
+	}
+	params := contact.PutContactParams()
+	want := map[string]string{
+		"email" : email,
+		"number" : number,
+		"countrycode" : countrycode,
+	}
+
+	assert.Equal(t, want, params, "Contact.PutContactParams() should return correct map")
+}
+
+func TestUser_PutParams(t *testing.T) {
+	name := "myname"
+	primary := "YES"
+	paused := "NO"
+
+	user := User{
+		Username: name,
+		Primary: primary,
+		Paused: paused,
+	}
+
+	params := user.PutParams()
+	want := map[string]string{
+		"name" : name,
+		"primary" : primary,
+		"paused" : paused,
+	}
+
+	assert.Equal(t, want, params, "User.PutParams() should return correct map")
 }

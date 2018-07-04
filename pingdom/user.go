@@ -11,18 +11,18 @@ type UserService struct {
 }
 
 type ContactApi interface {
-	ValidCreateContact() error
+	ValidContact() error
 	PostContactParams() map[string]string
+	PutContactParams() map[string]string
 }
 
 type UserApi interface {
-	ValidCreate() error
+	ValidUser() error
 	PostParams() map[string]string
-	//PutParams() map[string]string
-	//PutContactParams() map[string]string
+	PutParams() map[string]string
 }
 
-
+// Get a list of all users and their contact details
 func (cs *UserService) List(params ...map[string]string) ([]UsersResponse, error) {
 	param := map[string]string{}
 	if len(params) != 0 {
@@ -56,8 +56,9 @@ func (cs *UserService) List(params ...map[string]string) ([]UsersResponse, error
 	return u.Users, err
 }
 
+// Add a new user
 func (cs *UserService) Create(user UserApi) (*UsersResponse, error) {
-	if err := user.ValidCreate(); err != nil {
+	if err := user.ValidUser(); err != nil {
 		return nil, err
 	}
 
@@ -74,8 +75,9 @@ func (cs *UserService) Create(user UserApi) (*UsersResponse, error) {
 	return m.User, err
 }
 
+// Add a contact target to an existing user
 func (cs *UserService) CreateContact(userId int, contact Contact) (*CreateUserContactResponse, error) {
-	if err := contact.ValidCreateContact(); err != nil {
+	if err := contact.ValidContact(); err != nil {
 		return nil, err
 	}
 
@@ -92,9 +94,45 @@ func (cs *UserService) CreateContact(userId int, contact Contact) (*CreateUserCo
 	return m.Contact, err
 }
 
-//func (cs *UserService) Update(id int, user UserApi) (*PingdomResponse, error) {
-//
-//}
+// Update a user's core properties not contact targets
+func (cs *UserService) Update(id int, user UserApi) (*PingdomResponse, error) {
+	if err := user.ValidUser(); err != nil {
+		return nil, err
+	}
+
+	req, err := cs.client.NewRequest("PUT", "/users/"+strconv.Itoa(id), user.PutParams())
+	if err != nil {
+		return nil, err
+	}
+
+	m := &PingdomResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m, err
+}
+// Update a contact by id, will change an email to sms or sms to email
+// if you provide an id for the other
+func (cs *UserService) UpdateContact(userId int, contactId int, contact Contact) (*PingdomResponse, error) {
+	if err := contact.ValidContact(); err != nil {
+		return nil, err
+	}
+
+	req, err := cs.client.NewRequest("PUT",  "/users/"+strconv.Itoa(userId)+"/"+strconv.Itoa(contactId), contact.PutContactParams())
+	if err != nil {
+		return nil, err
+	}
+
+	m := &PingdomResponse{}
+	_, err = cs.client.Do(req, m)
+	if err != nil {
+		return nil, err
+	}
+	return m, err
+}
+
+// Delete user
 func (cs *UserService) Delete(id int) (*PingdomResponse, error) {
 	req, err := cs.client.NewRequest("DELETE", "/users/"+strconv.Itoa(id), nil)
 	if err != nil {
@@ -109,10 +147,7 @@ func (cs *UserService) Delete(id int) (*PingdomResponse, error) {
 	return m, err
 }
 
-//func (cs *UserService) UpdateContact(id int, user UserApi) (*PingdomResponse, error) {
-//
-//}
-//
+// Delete contact target, either an email or sms property of a user
 func (cs *UserService) DeleteContact(userId int, contactId int) (*PingdomResponse, error) {
 	req, err := cs.client.NewRequest("DELETE", "/users/"+strconv.Itoa(userId)+"/"+strconv.Itoa(contactId), nil)
 	if err != nil {

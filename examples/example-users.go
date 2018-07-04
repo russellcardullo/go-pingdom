@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"github.com/russellcardullo/go-pingdom/pingdom"
+	"strconv"
 )
 
 type Credentials struct {
@@ -59,24 +60,36 @@ func main() {
 		Username : "exampleUser",
 	}
 	u, _ := client.Users.Create(&user)
-	fmt.Println(u)
+	fmt.Println("User Id: " + strconv.Itoa(u.Id))
 
 	// Create contact info
 	contact := pingdom.Contact{
 		Email: "test@example.com",
 	}
 	c, _ := client.Users.CreateContact(u.Id, contact)
-	fmt.Println(c)
+	fmt.Println("Contact Id: " + strconv.Itoa(c.Id))
 
 	//List all users and contacts
 	users, _ := client.Users.List()
 	fmt.Println("All users:", users)
 
+	user.Username = "newExampleUser"
+	uu, _ := client.Users.Update(u.Id, &user)
+	fmt.Println(uu.Message)
+
+	contact.Email = ""
+	contact.Provider = "Nexmo"
+	contact.Number = "5555555555"
+	contact.CountryCode = "1"
+
+	cc, _ := client.Users.UpdateContact(u.Id, c.Id, contact)
+	fmt.Println(cc.Message)
+
 	//Delete our example User Cpmtact
 	rContact, _ := client.Users.DeleteContact(u.Id, c.Id)
-	fmt.Println(rContact)
+	fmt.Println(rContact.Message)
 
 	//Delete our example User
 	rUser, _ := client.Users.Delete(u.Id)
-	fmt.Println(rUser)
+	fmt.Println(rUser.Message)
 }

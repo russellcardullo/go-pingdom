@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+// User email represents the sms contact object in a user in
+// GET /users
 type UserSms struct {
 	Severity string `json:"severity"`
 	CountryCode string `json:"country_code"`
@@ -11,11 +13,14 @@ type UserSms struct {
 	Provider string `json:"provider"`
 }
 
+// User email represents the email contact object in a user in
+// GET /users
 type UserEmail struct {
 	Severity string `json:"severity"`
 	Address string `json:"address"`
 }
 
+// Contact represents a Pingdom contact target
 type Contact struct {
 	Severity string `json:"severitylevel"`
 	CountryCode string `json:"countrycode"`
@@ -24,15 +29,16 @@ type Contact struct {
 	Email string `json:"email"`
 }
 
-// MaintenanceWindow represents a Pingdom Maintenance Window.
+// User represents a Pingdom User or Contact.
 type User struct {
-	Paused         int  `json:"paused,omitempty"`
+	Paused         string  `json:"paused,omitempty"`
 	Username       string `json:"name,omitempty"`
+	Primary		   string `json:"primary,omitempty"`
 	Sms			   []UserSmsResponse `json:"sms,omitempty"`
 	Email 		   []UserEmailResponse `json:"email,omitempty"`
 }
 
-func (u *User) ValidCreate() error {
+func (u *User) ValidUser() error {
 	if u.Username == "" {
 		return fmt.Errorf("Invalid value for `Username`.  Must contain non-empty string")
 	}
@@ -40,13 +46,19 @@ func (u *User) ValidCreate() error {
 	return nil
 }
 
-func (c *Contact) ValidCreateContact() error {
+// For simplicity I am enforcing these rules for both PUT and POST
+// of contact targets.  However in practice they are slightly different
+func (c *Contact) ValidContact() error {
 	if c.Email == "" && c.Number == "" {
 		return fmt.Errorf("you must provide either an Email or a Phone Number to create a contact target")
 }
 
 	if c.Number != "" && c.CountryCode == "" {
 		return fmt.Errorf("you must provide a Country Code if providing a phone number")
+	}
+
+	if c.Provider != "" && ( c.Number == "" || c.CountryCode == "" ){
+		return fmt.Errorf("you must provide CountryCode and Number if Provider is provided")
 	}
 
 	return nil
@@ -87,11 +99,24 @@ func (c *Contact) PostContactParams() map[string]string {
 	return m
 }
 
-//func (u *User) PutParams() map[string]string {
-//
-//}
-//
-//func (u *User) PutContactParams() map[string]string {
-//
-//}
-//
+func (u *User) PutParams() map[string]string {
+	m := map[string]string{
+		"name" : u.Username,
+	}
+
+	if u.Primary != "" {
+		m["primary"] = u.Primary
+	}
+
+	if u.Paused != "" {
+		m["paused"] = u.Paused
+	}
+
+	return m
+}
+
+// Currently the Creates and Updates for Contacts are  the same
+func (c *Contact) PutContactParams() map[string]string {
+	return c.PostContactParams()
+}
+
