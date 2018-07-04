@@ -101,6 +101,33 @@ type TeamDeleteResponse struct {
 	Success bool `json:"success"`
 }
 
+type UserSmsResponse struct {
+	Id int `json:"id"`
+	Severity string `json:"severity"`
+	CountryCode string `json:"country_code"`
+	Number string `json:"number"`
+	Provider string `json:"provider"`
+}
+
+type UserEmailResponse struct {
+	Id int `json:"id"`
+	Severity string `json:"severity"`
+	Address string `json:"address"`
+}
+
+type CreateUserContactResponse struct {
+	Id int `json:"id"`
+}
+
+// MaintenanceWindow represents a Pingdom Maintenance Window.
+type UsersResponse struct {
+	Id    		   int  `json:"id"`
+	Paused         string  `json:"paused,omitempty"`
+	Username       string `json:"name,omitempty"`
+	Sms			   []UserSmsResponse `json:"sms,omitempty"`
+	Email 		   []UserEmailResponse `json:"email,omitempty"`
+}
+
 func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
 	var raw interface{}
 
@@ -180,6 +207,18 @@ type maintenanceDetailsJsonResponse struct {
 
 type teamDetailsJsonResponse struct {
 	Team *TeamResponse `json:"team"`
+}
+
+type createUserContactJsonResponse struct {
+	Contact *CreateUserContactResponse `json:"contact_target"`
+}
+
+type createUserJsonResponse struct {
+	User *UsersResponse `json:"user"`
+}
+
+type listUsersJsonResponse struct {
+	Users []UsersResponse `json:"users"`
 }
 
 type errorJsonResponse struct {
