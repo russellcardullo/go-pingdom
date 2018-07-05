@@ -85,6 +85,116 @@ func TestUserService_List(t *testing.T) {
 	assert.Equal(t, want, users, "Users.List() should return correct result")
 }
 
+func TestUserService_Read(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{
+	    "users": [
+        {
+            "id": 12,
+            "name": "John Doe",
+            "paused": "NO",
+            "access_level": "contact",
+            "use_severity_levels": false,
+            "sms": [
+                {
+                    "id": 352,
+                    "severity": "HIGH",
+                    "country_code": "1",
+                    "number": "6095555555",
+                    "provider": "nexmo"
+                }
+            ]
+        },
+        {
+            "id": 234,
+            "name": "Jane Doe",
+            "paused": "NO",
+            "access_level": "default",
+            "use_severity_levels": false,
+            "email": [
+                {
+                    "id": 314,
+                    "severity": "HIGH",
+                    "address": "test@billtrust.com"
+                }
+            ]
+		}
+		]
+		}`)
+	})
+	want := UsersResponse{
+		Id:       12,
+		Paused:   "NO",
+		Username: "John Doe",
+		Sms:      []UserSmsResponse{
+			{
+				Id: 352,
+				Severity: "HIGH",
+				CountryCode: "1",
+				Number: "6095555555",
+				Provider: "nexmo",
+			},
+		},
+		Email:    nil,
+	}
+
+	users, err := client.Users.Read(12)
+	assert.NoError(t, err)
+	assert.Equal(t, &want, users, "Users.Read(12) should return a user")
+}
+
+func TestUserService_Read_Failure(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{
+	    "users": [
+        {
+            "id": 12,
+            "name": "John Doe",
+            "paused": "NO",
+            "access_level": "contact",
+            "use_severity_levels": false,
+            "sms": [
+                {
+                    "id": 352,
+                    "severity": "HIGH",
+                    "country_code": "1",
+                    "number": "6095555555",
+                    "provider": "nexmo"
+                }
+            ]
+        },
+        {
+            "id": 234,
+            "name": "Jane Doe",
+            "paused": "NO",
+            "access_level": "default",
+            "use_severity_levels": false,
+            "email": [
+                {
+                    "id": 314,
+                    "severity": "HIGH",
+                    "address": "test@billtrust.com"
+                }
+            ]
+		}
+		]
+		}`)
+	})
+
+	want := fmt.Errorf("UserId: 24 not found")
+
+	_, err := client.Users.Read(24)
+	assert.Equal(t, want, err, "Read with an invalid user id should return an error.")
+}
+
 func TestUserService_Create(t *testing.T) {
 	setup()
 	defer teardown()

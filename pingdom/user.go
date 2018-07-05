@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"strconv"
+	"fmt"
 )
 
 type UserService struct {
@@ -23,16 +24,9 @@ type UserApi interface {
 }
 
 // Get a list of all users and their contact details
-func (cs *UserService) List(params ...map[string]string) ([]UsersResponse, error) {
-	param := map[string]string{}
-	if len(params) != 0 {
-		for _, m := range params {
-			for k, v := range m {
-				param[k] = v
-			}
-		}
-	}
-	req, err := cs.client.NewRequest("GET", "/users", param)
+func (cs *UserService) List() ([]UsersResponse, error) {
+
+	req, err := cs.client.NewRequest("GET", "/users", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +48,21 @@ func (cs *UserService) List(params ...map[string]string) ([]UsersResponse, error
 	err = json.Unmarshal([]byte(bodyString), &u)
 
 	return u.Users, err
+}
+
+func (cs *UserService) Read(userId int) (*UsersResponse, error) {
+	users, err := cs.List()
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range users {
+		if users[i].Id == userId {
+			return &users[i], nil
+		}
+	}
+
+	return nil, fmt.Errorf("UserId: " + strconv.Itoa(userId) + " not found")
 }
 
 // Add a new user
