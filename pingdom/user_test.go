@@ -74,7 +74,7 @@ func TestUserService_List(t *testing.T) {
 				{
 					Id: 314,
 					Severity: "HIGH",
-					Address: "test@example.com",
+					Address: "test@test.com",
 				},
 			},
 		},
