@@ -42,7 +42,7 @@ func TestUserService_List(t *testing.T) {
                 {
                     "id": 314,
                     "severity": "HIGH",
-                    "address": "test@billtrust.com"
+                    "address": "test@test.com"
                 }
             ]
 		}
@@ -74,7 +74,7 @@ func TestUserService_List(t *testing.T) {
 				{
 					Id: 314,
 					Severity: "HIGH",
-					Address: "test@billtrust.com",
+					Address: "test@example.com",
 				},
 			},
 		},
@@ -119,7 +119,7 @@ func TestUserService_Read(t *testing.T) {
                 {
                     "id": 314,
                     "severity": "HIGH",
-                    "address": "test@billtrust.com"
+                    "address": "test@example.com"
                 }
             ]
 		}
@@ -181,7 +181,7 @@ func TestUserService_Read_Failure(t *testing.T) {
                 {
                     "id": 314,
                     "severity": "HIGH",
-                    "address": "test@billtrust.com"
+                    "address": "test@example.com"
                 }
             ]
 		}
