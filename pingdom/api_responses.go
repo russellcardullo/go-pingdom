@@ -37,6 +37,7 @@ type CheckResponse struct {
 	Tags                     []CheckResponseTag `json:"tags,omitempty"`
 	UserIds                  []int              `json:"userids,omitempty"`
 	TeamIds                  []int              `json:"teamids,omitempty"`
+	ResponseTimeThreshold    int                `json:"responsetime_threshold,omitempty"`
 }
 
 type CheckResponseType struct {
