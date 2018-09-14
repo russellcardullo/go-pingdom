@@ -134,3 +134,59 @@ func TestPingCheckValid(t *testing.T) {
 	badCheck := PingCheck{Name: "fake check", Hostname: "example.com"}
 	assert.Error(t, badCheck.Valid())
 }
+
+func TestSummaryPerformanceRequestValid(t *testing.T) {
+	t.Run("missing field 'id'", func(t *testing.T) {
+		assert.Equal(t, ErrMissingId, SummaryPerformanceRequest{}.Valid())
+	})
+
+	t.Run("resolution", func(t *testing.T) {
+		assert.Nil(t, SummaryPerformanceRequest{
+			Id:         123,
+			Resolution: "hour",
+		}.Valid())
+		assert.Nil(t, SummaryPerformanceRequest{
+			Id:         123,
+			Resolution: "day",
+		}.Valid())
+		assert.Nil(t, SummaryPerformanceRequest{
+			Id:         123,
+			Resolution: "week",
+		}.Valid())
+		assert.Equal(t, ErrBadResolution, SummaryPerformanceRequest{
+			Id:         123,
+			Resolution: "month",
+		}.Valid())
+
+	})
+}
+
+func TestSummaryPerformanceRequestGetParams(t *testing.T) {
+	id := 1337
+	t.Run("empty request", func(t *testing.T) {
+		want := map[string]string{
+		}
+
+		params := SummaryPerformanceRequest{
+			Id: id,
+		}.GetParams()
+
+		assert.Equal(t, want, params)
+	})
+
+	t.Run("with some params", func(t *testing.T) {
+		want := map[string]string{
+			"resolution":    "week",
+			"includeuptime": "true",
+		}
+
+		params := SummaryPerformanceRequest{
+			Id:            id,
+			IncludeUptime: true,
+			Resolution:    "week",
+		}.GetParams()
+
+		assert.Equal(t, want, params)
+	})
+
+}
