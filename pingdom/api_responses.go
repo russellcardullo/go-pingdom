@@ -42,6 +42,7 @@ type CheckResponse struct {
 type CheckResponseType struct {
 	Name string                    `json:"-"`
 	HTTP *CheckResponseHTTPDetails `json:"http,omitempty"`
+	TCP  *CheckResponseTCPDetails  `json:"tcp,omitempty"`
 }
 
 type CheckResponseTag struct {
@@ -145,6 +146,13 @@ type CheckResponseHTTPDetails struct {
 	ShouldNotContain string            `json:"shouldnotcontain,omitempty"`
 	PostData         string            `json:"postdata,omitempty"`
 	RequestHeaders   map[string]string `json:"requestheaders,omitempty"`
+}
+
+// HttpCheck represents a Pingdom http check.
+type CheckResponseTCPDetails struct {
+	Port           int    `json:"port,omitempty"`
+	StringToSend   string `json:"stringtosend,omitempty"`
+	StringToExpect string `json:"stringtoexpect,omitempty"`
 }
 
 // Return string representation of the PingdomError

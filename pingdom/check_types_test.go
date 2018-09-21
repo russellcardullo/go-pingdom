@@ -109,17 +109,17 @@ func TestPingCheckPostParams(t *testing.T) {
 		TeamIds:        []int{789},
 	}
 	want := map[string]string{
-		"name":                     "fake check",
-		"host":                     "example.com",
-		"paused":                   "false",
-		"resolution":               "0",
-		"notifyagainevery":         "0",
-		"notifywhenbackup":         "false",
-		"type":                     "ping",
-		"integrationids":           "33333333,44444444",
-		"probe_filters":            "",
-		"userids":                  "123,456",
-		"teamids":                  "789",
+		"name":             "fake check",
+		"host":             "example.com",
+		"paused":           "false",
+		"resolution":       "0",
+		"notifyagainevery": "0",
+		"notifywhenbackup": "false",
+		"type":             "ping",
+		"integrationids":   "33333333,44444444",
+		"probe_filters":    "",
+		"userids":          "123,456",
+		"teamids":          "789",
 	}
 
 	params := check.PostParams()
@@ -146,20 +146,20 @@ func TestTCPCheckPostParams(t *testing.T) {
 		StringToExpect: "Hi there",
 	}
 	want := map[string]string{
-		"name":                     "fake check",
-		"host":                     "example.com",
-		"paused":                   "false",
-		"resolution":               "0",
-		"notifyagainevery":         "0",
-		"notifywhenbackup":         "false",
-		"type":                     "tcp",
-		"integrationids":           "33333333,44444444",
-		"probe_filters":            "",
-		"userids":                  "123,456",
-		"teamids":                  "789",
-		"port":                     "8080",
-		"stringtosend":             "Hello World",
-		"stringtoexpect":           "Hi there",
+		"name":             "fake check",
+		"host":             "example.com",
+		"paused":           "false",
+		"resolution":       "0",
+		"notifyagainevery": "0",
+		"notifywhenbackup": "false",
+		"type":             "tcp",
+		"integrationids":   "33333333,44444444",
+		"probe_filters":    "",
+		"userids":          "123,456",
+		"teamids":          "789",
+		"port":             "8080",
+		"stringtosend":     "Hello World",
+		"stringtoexpect":   "Hi there",
 	}
 
 	params := check.PostParams()

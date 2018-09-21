@@ -60,8 +60,8 @@ type TCPCheck struct {
 	UserIds                  []int  `json:"userids,omitempty"`
 	TeamIds                  []int  `json:"teamids,omitempty"`
 	Port                     int    `json:"port"`
-	StringToSend             string `json:"stringtosend,omitifempty"`
-	StringToExpect           string `json:"stringtoexpect,omitifempty"`
+	StringToSend             string `json:"stringtosend,omitempty"`
+	StringToExpect           string `json:"stringtoexpect,omitempty"`
 }
 
 // Params returns a map of parameters for an HttpCheck that can be sent along
