@@ -113,7 +113,6 @@ func TestPingCheckPostParams(t *testing.T) {
 		"host":                     "example.com",
 		"paused":                   "false",
 		"resolution":               "0",
-		"sendnotificationwhendown": "0",
 		"notifyagainevery":         "0",
 		"notifywhenbackup":         "false",
 		"type":                     "ping",
@@ -132,5 +131,45 @@ func TestPingCheckValid(t *testing.T) {
 	assert.NoError(t, check.Valid())
 
 	badCheck := PingCheck{Name: "fake check", Hostname: "example.com"}
+	assert.Error(t, badCheck.Valid())
+}
+
+func TestTCPCheckPostParams(t *testing.T) {
+	check := TCPCheck{
+		Name:           "fake check",
+		Hostname:       "example.com",
+		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
+		Port:           8080,
+		StringToSend:   "Hello World",
+		StringToExpect: "Hi there",
+	}
+	want := map[string]string{
+		"name":                     "fake check",
+		"host":                     "example.com",
+		"paused":                   "false",
+		"resolution":               "0",
+		"notifyagainevery":         "0",
+		"notifywhenbackup":         "false",
+		"type":                     "tcp",
+		"integrationids":           "33333333,44444444",
+		"probe_filters":            "",
+		"userids":                  "123,456",
+		"teamids":                  "789",
+		"port":                     "8080",
+		"stringtosend":             "Hello World",
+		"stringtoexpect":           "Hi there",
+	}
+
+	params := check.PostParams()
+	assert.Equal(t, want, params)
+}
+
+func TestTCPCheckValid(t *testing.T) {
+	check := TCPCheck{Name: "fake check", Hostname: "example.com", Resolution: 15, Port: 8080}
+	assert.NoError(t, check.Valid())
+
+	badCheck := TCPCheck{Name: "fake check", Hostname: "example.com", Resolution: 15}
 	assert.Error(t, badCheck.Valid())
 }
