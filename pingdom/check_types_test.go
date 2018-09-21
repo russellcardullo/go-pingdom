@@ -117,7 +117,6 @@ func TestPingCheckPostParams(t *testing.T) {
 		"notifywhenbackup": "false",
 		"type":             "ping",
 		"integrationids":   "33333333,44444444",
-		"probe_filters":    "",
 		"userids":          "123,456",
 		"teamids":          "789",
 	}
@@ -154,7 +153,6 @@ func TestTCPCheckPostParams(t *testing.T) {
 		"notifywhenbackup": "false",
 		"type":             "tcp",
 		"integrationids":   "33333333,44444444",
-		"probe_filters":    "",
 		"userids":          "123,456",
 		"teamids":          "789",
 		"port":             "8080",
