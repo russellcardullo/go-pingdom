@@ -185,6 +185,13 @@ func (ck *PingCheck) PutParams() map[string]string {
 // with an HTTP POST request. Same as PUT.
 func (ck *PingCheck) PostParams() map[string]string {
 	params := ck.PutParams()
+
+	for k, v := range params {
+		if v == "" {
+			delete(params, k)
+		}
+	}
+
 	params["type"] = "ping"
 	return params
 }
@@ -243,6 +250,13 @@ func (ck *TCPCheck) PutParams() map[string]string {
 // with an HTTP POST request. Same as PUT.
 func (ck *TCPCheck) PostParams() map[string]string {
 	params := ck.PutParams()
+
+	for k, v := range params {
+		if v == "" {
+			delete(params, k)
+		}
+	}
+
 	params["type"] = "tcp"
 	return params
 }
