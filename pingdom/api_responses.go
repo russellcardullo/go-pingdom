@@ -136,7 +136,7 @@ func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// HttpCheck represents a Pingdom http check.
+// CheckResponseHTTPDetails represents the details specific to HTTP checks.
 type CheckResponseHTTPDetails struct {
 	Url              string            `json:"url,omitempty"`
 	Encryption       bool              `json:"encryption,omitempty"`
@@ -149,7 +149,7 @@ type CheckResponseHTTPDetails struct {
 	RequestHeaders   map[string]string `json:"requestheaders,omitempty"`
 }
 
-// HttpCheck represents a Pingdom http check.
+// CheckResponseTCPDetails represents the details specific to TCP checks.
 type CheckResponseTCPDetails struct {
 	Port           int    `json:"port,omitempty"`
 	StringToSend   string `json:"stringtosend,omitempty"`
