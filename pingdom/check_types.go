@@ -172,6 +172,7 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
 		"integrationids":   intListToCDString(ck.IntegrationIds),
 		"probe_filters":    ck.ProbeFilters,
+		"tags":             ck.Tags,
 		"userids":          intListToCDString(ck.UserIds),
 		"teamids":          intListToCDString(ck.TeamIds),
 	}
@@ -228,6 +229,7 @@ func (ck *TCPCheck) PutParams() map[string]string {
 		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
 		"integrationids":   intListToCDString(ck.IntegrationIds),
 		"probe_filters":    ck.ProbeFilters,
+		"tags":             ck.Tags,
 		"userids":          intListToCDString(ck.UserIds),
 		"teamids":          intListToCDString(ck.TeamIds),
 		"port":             strconv.Itoa(ck.Port),
