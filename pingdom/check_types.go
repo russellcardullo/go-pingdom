@@ -41,6 +41,7 @@ type PingCheck struct {
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
 	IntegrationIds           []int  `json:"integrationids,omitempty"`
+	Tags                     string `json:"tags,omitempty"`
 	ProbeFilters             string `json:"probe_filters,omitempty"`
 	UserIds                  []int  `json:"userids,omitempty"`
 	TeamIds                  []int  `json:"teamids,omitempty"`
@@ -56,6 +57,7 @@ type TCPCheck struct {
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
 	IntegrationIds           []int  `json:"integrationids,omitempty"`
+	Tags                     string `json:"tags,omitempty"`
 	ProbeFilters             string `json:"probe_filters,omitempty"`
 	UserIds                  []int  `json:"userids,omitempty"`
 	TeamIds                  []int  `json:"teamids,omitempty"`
