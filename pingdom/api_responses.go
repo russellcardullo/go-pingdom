@@ -102,6 +102,12 @@ type TeamDeleteResponse struct {
 	Success bool `json:"success"`
 }
 
+type PublicReportResponse struct {
+	ID        int    `json:"checkid"`
+	Name      string `json:"checkname"`
+	ReportURL string `json:"reporturl"`
+}
+
 type SummaryPerformanceResponse struct {
 	Summary SummaryPerformanceMap `json:"summary"`
 }
@@ -214,6 +220,10 @@ type listProbesJsonResponse struct {
 
 type listTeamsJsonResponse struct {
 	Teams []TeamResponse `json:"teams"`
+}
+
+type listPublicReportsJsonResponse struct {
+	Checks []PublicReportResponse `json:"public"`
 }
 
 type checkDetailsJsonResponse struct {

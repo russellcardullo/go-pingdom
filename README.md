@@ -228,6 +228,35 @@ Delete a team:
 team, err := client.Teams.Delete(12345)
 ```
 
+### PublicReportService ###
+
+This service manages the pingdom public report.  The public report is a
+publicly-visible list of checks, and this API can be used to List those
+checks, Publish checks to the public report or Withdrawl them.
+
+More information on the Public Report from Pingdom: https://www.pingdom.com/resources/api/2.1/#ResourceReports.public
+
+> Note: There is only one "public report", and it cannot be deleted.  To remove the public report, you must list all the checks and withdrawl them one-by-one.
+
+Get a list of all published checks in the public report:
+
+```go
+checks, err := client.PublicReport.List()
+fmt.Println("Checks:", checks) // [{ID Name ReportURL} ...]
+```
+
+Publish a check to the public report:
+
+```go
+_, err := client.PublicReport.PublishCheck(12345)
+```
+
+Withdrawl a check from the public report:
+
+```go
+_, err := client.PublicReport.WithdrawlCheck(12345)
+```
+
 ### UserService ###
 
 This service manages users and their contact information which is represented by the `User` struct. 
