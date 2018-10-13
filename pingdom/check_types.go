@@ -82,21 +82,21 @@ type SummaryPerformanceRequest struct {
 // with an HTTP PUT request
 func (ck *HttpCheck) PutParams() map[string]string {
 	m := map[string]string{
-		"name":                    ck.Name,
-		"host":                    ck.Hostname,
-		"resolution":              strconv.Itoa(ck.Resolution),
-		"paused":                  strconv.FormatBool(ck.Paused),
-		"notifyagainevery":        strconv.Itoa(ck.NotifyAgainEvery),
-		"notifywhenbackup":        strconv.FormatBool(ck.NotifyWhenBackup),
-		"url":                     ck.Url,
-		"encryption":              strconv.FormatBool(ck.Encryption),
-		"postdata":                ck.PostData,
-		"integrationids":          intListToCDString(ck.IntegrationIds),
-		"responsetime_threshold":  strconv.Itoa(ck.ResponseTimeThreshold),
-		"tags":                    ck.Tags,
-		"probe_filters":           ck.ProbeFilters,
-		"userids":                 intListToCDString(ck.UserIds),
-		"teamids":                 intListToCDString(ck.TeamIds),
+		"name":                   ck.Name,
+		"host":                   ck.Hostname,
+		"resolution":             strconv.Itoa(ck.Resolution),
+		"paused":                 strconv.FormatBool(ck.Paused),
+		"notifyagainevery":       strconv.Itoa(ck.NotifyAgainEvery),
+		"notifywhenbackup":       strconv.FormatBool(ck.NotifyWhenBackup),
+		"url":                    ck.Url,
+		"encryption":             strconv.FormatBool(ck.Encryption),
+		"postdata":               ck.PostData,
+		"integrationids":         intListToCDString(ck.IntegrationIds),
+		"responsetime_threshold": strconv.Itoa(ck.ResponseTimeThreshold),
+		"tags":          ck.Tags,
+		"probe_filters": ck.ProbeFilters,
+		"userids":       intListToCDString(ck.UserIds),
+		"teamids":       intListToCDString(ck.TeamIds),
 	}
 
 	// Ignore zero values
@@ -177,36 +177,21 @@ func (ck *HttpCheck) Valid() error {
 // with an HTTP PUT request
 func (ck *PingCheck) PutParams() map[string]string {
 	m := map[string]string{
-		"name":             ck.Name,
-		"host":             ck.Hostname,
-		"resolution":       strconv.Itoa(ck.Resolution),
-		"paused":           strconv.FormatBool(ck.Paused),
-		"notifyagainevery": strconv.Itoa(ck.NotifyAgainEvery),
-		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
-		"integrationids":   intListToCDString(ck.IntegrationIds),
-		"probe_filters":    ck.ProbeFilters,
-		"tags":             ck.Tags,
-		"userids":          intListToCDString(ck.UserIds),
-		"teamids":          intListToCDString(ck.TeamIds),
+		"name":                   ck.Name,
+		"host":                   ck.Hostname,
+		"resolution":             strconv.Itoa(ck.Resolution),
+		"paused":                 strconv.FormatBool(ck.Paused),
+		"notifyagainevery":       strconv.Itoa(ck.NotifyAgainEvery),
+		"notifywhenbackup":       strconv.FormatBool(ck.NotifyWhenBackup),
+		"integrationids":         intListToCDString(ck.IntegrationIds),
+		"responsetime_threshold": strconv.Itoa(ck.ResponseTimeThreshold),
+		"probe_filters":          ck.ProbeFilters,
+		"userids":                intListToCDString(ck.UserIds),
+		"teamids":                intListToCDString(ck.TeamIds),
 	}
 
 	if ck.SendNotificationWhenDown != 0 {
 		m["sendnotificationwhendown"] = strconv.Itoa(ck.SendNotificationWhenDown)
-  }
-  
-	return map[string]string{
-		"name":                     ck.Name,
-		"host":                     ck.Hostname,
-		"resolution":               strconv.Itoa(ck.Resolution),
-		"paused":                   strconv.FormatBool(ck.Paused),
-		"sendnotificationwhendown": strconv.Itoa(ck.SendNotificationWhenDown),
-		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
-		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
-		"integrationids":           intListToCDString(ck.IntegrationIds),
-		"responsetime_threshold":   strconv.Itoa(ck.ResponseTimeThreshold),
-		"probe_filters":            ck.ProbeFilters,
-		"userids":                  intListToCDString(ck.UserIds),
-		"teamids":                  intListToCDString(ck.TeamIds),
 	}
 
 	return m
