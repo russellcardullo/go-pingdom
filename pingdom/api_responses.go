@@ -102,6 +102,24 @@ type TeamDeleteResponse struct {
 	Success bool `json:"success"`
 }
 
+type SummaryPerformanceResponse struct {
+	Summary SummaryPerformanceMap `json:"summary"`
+}
+
+type SummaryPerformanceMap struct {
+	Hours []SummaryPerformanceSummary `json:"hours,omitempty"`
+	Days []SummaryPerformanceSummary `json:"days,omitempty"`
+	Weeks []SummaryPerformanceSummary `json:"weeks,omitempty"`
+}
+
+type SummaryPerformanceSummary struct {
+	AvgResponse int `json:"avgresponse"`
+	Downtime int `json:"downtime"`
+	StartTime int `json:"starttime"`
+	Unmonitored int `json:"unmonitored"`
+	Uptime int `json:"uptime"`
+}
+
 type UserSmsResponse struct {
 	Id int `json:"id"`
 	Severity string `json:"severity"`

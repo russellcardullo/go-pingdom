@@ -284,3 +284,88 @@ func TestCheckServiceDelete(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, want, msg)
 }
+
+func TestCheckServiceSummaryPerformance(t *testing.T) {
+	id := 1337
+	t.Run("passes on error from API", func(t *testing.T) {
+		setup()
+		defer teardown()
+
+		errorMsg := `{"error":{"statuscode":401,"statusdesc":"Unauthorized","errormessage":"Invalid email and\/or password"}}`
+		request := SummaryPerformanceRequest{
+			Id: id,
+		}
+
+		mux.HandleFunc(fmt.Sprintf("/summary.performance/%v", id), func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(401)
+			fmt.Fprint(w, errorMsg)
+		})
+
+		_, err := client.Checks.SummaryPerformance(request)
+
+		assert.Equal(t, &PingdomError{
+			StatusCode: 401,
+			StatusDesc: "Unauthorized",
+			Message:    "Invalid email and/or password",
+		}, err)
+	})
+
+	t.Run("passes on response as datastructure", func(t *testing.T) {
+		setup()
+		defer teardown()
+
+		request := SummaryPerformanceRequest{
+			Id: id,
+		}
+
+		expectedResponse := SummaryPerformanceResponse{
+			Summary: SummaryPerformanceMap{
+				Hours: []SummaryPerformanceSummary{
+					{
+						AvgResponse: 222,
+						Downtime:    0,
+						StartTime:   1536926400,
+						Unmonitored: 0,
+						Uptime:      3600,
+					},
+					{
+						AvgResponse: 225,
+						Downtime:    0,
+						StartTime:   1536930000,
+						Unmonitored: 0,
+						Uptime:      3442,
+					},
+				},
+			},
+		}
+
+		mux.HandleFunc(fmt.Sprintf("/summary.performance/%v", id), func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(200)
+			fmt.Fprint(w, `{
+	"summary": {
+		"hours": [
+			{
+				"avgresponse": 222,
+				"downtime": 0,
+        		"starttime": 1536926400,
+        		"unmonitored": 0,
+        		"uptime": 3600
+			},
+      		{
+	        	"avgresponse": 225,
+	        	"downtime": 0,
+	        	"starttime": 1536930000,
+	        	"unmonitored": 0,
+	        	"uptime": 3442
+	      	}
+		]
+	}
+}`)
+		})
+
+		resp, err := client.Checks.SummaryPerformance(request)
+
+		assert.NoError(t, err)
+		assert.Equal(t, expectedResponse, *resp)
+	})
+}

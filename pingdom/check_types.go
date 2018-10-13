@@ -48,6 +48,16 @@ type PingCheck struct {
 	TeamIds                  []int  `json:"teamids,omitempty"`
 }
 
+type SummaryPerformanceRequest struct {
+	Id            int
+	From          int
+	To            int
+	Resolution    string
+	IncludeUptime bool
+	Probes        string
+	Order         string
+}
+
 // Params returns a map of parameters for an HttpCheck that can be sent along
 // with an HTTP PUT request
 func (ck *HttpCheck) PutParams() map[string]string {
@@ -198,4 +208,29 @@ func intListToCDString(integers []int) string {
 		}
 	}
 	return CDString
+}
+
+func (csr SummaryPerformanceRequest) Valid() error {
+	if csr.Id == 0 {
+		return ErrMissingId
+	}
+
+	if csr.Resolution != "" && csr.Resolution != "hour" && csr.Resolution != "day" && csr.Resolution != "week" {
+		return ErrBadResolution
+	}
+	return nil
+}
+
+func (csr SummaryPerformanceRequest) GetParams() (params map[string]string) {
+	params = make(map[string]string)
+
+	if csr.Resolution != "" {
+		params["resolution"] = csr.Resolution
+	}
+
+	if csr.IncludeUptime {
+		params["includeuptime"] = "true"
+	}
+
+	return
 }
