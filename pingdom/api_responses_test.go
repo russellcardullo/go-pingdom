@@ -30,7 +30,8 @@ var detailedCheckJson = `
 	"status" : "up",
 	"lasterrortime" : 1293143467,
 	"lasttesttime" : 1294064823,
-	"tags": []
+	"tags": [],
+	"responsetime_threshold": 2300
 }
 `
 
