@@ -256,3 +256,71 @@ Withdrawl a check from the public report:
 ```go
 _, err := client.PublicReport.WithdrawlCheck(12345)
 ```
+
+### UserService ###
+
+This service manages users and their contact information which is represented by the `User` struct. 
+When creating or modifying users you must provide the `Username`. 
+More information from Pingdom: https://www.pingdom.com/resources/api/2.1/#ResourceUsers
+
+Get all users and contact info:
+
+```go
+users, err := client.Users.List()
+fmt.Println(users)
+```
+
+Create a new user and contact:
+
+```go
+user := User{
+    Username : "loginName",
+    Paused : "NO",
+} 
+userId, err := client.Users.Create(user)
+fmt.Println("New UserId: ", userId.Id)
+
+contact := Contact{
+	Number : "5555555555",
+	CountryCode : "1",
+	Provider : "Verizon",
+}
+contactId, err := client.Users.CreateContact(userId.Id, contact)
+fmt.Println("New Contact Id: ", contactId.Id)
+```
+
+Update a user and contact
+
+```go
+userId := 1234
+contactId := 90877
+
+user := User{
+    Username : "loginName",
+    Paused : "NO",
+} 
+result, err := client.Users.Update(userId, user)
+fmt.Println("result.Message)
+
+contact := Contact{
+	Number : "5555555555",
+	CountryCode : "1",
+	Provider : "Verizon",
+}
+result, err := client.Users.UpdateContact(userId, contactId, contact)
+fmt.Println(result.Message)
+```
+
+Delete a user and contact (deleting a user will delete all contact info)
+
+```go
+userId := 1234
+contactId := 90877
+
+result, err := client.Users.DeleteContact(userId, contactId)
+fmt.Println(result.Message)
+
+
+result, err := client.Users.Delete(userId)
+fmt.Println("result.Message)
+```

@@ -25,6 +25,7 @@ type HttpCheck struct {
 	PostData                 string            `json:"postdata,omitempty"`
 	RequestHeaders           map[string]string `json:"requestheaders,omitempty"`
 	IntegrationIds           []int             `json:"integrationids,omitempty"`
+	ResponseTimeThreshold    int               `json:"responsetime_threshold,omitempty"`
 	Tags                     string            `json:"tags,omitempty"`
 	ProbeFilters             string            `json:"probe_filters,omitempty"`
 	UserIds                  []int             `json:"userids,omitempty"`
@@ -41,29 +42,41 @@ type PingCheck struct {
 	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
 	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
 	IntegrationIds           []int  `json:"integrationids,omitempty"`
+	ResponseTimeThreshold    int    `json:"responsetime_threshold,omitempty"`
 	ProbeFilters             string `json:"probe_filters,omitempty"`
 	UserIds                  []int  `json:"userids,omitempty"`
 	TeamIds                  []int  `json:"teamids,omitempty"`
+}
+
+type SummaryPerformanceRequest struct {
+	Id            int
+	From          int
+	To            int
+	Resolution    string
+	IncludeUptime bool
+	Probes        string
+	Order         string
 }
 
 // Params returns a map of parameters for an HttpCheck that can be sent along
 // with an HTTP PUT request
 func (ck *HttpCheck) PutParams() map[string]string {
 	m := map[string]string{
-		"name":             ck.Name,
-		"host":             ck.Hostname,
-		"resolution":       strconv.Itoa(ck.Resolution),
-		"paused":           strconv.FormatBool(ck.Paused),
-		"notifyagainevery": strconv.Itoa(ck.NotifyAgainEvery),
-		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
-		"url":              ck.Url,
-		"encryption":       strconv.FormatBool(ck.Encryption),
-		"postdata":         ck.PostData,
-		"integrationids":   intListToCDString(ck.IntegrationIds),
-		"tags":             ck.Tags,
-		"probe_filters":    ck.ProbeFilters,
-		"userids":          intListToCDString(ck.UserIds),
-		"teamids":          intListToCDString(ck.TeamIds),
+		"name":                    ck.Name,
+		"host":                    ck.Hostname,
+		"resolution":              strconv.Itoa(ck.Resolution),
+		"paused":                  strconv.FormatBool(ck.Paused),
+		"notifyagainevery":        strconv.Itoa(ck.NotifyAgainEvery),
+		"notifywhenbackup":        strconv.FormatBool(ck.NotifyWhenBackup),
+		"url":                     ck.Url,
+		"encryption":              strconv.FormatBool(ck.Encryption),
+		"postdata":                ck.PostData,
+		"integrationids":          intListToCDString(ck.IntegrationIds),
+		"responsetime_threshold":  strconv.Itoa(ck.ResponseTimeThreshold),
+		"tags":                    ck.Tags,
+		"probe_filters":           ck.ProbeFilters,
+		"userids":                 intListToCDString(ck.UserIds),
+		"teamids":                 intListToCDString(ck.TeamIds),
 	}
 
 	// Ignore zero values
@@ -152,6 +165,7 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"notifyagainevery":         strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup":         strconv.FormatBool(ck.NotifyWhenBackup),
 		"integrationids":           intListToCDString(ck.IntegrationIds),
+		"responsetime_threshold":   strconv.Itoa(ck.ResponseTimeThreshold),
 		"probe_filters":            ck.ProbeFilters,
 		"userids":                  intListToCDString(ck.UserIds),
 		"teamids":                  intListToCDString(ck.TeamIds),
@@ -194,4 +208,29 @@ func intListToCDString(integers []int) string {
 		}
 	}
 	return CDString
+}
+
+func (csr SummaryPerformanceRequest) Valid() error {
+	if csr.Id == 0 {
+		return ErrMissingId
+	}
+
+	if csr.Resolution != "" && csr.Resolution != "hour" && csr.Resolution != "day" && csr.Resolution != "week" {
+		return ErrBadResolution
+	}
+	return nil
+}
+
+func (csr SummaryPerformanceRequest) GetParams() (params map[string]string) {
+	params = make(map[string]string)
+
+	if csr.Resolution != "" {
+		params["resolution"] = csr.Resolution
+	}
+
+	if csr.IncludeUptime {
+		params["includeuptime"] = "true"
+	}
+
+	return
 }
