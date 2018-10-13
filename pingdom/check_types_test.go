@@ -15,11 +15,11 @@ func TestHttpCheckPutParams(t *testing.T) {
 			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 			"Pragma":     "no-cache",
 		},
-		Username:       "user",
-		Password:       "pass",
-		IntegrationIds: []int{33333333, 44444444},
-		UserIds:        []int{123, 456},
-		TeamIds:        []int{789},
+		Username:              "user",
+		Password:              "pass",
+		IntegrationIds:        []int{33333333, 44444444},
+		UserIds:               []int{123, 456},
+		TeamIds:               []int{789},
 		ResponseTimeThreshold: 2300,
 	}
 	want := map[string]string{
@@ -57,11 +57,11 @@ func TestHttpCheckPostParams(t *testing.T) {
 			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
 			"Pragma":     "no-cache",
 		},
-		Username:       "user",
-		Password:       "pass",
-		IntegrationIds: []int{33333333, 44444444},
-		UserIds:        []int{123, 456},
-		TeamIds:        []int{789},
+		Username:              "user",
+		Password:              "pass",
+		IntegrationIds:        []int{33333333, 44444444},
+		UserIds:               []int{123, 456},
+		TeamIds:               []int{789},
 		ResponseTimeThreshold: 2300,
 	}
 	want := map[string]string{
@@ -106,27 +106,25 @@ func TestHttpCheckValid(t *testing.T) {
 
 func TestPingCheckPostParams(t *testing.T) {
 	check := PingCheck{
-		Name:           "fake check",
-		Hostname:       "example.com",
-		IntegrationIds: []int{33333333, 44444444},
-		UserIds:        []int{123, 456},
-		TeamIds:        []int{789},
+		Name:                  "fake check",
+		Hostname:              "example.com",
+		IntegrationIds:        []int{33333333, 44444444},
+		UserIds:               []int{123, 456},
+		TeamIds:               []int{789},
 		ResponseTimeThreshold: 2300,
 	}
 	want := map[string]string{
-		"name":                     "fake check",
-		"host":                     "example.com",
-		"paused":                   "false",
-		"resolution":               "0",
-		"sendnotificationwhendown": "0",
-		"notifyagainevery":         "0",
-		"notifywhenbackup":         "false",
-		"type":                     "ping",
-		"integrationids":           "33333333,44444444",
-		"probe_filters":            "",
-		"userids":                  "123,456",
-		"teamids":                  "789",
-		"responsetime_threshold":   "2300",
+		"name":                   "fake check",
+		"host":                   "example.com",
+		"paused":                 "false",
+		"resolution":             "0",
+		"notifyagainevery":       "0",
+		"notifywhenbackup":       "false",
+		"type":                   "ping",
+		"integrationids":         "33333333,44444444",
+		"userids":                "123,456",
+		"teamids":                "789",
+		"responsetime_threshold": "2300",
 	}
 
 	params := check.PostParams()
@@ -138,6 +136,45 @@ func TestPingCheckValid(t *testing.T) {
 	assert.NoError(t, check.Valid())
 
 	badCheck := PingCheck{Name: "fake check", Hostname: "example.com"}
+	assert.Error(t, badCheck.Valid())
+}
+
+func TestTCPCheckPostParams(t *testing.T) {
+	check := TCPCheck{
+		Name:           "fake check",
+		Hostname:       "example.com",
+		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
+		Port:           8080,
+		StringToSend:   "Hello World",
+		StringToExpect: "Hi there",
+	}
+	want := map[string]string{
+		"name":             "fake check",
+		"host":             "example.com",
+		"paused":           "false",
+		"resolution":       "0",
+		"notifyagainevery": "0",
+		"notifywhenbackup": "false",
+		"type":             "tcp",
+		"integrationids":   "33333333,44444444",
+		"userids":          "123,456",
+		"teamids":          "789",
+		"port":             "8080",
+		"stringtosend":     "Hello World",
+		"stringtoexpect":   "Hi there",
+	}
+
+	params := check.PostParams()
+	assert.Equal(t, want, params)
+}
+
+func TestTCPCheckValid(t *testing.T) {
+	check := TCPCheck{Name: "fake check", Hostname: "example.com", Resolution: 15, Port: 8080}
+	assert.NoError(t, check.Valid())
+
+	badCheck := TCPCheck{Name: "fake check", Hostname: "example.com", Resolution: 15}
 	assert.Error(t, badCheck.Valid())
 }
 
@@ -170,8 +207,7 @@ func TestSummaryPerformanceRequestValid(t *testing.T) {
 func TestSummaryPerformanceRequestGetParams(t *testing.T) {
 	id := 1337
 	t.Run("empty request", func(t *testing.T) {
-		want := map[string]string{
-		}
+		want := map[string]string{}
 
 		params := SummaryPerformanceRequest{
 			Id: id,
@@ -194,5 +230,4 @@ func TestSummaryPerformanceRequestGetParams(t *testing.T) {
 
 		assert.Equal(t, want, params)
 	})
-
 }

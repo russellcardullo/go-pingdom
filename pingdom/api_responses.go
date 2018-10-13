@@ -43,6 +43,7 @@ type CheckResponse struct {
 type CheckResponseType struct {
 	Name string                    `json:"-"`
 	HTTP *CheckResponseHTTPDetails `json:"http,omitempty"`
+	TCP  *CheckResponseTCPDetails  `json:"tcp,omitempty"`
 }
 
 type CheckResponseTag struct {
@@ -182,11 +183,12 @@ func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
 			return err
 		}
 		c.HTTP = rawCheckDetails.HTTP
+		c.TCP = rawCheckDetails.TCP
 	}
 	return nil
 }
 
-// HttpCheck represents a Pingdom http check.
+// CheckResponseHTTPDetails represents the details specific to HTTP checks.
 type CheckResponseHTTPDetails struct {
 	Url              string            `json:"url,omitempty"`
 	Encryption       bool              `json:"encryption,omitempty"`
@@ -197,6 +199,13 @@ type CheckResponseHTTPDetails struct {
 	ShouldNotContain string            `json:"shouldnotcontain,omitempty"`
 	PostData         string            `json:"postdata,omitempty"`
 	RequestHeaders   map[string]string `json:"requestheaders,omitempty"`
+}
+
+// CheckResponseTCPDetails represents the details specific to TCP checks.
+type CheckResponseTCPDetails struct {
+	Port           int    `json:"port,omitempty"`
+	StringToSend   string `json:"stringtosend,omitempty"`
+	StringToExpect string `json:"stringtoexpect,omitempty"`
 }
 
 // Return string representation of the PingdomError
