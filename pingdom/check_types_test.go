@@ -131,6 +131,31 @@ func TestPingCheckPostParams(t *testing.T) {
 	assert.Equal(t, want, params)
 }
 
+func TestPingCheckPutParams(t *testing.T) {
+	check := PingCheck{
+		Name:           "fake check",
+		Hostname:       "example.com",
+		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
+	}
+	want := map[string]string{
+		"name":             "fake check",
+		"host":             "example.com",
+		"resolution":       "0",
+		"paused":           "false",
+		"notifyagainevery": "0",
+		"notifywhenbackup": "false",
+		"integrationids":   "33333333,44444444",
+		"probe_filters":    "",
+		"userids":          "123,456",
+		"teamids":          "789",
+	}
+
+	params := check.PutParams()
+	assert.Equal(t, want, params)
+}
+
 func TestPingCheckValid(t *testing.T) {
 	check := PingCheck{Name: "fake check", Hostname: "example.com", Resolution: 15}
 	assert.NoError(t, check.Valid())
