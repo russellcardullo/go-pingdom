@@ -79,15 +79,15 @@ func TestCheckServiceList(t *testing.T) {
 
 	want := []CheckResponse{
 		{
-			ID:                     85975,
-			Name:                   "My check 1",
-			LastErrorTime:          1297446423,
-			LastResponseTime:       355,
-			LastTestTime:           1300977363,
-			Hostname:               "example.com",
-			Resolution:             1,
-			Status:                 "up",
-			ResponseTimeThreshold:  2300,
+			ID:                    85975,
+			Name:                  "My check 1",
+			LastErrorTime:         1297446423,
+			LastResponseTime:      355,
+			LastTestTime:          1300977363,
+			Hostname:              "example.com",
+			Resolution:            1,
+			Status:                "up",
+			ResponseTimeThreshold: 2300,
 			Type: CheckResponseType{
 				Name: "http",
 			},
