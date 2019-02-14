@@ -27,7 +27,8 @@ type Client struct {
 	Probes       *ProbeService
 	Teams        *TeamService
 	PublicReport *PublicReportService
-	Users		     *UserService
+	Users        *UserService
+	Recipe       *CheckRecipe
 }
 
 // NewClient returns a Pingdom client with a default base URL and HTTP client
@@ -41,6 +42,7 @@ func NewClient(user string, password string, key string) *Client {
 	c.Teams = &TeamService{client: c}
 	c.PublicReport = &PublicReportService{client: c}
 	c.Users = &UserService{client: c}
+	c.Recipe = &CheckRecipe{client: c}
 	return c
 }
 
