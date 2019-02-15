@@ -3,18 +3,19 @@ package main
 import (
 	"fmt"
 
-	"github.com/russellcardullo/go-pingdom/pingdom"
-	"os"
-	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
+	"os"
 	"strconv"
+
+	"github.com/russellcardullo/go-pingdom/pingdom"
 )
 
 type Credentials struct {
-	User 			string `json:"user"`
-	Password 		string `json:"password"`
-	ApiKey 			string `json:"apikey"`
-	AccountEmail 	string `json:"accountEmail"`
+	User         string `json:"user"`
+	Password     string `json:"password"`
+	ApiKey       string `json:"apikey"`
+	AccountEmail string `json:"accountEmail"`
 }
 
 func getConfig() Credentials {
@@ -38,10 +39,8 @@ func getConfig() Credentials {
 	// read our opened xmlFile as a byte array.
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-
 	// we initialize our Users array
 	var config Credentials
-
 
 	// we unmarshal our byteArray which contains our
 	// jsonFile's content into 'users' which we defined above
@@ -58,14 +57,14 @@ func userExamples() {
 
 	//Create User
 	user := pingdom.User{
-	Username : "exampleUser",
+		Username: "exampleUser",
 	}
 	u, _ := client.Users.Create(&user)
 	fmt.Println("User Id: " + strconv.Itoa(u.Id))
 
 	// Create contact info
 	contact := pingdom.Contact{
-	Email: "test@example.com",
+		Email: "test@example.com",
 	}
 	c, _ := client.Users.CreateContact(u.Id, contact)
 	fmt.Println("Contact Id: " + strconv.Itoa(c.Id))

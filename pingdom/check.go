@@ -127,7 +127,7 @@ func (cs *CheckService) Delete(id int) (*PingdomResponse, error) {
 	return m, err
 }
 
-func (cs *CheckService) SummaryPerformance(request SummaryPerformanceRequest) (*SummaryPerformanceResponse, error){
+func (cs *CheckService) SummaryPerformance(request SummaryPerformanceRequest) (*SummaryPerformanceResponse, error) {
 	if err := request.Valid(); err != nil {
 		return nil, err
 	}
