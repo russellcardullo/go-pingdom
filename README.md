@@ -330,3 +330,17 @@ fmt.Println(result.Message)
 result, err := client.Users.Delete(userId)
 fmt.Println("result.Message)
 ```
+
+## Development ##
+
+### Acceptance Tests ###
+
+You can run acceptance tests against the actual pingdom API to test any changes:
+```
+PINGDOM_USER=[username] \
+  PINGDOM_PASSWORD=[password] \
+  PINGDOM_API_KEY=[api key] make acceptance
+```
+
+Note that this will create actual resources in your Pingdom account.  The tests will make a best effort to clean up but these would
+not be guaranteed on test failures depending on the nature of the failure.
