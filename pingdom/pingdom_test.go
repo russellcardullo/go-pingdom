@@ -24,7 +24,12 @@ func setup() {
 	server = httptest.NewServer(mux)
 
 	// test client
-	client = NewClient("fake_email@example.com", "12345", "my_api_key")
+	client, _ = NewClientWithConfig(ClientConfig{
+		User:     "fake_email@example.com",
+		Password: "12345",
+		APIKey:   "my_api_key",
+	})
+
 	url, _ := url.Parse(server.URL)
 	client.BaseURL = url
 }
@@ -35,6 +40,18 @@ func teardown() {
 
 func testMethod(t *testing.T, r *http.Request, want string) {
 	assert.Equal(t, want, r.Method)
+}
+
+func TestNewClientWithConfig(t *testing.T) {
+	c, err := NewClientWithConfig(ClientConfig{
+		User:     "user",
+		Password: "password",
+		APIKey:   "key",
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, http.DefaultClient, c.client)
+	assert.Equal(t, defaultBaseURL, c.BaseURL.String())
+	assert.NotNil(t, c.Checks)
 }
 
 func TestNewClient(t *testing.T) {
