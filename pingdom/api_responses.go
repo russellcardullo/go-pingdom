@@ -262,3 +262,31 @@ type listUsersJsonResponse struct {
 type errorJsonResponse struct {
 	Error *PingdomError `json:"error"`
 }
+
+type listRecipesJsonResponse struct {
+	Recipes map[string]RecipeResponse `json:"recipes"`
+}
+
+type RecipeResponse struct {
+	Name                   string `json:"name"`
+	Status                 string `json:"status"`
+	Kitchen                string `json:"kitchen"`
+	Active                 string `json:"active"`
+	CreatedAt              int    `json:"created_at"`
+	Interval               int    `json:"interval"`
+	UseLegacyNotifications bool   `json:"use_legacy_notifications"`
+}
+
+type RecipeSummaryResponse struct {
+	Summary struct {
+		Hours []struct {
+			Data []struct {
+				Avgresponse int    `json:"avgresponse"`
+				Command     string `json:"command"`
+			} `json:"#"`
+			Avgresponse int `json:"avgresponse"`
+			Starttime   int `json:"starttime"`
+			Revision    int `json:"revision"`
+		} `json:"hours"`
+	} `json:"summary"`
+}
