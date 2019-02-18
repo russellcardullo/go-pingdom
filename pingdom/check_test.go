@@ -79,15 +79,15 @@ func TestCheckServiceList(t *testing.T) {
 
 	want := []CheckResponse{
 		{
-			ID:                     85975,
-			Name:                   "My check 1",
-			LastErrorTime:          1297446423,
-			LastResponseTime:       355,
-			LastTestTime:           1300977363,
-			Hostname:               "example.com",
-			Resolution:             1,
-			Status:                 "up",
-			ResponseTimeThreshold:  2300,
+			ID:                    85975,
+			Name:                  "My check 1",
+			LastErrorTime:         1297446423,
+			LastResponseTime:      355,
+			LastTestTime:          1300977363,
+			Hostname:              "example.com",
+			Resolution:            1,
+			Status:                "up",
+			ResponseTimeThreshold: 2300,
 			Type: CheckResponseType{
 				Name: "http",
 			},
@@ -200,6 +200,12 @@ func TestCheckServiceRead(t *testing.T) {
         "responsetime_threshold": 2300,
         "status" : "up",
         "tags": [],
+        "teams": [
+            {
+                "id": 123456,
+                "name": "Oncall"
+            }
+        ],
         "type" : {
           "http" : {
             "encryption": false,
@@ -227,6 +233,13 @@ func TestCheckServiceRead(t *testing.T) {
 		LastErrorTime:            1293143467,
 		LastTestTime:             1294064823,
 		ResponseTimeThreshold:    2300,
+		Teams: []CheckTeamResponse{
+			CheckTeamResponse{
+				Name: "Oncall",
+				ID:   123456,
+			},
+		},
+		TeamIds: []int{123456},
 		Type: CheckResponseType{
 			Name: "http",
 			HTTP: &CheckResponseHTTPDetails{
