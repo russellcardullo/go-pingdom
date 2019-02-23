@@ -234,7 +234,7 @@ func TestCheckServiceRead(t *testing.T) {
 		LastTestTime:             1294064823,
 		ResponseTimeThreshold:    2300,
 		Teams: []CheckTeamResponse{
-			CheckTeamResponse{
+			{
 				Name: "Oncall",
 				ID:   123456,
 			},

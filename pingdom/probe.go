@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 )
 
-// ProbeService provides an interface to Pingdom probes
+// ProbeService provides an interface to Pingdom probes.
 type ProbeService struct {
 	client *Client
 }

@@ -7,23 +7,19 @@ import (
 	"strconv"
 )
 
+// UserService provides an interface to Pingdom users.
 type UserService struct {
 	client *Client
 }
 
-type ContactApi interface {
-	ValidContact() error
-	PostContactParams() map[string]string
-	PutContactParams() map[string]string
-}
-
+// User is an interface representing a Pingdom team.
 type UserApi interface {
 	ValidUser() error
 	PostParams() map[string]string
 	PutParams() map[string]string
 }
 
-// Get a list of all users and their contact details
+// List returns a list of all users and their contact details.
 func (cs *UserService) List() ([]UsersResponse, error) {
 
 	req, err := cs.client.NewRequest("GET", "/users", nil)
@@ -50,6 +46,7 @@ func (cs *UserService) List() ([]UsersResponse, error) {
 	return u.Users, err
 }
 
+// Read return a user object from Pingdom.
 func (cs *UserService) Read(userId int) (*UsersResponse, error) {
 	users, err := cs.List()
 	if err != nil {
@@ -65,7 +62,7 @@ func (cs *UserService) Read(userId int) (*UsersResponse, error) {
 	return nil, fmt.Errorf("UserId: " + strconv.Itoa(userId) + " not found")
 }
 
-// Add a new user
+// Create adds a new user.
 func (cs *UserService) Create(user UserApi) (*UsersResponse, error) {
 	if err := user.ValidUser(); err != nil {
 		return nil, err
@@ -84,7 +81,7 @@ func (cs *UserService) Create(user UserApi) (*UsersResponse, error) {
 	return m.User, err
 }
 
-// Add a contact target to an existing user
+// CreateContact adds a contact target to an existing user.
 func (cs *UserService) CreateContact(userId int, contact Contact) (*CreateUserContactResponse, error) {
 	if err := contact.ValidContact(); err != nil {
 		return nil, err
@@ -103,7 +100,7 @@ func (cs *UserService) CreateContact(userId int, contact Contact) (*CreateUserCo
 	return m.Contact, err
 }
 
-// Update a user's core properties not contact targets
+// Update a user's core properties not contact targets.
 func (cs *UserService) Update(id int, user UserApi) (*PingdomResponse, error) {
 	if err := user.ValidUser(); err != nil {
 		return nil, err
@@ -122,8 +119,8 @@ func (cs *UserService) Update(id int, user UserApi) (*PingdomResponse, error) {
 	return m, err
 }
 
-// Update a contact by id, will change an email to sms or sms to email
-// if you provide an id for the other
+// UpdateContact updates a contact by id, will change an email to sms or sms to email
+// if you provide an id for the other.
 func (cs *UserService) UpdateContact(userId int, contactId int, contact Contact) (*PingdomResponse, error) {
 	if err := contact.ValidContact(); err != nil {
 		return nil, err
@@ -142,7 +139,7 @@ func (cs *UserService) UpdateContact(userId int, contactId int, contact Contact)
 	return m, err
 }
 
-// Delete user
+// Delete removes a user from Pingdom.
 func (cs *UserService) Delete(id int) (*PingdomResponse, error) {
 	req, err := cs.client.NewRequest("DELETE", "/users/"+strconv.Itoa(id), nil)
 	if err != nil {
@@ -157,7 +154,7 @@ func (cs *UserService) Delete(id int) (*PingdomResponse, error) {
 	return m, err
 }
 
-// Delete contact target, either an email or sms property of a user
+// DeleteContact deletes a contact target from a user, either an email or sms property of a user.
 func (cs *UserService) DeleteContact(userId int, contactId int) (*PingdomResponse, error) {
 	req, err := cs.client.NewRequest("DELETE", "/users/"+strconv.Itoa(userId)+"/"+strconv.Itoa(contactId), nil)
 	if err != nil {

@@ -30,6 +30,7 @@ type Client struct {
 	Users        *UserService
 }
 
+// ClientConfig represents a configuration for a pingdom client.
 type ClientConfig struct {
 	User         string
 	Password     string
@@ -39,7 +40,7 @@ type ClientConfig struct {
 	HTTPClient   *http.Client
 }
 
-// NewClientWithConfig returns a Pingdom client
+// NewClientWithConfig returns a Pingdom client.
 func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	var baseURL *url.URL
 	var err error
@@ -75,7 +76,7 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	return c, nil
 }
 
-// NewClient returns a Pingdom client with a default base URL and default HTTP client
+// NewClient returns a Pingdom client with a default base URL and default HTTP client.
 // Deprecated: Use NewClientWithConfig
 func NewClient(user string, password string, key string) *Client {
 	config := ClientConfig{
@@ -87,7 +88,7 @@ func NewClient(user string, password string, key string) *Client {
 	return c
 }
 
-// NewMultiUserClient extends NewClient to allow Multi-User authentication
+// NewMultiUserClient extends NewClient to allow Multi-User authentication.
 // Deprecated: Use NewClientWithConfig
 func NewMultiUserClient(user string, password string, key string, accountEmail string) *Client {
 	config := ClientConfig{

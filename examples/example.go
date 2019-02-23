@@ -11,14 +11,14 @@ import (
 	"github.com/russellcardullo/go-pingdom/pingdom"
 )
 
-type Credentials struct {
+type credentials struct {
 	User         string `json:"user"`
 	Password     string `json:"password"`
 	APIKey       string `json:"apikey"`
 	AccountEmail string `json:"accountEmail"`
 }
 
-func getConfig() Credentials {
+func getConfig() credentials {
 	// Config Example
 	// { "user" : "", "password" : "", "apikey" : "", "accountEmail" : "" }
 	if len(os.Args) < 2 {
@@ -40,7 +40,7 @@ func getConfig() Credentials {
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	// we initialize our Users array
-	var config Credentials
+	var config credentials
 
 	// we unmarshal our byteArray which contains our
 	// jsonFile's content into 'users' which we defined above

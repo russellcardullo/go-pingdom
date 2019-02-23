@@ -3,25 +3,28 @@ package pingdom
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"strconv"
 )
 
+// MaintenanceService provides an interface to Pingdom maintenance windows.
 type MaintenanceService struct {
 	client *Client
 }
 
+// Maintenance is a Pingdom maintenance window.
 type Maintenance interface {
 	PutParams() map[string]string
 	PostParams() map[string]string
 	Valid() error
 }
 
+// MaintenanceDelete is the set of parameteres to a Pingdom maintenance delete request.
 type MaintenanceDelete interface {
 	DeleteParams() map[string]string
 	ValidDelete() error
 }
 
+// List returns the response holding a list of Maintenance windows.
 func (cs *MaintenanceService) List(params ...map[string]string) ([]MaintenanceResponse, error) {
 	param := map[string]string{}
 	if len(params) != 0 {
@@ -55,6 +58,7 @@ func (cs *MaintenanceService) List(params ...map[string]string) ([]MaintenanceRe
 	return m.Maintenances, err
 }
 
+// Read returns a Maintenance for a given ID.
 func (cs *MaintenanceService) Read(id int) (*MaintenanceResponse, error) {
 	req, err := cs.client.NewRequest("GET", "/maintenance/"+strconv.Itoa(id), nil)
 	if err != nil {
@@ -70,6 +74,7 @@ func (cs *MaintenanceService) Read(id int) (*MaintenanceResponse, error) {
 	return m.Maintenance, err
 }
 
+// Create creates a new Maintenance.
 func (cs *MaintenanceService) Create(maintenance Maintenance) (*MaintenanceResponse, error) {
 	if err := maintenance.Valid(); err != nil {
 		return nil, err
@@ -88,8 +93,8 @@ func (cs *MaintenanceService) Create(maintenance Maintenance) (*MaintenanceRespo
 	return m.Maintenance, err
 }
 
-// Update is used to update existing maintenance window.Looks like you can only update 'Description',
-// and 'To' fields.
+// Update is used to update an existing Maintenance. Only the 'Description',
+// and 'To' fields can be updated.
 func (cs *MaintenanceService) Update(id int, maintenance Maintenance) (*PingdomResponse, error) {
 	if err := maintenance.Valid(); err != nil {
 		return nil, err
@@ -113,8 +118,6 @@ func (cs *MaintenanceService) MultiDelete(maintenance MaintenanceDelete) (*Pingd
 	if err := maintenance.ValidDelete(); err != nil {
 		return nil, err
 	}
-
-	log.Println(maintenance.DeleteParams())
 
 	req, err := cs.client.NewRequest("DELETE", "/maintenance/", maintenance.DeleteParams())
 	if err != nil {
