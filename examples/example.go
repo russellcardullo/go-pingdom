@@ -14,7 +14,7 @@ import (
 type Credentials struct {
 	User         string `json:"user"`
 	Password     string `json:"password"`
-	ApiKey       string `json:"apikey"`
+	APIKey       string `json:"apikey"`
 	AccountEmail string `json:"accountEmail"`
 }
 
@@ -53,7 +53,7 @@ func getConfig() Credentials {
 
 func userExamples() {
 	config := getConfig()
-	client := pingdom.NewMultiUserClient(config.User, config.Password, config.ApiKey, config.AccountEmail)
+	client := pingdom.NewMultiUserClient(config.User, config.Password, config.APIKey, config.AccountEmail)
 
 	//Create User
 	user := pingdom.User{
@@ -95,7 +95,15 @@ func userExamples() {
 }
 
 func main() {
-	client := pingdom.NewClient("username", "password", "api_key")
+	client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
+		User:     "username",
+		Password: "password",
+		APIKey:   "api_key",
+	})
+	if err != nil {
+		fmt.Println("Error", err)
+		os.Exit(1)
+	}
 
 	// List all checks
 	checks, _ := client.Checks.List()

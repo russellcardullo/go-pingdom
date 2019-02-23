@@ -1,9 +1,11 @@
 package acceptance
 
 import (
+	"net/http"
 	"os"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/russellcardullo/go-pingdom/pingdom"
 	"github.com/stretchr/testify/assert"
@@ -17,11 +19,15 @@ func init() {
 	if os.Getenv("PINGDOM_ACCEPTANCE") == "1" {
 		runAcceptance = true
 
-		user := os.Getenv("PINGDOM_USER")
-		password := os.Getenv("PINGDOM_PASSWORD")
-		apiKey := os.Getenv("PINGDOM_API_KEY")
-
-		client = pingdom.NewClient(user, password, apiKey)
+		config := pingdom.ClientConfig{
+			User:     os.Getenv("PINGDOM_USER"),
+			Password: os.Getenv("PINGDOM_PASSWORD"),
+			APIKey:   os.Getenv("PINGDOM_API_KEY"),
+			HTTPClient: &http.Client{
+				Timeout: time.Second * 10,
+			},
+		}
+		client, _ = pingdom.NewClientWithConfig(config)
 	}
 }
 

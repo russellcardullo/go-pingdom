@@ -17,18 +17,41 @@ Pingdom handles single-user and multi-user accounts differently.
 Construct a new single-user Pingdom client:
 
 ```go
-client := pingdom.NewClient("pingdom_username", "pingdom_password", "pingdom_api_key")
+client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
+    Username: "pingdom_username",
+    Password: "pingdom_password",
+    APIKey: "pingdom_api_key",
+})
 ```
 
 Construct a multi-user Pingdom client:
 
 ```go
-client := pingdom.NewMultiUserClient("pingdom_username", "pingdom_password", "pingdom_api_key", "pingdom_account_email")
+client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
+    Username: "pingdom_username",
+    Password: "pingdom_password",
+    APIKey: "pingdom_api_key",
+    AccountEmail: "pingdom_account_email",
+})
 ```
 
 The `pingdom_account_email` variable is the email address of the owner of the multi-user account. This is passed in the `Account-Email` header to the Pingdom API.
 
 Using a Pingdom client, you can access supported services.
+
+You can override the timeout or other parameters by passing a custom http client:
+```go
+client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
+    Username: "pingdom_username",
+    Password: "pingdom_password",
+    APIKey: "pingdom_api_key",
+    AccountEmail: "pingdom_account_email",
+    HTTPClient: &http.Client{
+        Timeout: time.Second * 10,
+    },
+})
+```
+
 
 ### CheckService ###
 
@@ -117,10 +140,10 @@ Create a new Maintenance Window:
 
 ```go
 m := pingdom.MaintenanceWindow{
-		Description: "My Maintenance",
-		From:        1,
-		To:          1234567899,
-	}
+    Description: "My Maintenance",
+    From:        1,
+    To:          1234567899,
+}
 maintenance, err := client.Maintenances.Create(&m)
 fmt.Println("Created MaintenanceWindow:", maintenance) // {ID Description}
 ```
@@ -135,9 +158,9 @@ Update a maintenance: (Please note, that based on experience, you are allowed to
 
 ```go
 updatedMaintenance := pingdom.MaintenanceWindow{
-		Description: "My Maintenance",
-		To:          1234567999,
-	}
+    Description: "My Maintenance",
+    To:          1234567999,
+}
 msg, err := client.Maintenances.Update(12345, &updatedMaintenance)
 ```
 
@@ -155,11 +178,11 @@ After contacting Pingdom, the better approach would be to use update function an
 maintenance, _ := client.Maintenances.Read(12345)
 
 m := pingdom.MaintenanceWindow{
-		Description: maintenance.Description,
-		From:        maintenance.From,
-		To:          1,
-		EffectiveTo: 1,
-	}
+    Description: maintenance.Description,
+    From:        maintenance.From,
+    To:          1,
+    EffectiveTo: 1,
+}
 
 maintenanceUpdate, err := client.Maintenances.Update(12345, &m)
 ```
@@ -182,7 +205,7 @@ probes, err := client.Probes.List(params)
 fmt.Println("Probes:", probes) // [{ID Name} ...]
 
 for _, probe := range probes {
-  fmt.Println("Probe region:", probe.Region)  // Probe region: EU
+    fmt.Println("Probe region:", probe.Region)  // Probe region: EU
 }
 ```
 
@@ -206,7 +229,7 @@ Create a new Team:
 
 ```go
 t := pingdom.TeamData{
-		Name: "Team",
+    Name: "Team",
 }
 team, err := client.Teams.Create(&t)
 fmt.Println("Created Team:", team) // {ID Name Users}
@@ -223,7 +246,7 @@ Update a team:
 ```go
 modifyTeam := pingdom.TeamData{
     Name:    "New Name"
-		UserIDs: "123,678",
+    UserIDs: "123,678",
 }
 team, err := client.Teams.Update(12345, &modifyTeam)
 ```
@@ -287,9 +310,9 @@ userId, err := client.Users.Create(user)
 fmt.Println("New UserId: ", userId.Id)
 
 contact := Contact{
-	Number : "5555555555",
-	CountryCode : "1",
-	Provider : "Verizon",
+    Number : "5555555555",
+    CountryCode : "1",
+    Provider : "Verizon",
 }
 contactId, err := client.Users.CreateContact(userId.Id, contact)
 fmt.Println("New Contact Id: ", contactId.Id)
@@ -309,9 +332,9 @@ result, err := client.Users.Update(userId, user)
 fmt.Println("result.Message)
 
 contact := Contact{
-	Number : "5555555555",
-	CountryCode : "1",
-	Provider : "Verizon",
+    Number : "5555555555",
+    CountryCode : "1",
+    Provider : "Verizon",
 }
 result, err := client.Users.UpdateContact(userId, contactId, contact)
 fmt.Println(result.Message)
