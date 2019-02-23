@@ -12,7 +12,7 @@ type UserService struct {
 	client *Client
 }
 
-// User is an interface representing a Pingdom team.
+// UserApi is an interface representing a Pingdom User.
 type UserApi interface {
 	ValidUser() error
 	PostParams() map[string]string
