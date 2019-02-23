@@ -34,7 +34,7 @@ func (cs *ProbeService) List(params ...map[string]string) ([]ProbeResponse, erro
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	bodyString := string(bodyBytes)
 
-	p := &listProbesJsonResponse{}
+	p := &listProbesJSONResponse{}
 	err = json.Unmarshal([]byte(bodyString), &p)
 
 	return p.Probes, err

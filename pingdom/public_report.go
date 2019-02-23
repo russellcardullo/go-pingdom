@@ -31,7 +31,7 @@ func (cs *PublicReportService) List() ([]PublicReportResponse, error) {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	bodyString := string(bodyBytes)
 
-	t := &listPublicReportsJsonResponse{}
+	t := &listPublicReportsJSONResponse{}
 	err = json.Unmarshal([]byte(bodyString), &t)
 
 	return t.Checks, err

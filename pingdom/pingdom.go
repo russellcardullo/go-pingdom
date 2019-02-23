@@ -108,7 +108,7 @@ func NewMultiUserClient(user string, password string, key string, accountEmail s
 // ListChecks, etc but this method is provided to allow for making other
 // API calls that might not be built in.
 func (pc *Client) NewRequest(method string, rsc string, params map[string]string) (*http.Request, error) {
-	baseUrl, err := url.Parse(pc.BaseURL.String() + rsc)
+	baseURL, err := url.Parse(pc.BaseURL.String() + rsc)
 	if err != nil {
 		return nil, err
 	}
@@ -118,10 +118,10 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 		for k, v := range params {
 			ps.Set(k, v)
 		}
-		baseUrl.RawQuery = ps.Encode()
+		baseURL.RawQuery = ps.Encode()
 	}
 
-	req, err := http.NewRequest(method, baseUrl.String(), nil)
+	req, err := http.NewRequest(method, baseURL.String(), nil)
 	req.SetBasicAuth(pc.User, pc.Password)
 	req.Header.Add("App-Key", pc.APIKey)
 	if pc.AccountEmail != "" {
@@ -170,7 +170,7 @@ func validateResponse(r *http.Response) error {
 
 	bodyBytes, _ := ioutil.ReadAll(r.Body)
 	bodyString := string(bodyBytes)
-	m := &errorJsonResponse{}
+	m := &errorJSONResponse{}
 	err := json.Unmarshal([]byte(bodyString), &m)
 	if err != nil {
 		return err

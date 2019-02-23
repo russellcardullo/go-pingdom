@@ -226,9 +226,9 @@ func TestUserService_CreateContact(t *testing.T) {
 	setup()
 	defer teardown()
 
-	userId := 12941
+	userID := 12941
 
-	mux.HandleFunc("/users/"+strconv.Itoa(userId), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/users/"+strconv.Itoa(userID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		fmt.Fprint(w, `{
 			"contact_target": {
@@ -247,7 +247,7 @@ func TestUserService_CreateContact(t *testing.T) {
 		Number:      "5559995555",
 	}
 
-	contact, err := client.Users.CreateContact(userId, c)
+	contact, err := client.Users.CreateContact(userID, c)
 	assert.NoError(t, err)
 	assert.Equal(t, want, contact, "Users.CreateContact() should return contact_target.id")
 }
@@ -256,9 +256,9 @@ func TestUserService_Delete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	userId := 12941
+	userID := 12941
 
-	mux.HandleFunc("/users/"+strconv.Itoa(userId), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/users/"+strconv.Itoa(userID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		fmt.Fprint(w, `{
 			"message":"Deletion of user was successful!"
@@ -269,7 +269,7 @@ func TestUserService_Delete(t *testing.T) {
 		Message: "Deletion of user was successful!",
 	}
 
-	response, err := client.Users.Delete(userId)
+	response, err := client.Users.Delete(userID)
 	assert.NoError(t, err)
 	assert.Equal(t, want, response, "Users.Delete() should return PingdomResponse with message")
 
@@ -279,10 +279,10 @@ func TestUserService_DeleteContact(t *testing.T) {
 	setup()
 	defer teardown()
 
-	userId := 12941
-	contactId := 87655
+	userID := 12941
+	contactID := 87655
 
-	mux.HandleFunc("/users/"+strconv.Itoa(userId)+"/"+strconv.Itoa(contactId), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/users/"+strconv.Itoa(userID)+"/"+strconv.Itoa(contactID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
 		fmt.Fprint(w, `{
 			"message":"Deletion of contact target successful"
@@ -293,7 +293,7 @@ func TestUserService_DeleteContact(t *testing.T) {
 		Message: "Deletion of contact target successful",
 	}
 
-	response, err := client.Users.DeleteContact(userId, contactId)
+	response, err := client.Users.DeleteContact(userID, contactID)
 	assert.NoError(t, err)
 	assert.Equal(t, want, response, "Users.DeleteContact() should return PingdomResponse with message")
 
@@ -303,12 +303,12 @@ func TestUserService_Update(t *testing.T) {
 	setup()
 	defer teardown()
 
-	userId := 12941
+	userID := 12941
 	user := User{
 		Username: "updatedUsername",
 	}
 
-	mux.HandleFunc("/users/"+strconv.Itoa(userId), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/users/"+strconv.Itoa(userID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
 		fmt.Fprint(w, `{
 			"message":"Modification of user was successful!"
@@ -319,7 +319,7 @@ func TestUserService_Update(t *testing.T) {
 		Message: "Modification of user was successful!",
 	}
 
-	response, err := client.Users.Update(userId, &user)
+	response, err := client.Users.Update(userID, &user)
 	assert.NoError(t, err)
 	assert.Equal(t, want, response, "Users.Update() should return PingdomResponse with message")
 
@@ -329,13 +329,13 @@ func TestUserService_UpdateContact(t *testing.T) {
 	setup()
 	defer teardown()
 
-	userId := 12941
-	contactId := 87655
+	userID := 12941
+	contactID := 87655
 	contact := Contact{
 		Email: "test@example.com",
 	}
 
-	mux.HandleFunc("/users/"+strconv.Itoa(userId)+"/"+strconv.Itoa(contactId), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/users/"+strconv.Itoa(userID)+"/"+strconv.Itoa(contactID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
 		fmt.Fprint(w, `{
 			"message":"Modification of contact target was successful!"
@@ -346,7 +346,7 @@ func TestUserService_UpdateContact(t *testing.T) {
 		Message: "Modification of contact target was successful!",
 	}
 
-	response, err := client.Users.UpdateContact(userId, contactId, contact)
+	response, err := client.Users.UpdateContact(userID, contactID, contact)
 	assert.NoError(t, err)
 	assert.Equal(t, want, response, "Users.UpdateContact() should return PingdomResponse with message")
 

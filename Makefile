@@ -9,6 +9,9 @@ vendor_update:
 install:
 	go install ./...
 
+lint:
+	golint github.com/russellcardullo/go-pingdom/pingdom
+
 test:
 	go test github.com/russellcardullo/go-pingdom/pingdom
 

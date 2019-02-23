@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var detailedCheckJson = `
+var detailedCheckJSON = `
 {
 	"id" : 85975,
 	"name" : "My check 7",
@@ -43,7 +43,7 @@ func TestPingdomError(t *testing.T) {
 
 func TestCheckResponseUnmarshal(t *testing.T) {
 	var ck CheckResponse
-	err := json.Unmarshal([]byte(detailedCheckJson), &ck)
+	err := json.Unmarshal([]byte(detailedCheckJSON), &ck)
 	assert.NoError(t, err)
 	assert.Equal(t, "http", ck.Type.Name)
 	assert.NotNil(t, ck.Type.HTTP)

@@ -167,7 +167,7 @@ func (ck *HttpCheck) Valid() error {
 
 	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
 		ck.Resolution != 30 && ck.Resolution != 60 {
-		return fmt.Errorf("Invalid value %v for `Resolution`.  Allowed values are [1,5,15,30,60].", ck.Resolution)
+		return fmt.Errorf("invalid value %v for `Resolution`, allowed values are [1,5,15,30,60]", ck.Resolution)
 	}
 
 	if ck.ShouldContain != "" && ck.ShouldNotContain != "" {
@@ -232,7 +232,7 @@ func (ck *PingCheck) Valid() error {
 
 	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
 		ck.Resolution != 30 && ck.Resolution != 60 {
-		return fmt.Errorf("Invalid value %v for `Resolution`.  Allowed values are [1,5,15,30,60].", ck.Resolution)
+		return fmt.Errorf("invalid value %v for `Resolution`, allowed values are [1,5,15,30,60]", ck.Resolution)
 	}
 	return nil
 }
@@ -289,16 +289,16 @@ func (ck *TCPCheck) PostParams() map[string]string {
 // used to guard against sending illegal values to the Pingdom API.
 func (ck *TCPCheck) Valid() error {
 	if ck.Name == "" {
-		return fmt.Errorf("Invalid value for `Name`.  Must contain non-empty string")
+		return fmt.Errorf("invalid value for `Name`, must contain non-empty string")
 	}
 
 	if ck.Hostname == "" {
-		return fmt.Errorf("Invalid value for `Hostname`.  Must contain non-empty string")
+		return fmt.Errorf("invalid value for `Hostname`, must contain non-empty string")
 	}
 
 	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
 		ck.Resolution != 30 && ck.Resolution != 60 {
-		return fmt.Errorf("Invalid value %v for `Resolution`.  Allowed values are [1,5,15,30,60].", ck.Resolution)
+		return fmt.Errorf("invalid value %v for `Resolution`, allowed values are [1,5,15,30,60]", ck.Resolution)
 	}
 
 	if ck.Port < 1 {

@@ -38,7 +38,7 @@ func (cs *TeamService) List() ([]TeamResponse, error) {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	bodyString := string(bodyBytes)
 
-	t := &listTeamsJsonResponse{}
+	t := &listTeamsJSONResponse{}
 	err = json.Unmarshal([]byte(bodyString), &t)
 
 	return t.Teams, err
@@ -51,7 +51,7 @@ func (cs *TeamService) Read(id int) (*TeamResponse, error) {
 		return nil, err
 	}
 
-	t := &teamDetailsJsonResponse{}
+	t := &teamDetailsJSONResponse{}
 	_, err = cs.client.Do(req, t)
 	if err != nil {
 		return nil, err

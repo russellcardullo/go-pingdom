@@ -236,50 +236,50 @@ func (r *PingdomError) Error() string {
 
 // private types used to unmarshall JSON responses from Pingdom.
 
-type listChecksJsonResponse struct {
+type listChecksJSONResponse struct {
 	Checks []CheckResponse `json:"checks"`
 }
 
-type listMaintenanceJsonResponse struct {
+type listMaintenanceJSONResponse struct {
 	Maintenances []MaintenanceResponse `json:"maintenance"`
 }
 
-type listProbesJsonResponse struct {
+type listProbesJSONResponse struct {
 	Probes []ProbeResponse `json:"probes"`
 }
 
-type listTeamsJsonResponse struct {
+type listTeamsJSONResponse struct {
 	Teams []TeamResponse `json:"teams"`
 }
 
-type listPublicReportsJsonResponse struct {
+type listPublicReportsJSONResponse struct {
 	Checks []PublicReportResponse `json:"public"`
 }
 
-type checkDetailsJsonResponse struct {
+type checkDetailsJSONResponse struct {
 	Check *CheckResponse `json:"check"`
 }
 
-type maintenanceDetailsJsonResponse struct {
+type maintenanceDetailsJSONResponse struct {
 	Maintenance *MaintenanceResponse `json:"maintenance"`
 }
 
-type teamDetailsJsonResponse struct {
+type teamDetailsJSONResponse struct {
 	Team *TeamResponse `json:"team"`
 }
 
-type createUserContactJsonResponse struct {
+type createUserContactJSONResponse struct {
 	Contact *CreateUserContactResponse `json:"contact_target"`
 }
 
-type createUserJsonResponse struct {
+type createUserJSONResponse struct {
 	User *UsersResponse `json:"user"`
 }
 
-type listUsersJsonResponse struct {
+type listUsersJSONResponse struct {
 	Users []UsersResponse `json:"users"`
 }
 
-type errorJsonResponse struct {
+type errorJSONResponse struct {
 	Error *PingdomError `json:"error"`
 }

@@ -52,7 +52,7 @@ func (cs *MaintenanceService) List(params ...map[string]string) ([]MaintenanceRe
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	bodyString := string(bodyBytes)
 
-	m := &listMaintenanceJsonResponse{}
+	m := &listMaintenanceJSONResponse{}
 	err = json.Unmarshal([]byte(bodyString), &m)
 
 	return m.Maintenances, err
@@ -65,7 +65,7 @@ func (cs *MaintenanceService) Read(id int) (*MaintenanceResponse, error) {
 		return nil, err
 	}
 
-	m := &maintenanceDetailsJsonResponse{}
+	m := &maintenanceDetailsJSONResponse{}
 	_, err = cs.client.Do(req, m)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (cs *MaintenanceService) Create(maintenance Maintenance) (*MaintenanceRespo
 		return nil, err
 	}
 
-	m := &maintenanceDetailsJsonResponse{}
+	m := &maintenanceDetailsJSONResponse{}
 	_, err = cs.client.Do(req, m)
 	if err != nil {
 		return nil, err
