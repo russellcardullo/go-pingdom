@@ -1,12 +1,10 @@
-# pingdom-go #
+# go-pingdom #
 
-pingdom-go is a Go client library for the Pingdom API.
+[![Build Status](https://travis-ci.org/russellcardullo/go-pingdom.svg?branch=master)](https://travis-ci.org/russellcardullo/go-pingdom) [![GoDoc](https://godoc.org/github.com/russellcardullo/go-pingdom/pingdom?status.svg)](https://godoc.org/github.com/russellcardullo/go-pingdom/pingdom)
 
-This currently supports working with basic HTTP (with specific details), ping checks and TCP checks.
+go-pingdom is a Go client library for the Pingdom API.
 
-**Build Status:** [![Build Status](https://travis-ci.org/russellcardullo/go-pingdom.svg?branch=master)](https://travis-ci.org/russellcardullo/go-pingdom)
-
-**Godoc:** https://godoc.org/github.com/russellcardullo/go-pingdom/pingdom
+This currently supports working with HTTP, ping checks, and TCP checks.
 
 ## Usage ##
 
@@ -51,7 +49,6 @@ client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
     },
 })
 ```
-
 
 ### CheckService ###
 
