@@ -165,7 +165,7 @@ type CreateUserContactResponse struct {
 	Id int `json:"id"`
 }
 
-// UserReponse represents the JSON response for a Pingom User.
+// UserResponse represents the JSON response for a Pingom User.
 type UsersResponse struct {
 	Id       int                 `json:"id"`
 	Paused   string              `json:"paused,omitempty"`

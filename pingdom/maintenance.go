@@ -18,7 +18,7 @@ type Maintenance interface {
 	Valid() error
 }
 
-// MaintenanceDelete is the set of parameteres to a Pingdom maintenance delete request.
+// MaintenanceDelete is the set of parameters to a Pingdom maintenance delete request.
 type MaintenanceDelete interface {
 	DeleteParams() map[string]string
 	ValidDelete() error
