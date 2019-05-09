@@ -258,6 +258,7 @@ func TestCheckServiceRead(t *testing.T) {
 		},
 		IntegrationIds: []int{33333333, 44444444},
 		Tags:           []CheckResponseTag{},
+		ProbeFilters:   []string{},
 	}
 
 	check, err := client.Checks.Read(85975)
