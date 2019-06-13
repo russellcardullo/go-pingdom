@@ -28,6 +28,7 @@ var detailedCheckJSON = `
 	},
 	"hostname" : "s7.mydomain.com",
 	"status" : "up",
+	"severity_level": "HIGH",
 	"lasterrortime" : 1293143467,
 	"lasttesttime" : 1294064823,
 	"tags": [],
@@ -48,4 +49,5 @@ func TestCheckResponseUnmarshal(t *testing.T) {
 	assert.Equal(t, "http", ck.Type.Name)
 	assert.NotNil(t, ck.Type.HTTP)
 	assert.Equal(t, 2, len(ck.Type.HTTP.RequestHeaders))
+	assert.Equal(t, "HIGH", ck.SeverityLevel)
 }
