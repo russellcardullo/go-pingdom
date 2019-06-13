@@ -1,10 +1,7 @@
 default: test
 
-vendor: Gopkg.toml Gopkg.lock
-	dep ensure
-
-vendor_update:
-	dep ensure -update
+vendor:
+	go mod vendor
 
 install:
 	go install ./...
