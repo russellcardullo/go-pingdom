@@ -383,3 +383,78 @@ func TestCheckServiceSummaryPerformance(t *testing.T) {
 		assert.Equal(t, expectedResponse, *resp)
 	})
 }
+
+func TestCheckServiceResults(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/results/12345", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `{
+    "activeprobes": [
+        259,
+        255,
+        93,
+        94,
+        87
+    ],
+    "results": [
+        {
+            "probeid": 259,
+            "time": 1563370611,
+            "status": "up",
+            "responsetime": 145,
+            "statusdesc": "OK",
+            "statusdesclong": "OK"
+        },
+        {
+            "probeid": 87,
+            "time": 1563370551,
+            "status": "up",
+            "responsetime": 56,
+            "statusdesc": "OK",
+            "statusdesclong": "OK"
+        },
+        {
+            "probeid": 93,
+            "time": 1563370491,
+            "status": "up",
+            "responsetime": 962,
+            "statusdesc": "OK",
+            "statusdesclong": "OK"
+        },
+        {
+            "probeid": 255,
+            "time": 1563370431,
+            "status": "up",
+            "responsetime": 395,
+            "statusdesc": "OK",
+            "statusdesclong": "OK"
+        },
+        {
+            "probeid": 94,
+            "time": 1563370371,
+            "status": "up",
+            "responsetime": 1084,
+            "statusdesc": "OK",
+            "statusdesclong": "OK"
+        }
+    ]
+}`)
+	})
+
+	want := &ResultsResponse{
+		ActiveProbes: []int{259, 255, 93, 94, 87},
+		Results: []Result{
+			{ProbeID: 259, Time: 1563370611, Status: "up", ResponseTime: 145, StatusDesc: "OK", StatusDescLong: "OK"},
+			{ProbeID: 87, Time: 1563370551, Status: "up", ResponseTime: 56, StatusDesc: "OK", StatusDescLong: "OK"},
+			{ProbeID: 93, Time: 1563370491, Status: "up", ResponseTime: 962, StatusDesc: "OK", StatusDescLong: "OK"},
+			{ProbeID: 255, Time: 1563370431, Status: "up", ResponseTime: 395, StatusDesc: "OK", StatusDescLong: "OK"},
+			{ProbeID: 94, Time: 1563370371, Status: "up", ResponseTime: 1084, StatusDesc: "OK", StatusDescLong: "OK"},
+		},
+	}
+
+	results, err := client.Checks.Results(12345)
+	assert.NoError(t, err)
+	assert.Equal(t, want, results)
+}

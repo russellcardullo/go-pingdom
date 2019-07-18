@@ -149,3 +149,32 @@ func (cs *CheckService) SummaryPerformance(request SummaryPerformanceRequest) (*
 
 	return m, nil
 }
+
+// Results returns raw check results and the list of associated probe IDs used from Pingdom.
+func (cs *CheckService) Results(id int, params ...map[string]string) (*ResultsResponse, error) {
+	param := map[string]string{}
+	if len(params) == 1 {
+		param = params[0]
+	}
+	req, err := cs.client.NewRequest("GET", "/results/"+strconv.Itoa(id), param)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := cs.client.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if err := validateResponse(resp); err != nil {
+		return nil, err
+	}
+
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	bodyString := string(bodyBytes)
+	m := &ResultsResponse{}
+	err = json.Unmarshal([]byte(bodyString), &m)
+
+	return m, err
+}
