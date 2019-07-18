@@ -146,6 +146,22 @@ type SummaryPerformanceSummary struct {
 	Uptime      int `json:"uptime"`
 }
 
+// ResultsResponse represents the JSON response for detailed check results from the Pingdom API.
+type ResultsResponse struct {
+	ActiveProbes []int    `json:"activeprobes"`
+	Results      []Result `json:"results"`
+}
+
+// Result reprensents the JSON response for a detailed check result.
+type Result struct {
+	ProbeID        int    `json:"probeid"`
+	Time           int    `json:"time"`
+	Status         string `json:"status"`
+	ResponseTime   int    `json:"responsetime"`
+	StatusDesc     string `json:"statusdesc"`
+	StatusDescLong string `json:"statusdesclong"`
+}
+
 // UserSmsResponse represents the JSON response for a user SMS contact.
 type UserSmsResponse struct {
 	Id          int    `json:"id"`
