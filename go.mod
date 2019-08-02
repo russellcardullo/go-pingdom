@@ -1,4 +1,4 @@
-module github.com/russellcardullo/go-pingdom
+module github.com/veepee-moc/go-pingdom
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

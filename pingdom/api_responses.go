@@ -46,6 +46,17 @@ type CheckResponse struct {
 	TeamIds []int
 }
 
+// TsmResponse represents the JSON response for a check from the Pingdom API.
+type TsmResponse struct {
+	Name                   string `json:"name"`
+	Status                 string `json:"status,omitempty"`
+	Kitchen                string `json:"kitchen,omitempty"`
+	Active                 string `json:"active,omitempty"`
+	CreatedAt              int64  `json:"created_at,omitempty"`
+	Interval               int    `json:"interval,omitempty"`
+	UseLegacyNotifications string `json:"use_legacy_notifications,omitempty"`
+}
+
 // CheckTeamResponse is a Team returned inside of a Check instance. (We can't
 // use TeamResponse because the ID returned here is an int, not a string).
 type CheckTeamResponse struct {
@@ -256,6 +267,10 @@ func (r *PingdomError) Error() string {
 
 type listChecksJSONResponse struct {
 	Checks []CheckResponse `json:"checks"`
+}
+
+type listTsmJSONResponse struct {
+	Tsm []TsmResponse `json:"tsm"`
 }
 
 type listMaintenanceJSONResponse struct {
