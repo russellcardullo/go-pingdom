@@ -81,7 +81,7 @@ func TestUserService_List(t *testing.T) {
 		},
 	}
 
-	users, err := client.Users.List()
+ 	users, err := client.Users.List()
 	assert.NoError(t, err)
 	assert.Equal(t, want, users, "Users.List() should return correct result")
 }

@@ -46,17 +46,6 @@ type CheckResponse struct {
 	TeamIds []int
 }
 
-// TsmResponse represents the JSON response for a check from the Pingdom API.
-type TsmResponse struct {
-	Name                   string `json:"name"`
-	Status                 string `json:"status,omitempty"`
-	Kitchen                string `json:"kitchen,omitempty"`
-	Active                 string `json:"active,omitempty"`
-	CreatedAt              int64  `json:"created_at,omitempty"`
-	Interval               int    `json:"interval,omitempty"`
-	UseLegacyNotifications string `json:"use_legacy_notifications,omitempty"`
-}
-
 // CheckTeamResponse is a Team returned inside of a Check instance. (We can't
 // use TeamResponse because the ID returned here is an int, not a string).
 type CheckTeamResponse struct {
@@ -94,6 +83,17 @@ type MaintenanceResponse struct {
 type MaintenanceCheckResponse struct {
 	Uptime []int `json:"uptime"`
 	Tms    []int `json:"tms"`
+}
+
+// TsmResponse represents the JSON response for a check from the Pingdom API.
+type TsmResponse struct {
+	Name                   string `json:"name"`
+	Status                 string `json:"status"`
+	Kitchen                string `json:"kitchen"`
+	Active                 string `json:"active"`
+	CreatedAt              int64  `json:"created_at"`
+	Interval               int    `json:"interval"`
+	UseLegacyNotifications string `json:"use_legacy_notifications,omitempty"`
 }
 
 // ProbeResponse represents the JSON response for probes from the Pingdom API.
@@ -270,7 +270,7 @@ type listChecksJSONResponse struct {
 }
 
 type listTsmJSONResponse struct {
-	Tsm []TsmResponse `json:"tsm"`
+	Tsm []TsmResponse `json:"recipes"`
 }
 
 type listMaintenanceJSONResponse struct {

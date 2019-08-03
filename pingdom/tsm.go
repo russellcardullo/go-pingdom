@@ -11,12 +11,8 @@ type TsmService struct {
 }
 
 // TODO
-func (cs *TsmService) List(params ...map[string]string) ([]TsmResponse, error) {
-	param := map[string]string{}
-	if len(params) == 1 {
-		param = params[0]
-	}
-	req, err := cs.client.NewRequest("GET", "/tms.recipes", param)
+func (cs *TsmService) List() ([]TsmResponse, error) {
+	req, err := cs.client.NewRequest("GET", "/tms.recipes", nil)
 	if err != nil {
 		return nil, err
 	}
