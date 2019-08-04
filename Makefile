@@ -16,7 +16,7 @@ acceptance:
 	PINGDOM_ACCEPTANCE=1 go test github.com/russellcardullo/go-pingdom/acceptance
 
 cov:
-	go test github.com/russellcardullo/go-pingdom -coverprofile=coverage.out
+	go test github.com/russellcardullo/go-pingdom/pingdom -coverprofile=coverage.out
 	go tool cover -func=coverage.out
 	rm coverage.out
 
