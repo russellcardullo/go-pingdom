@@ -16,20 +16,7 @@ Construct a new single-user Pingdom client:
 
 ```go
 client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-    Username: "pingdom_username",
-    Password: "pingdom_password",
     APIKey: "pingdom_api_key",
-})
-```
-
-Construct a multi-user Pingdom client:
-
-```go
-client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-    Username: "pingdom_username",
-    Password: "pingdom_password",
-    APIKey: "pingdom_api_key",
-    AccountEmail: "pingdom_account_email",
 })
 ```
 
@@ -40,10 +27,7 @@ Using a Pingdom client, you can access supported services.
 You can override the timeout or other parameters by passing a custom http client:
 ```go
 client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-    Username: "pingdom_username",
-    Password: "pingdom_password",
     APIKey: "pingdom_api_key",
-    AccountEmail: "pingdom_account_email",
     HTTPClient: &http.Client{
         Timeout: time.Second * 10,
     },
