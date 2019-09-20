@@ -15,7 +15,7 @@ func TestUserService_List(t *testing.T) {
 
 	mux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 	    "users": [
         {
             "id": 12,
@@ -154,7 +154,7 @@ func TestUserService_Read_Failure(t *testing.T) {
 
 	mux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_,_ = fmt.Fprint(w, `{
 	    "users": [
         {
             "id": 12,
@@ -202,7 +202,7 @@ func TestUserService_Create(t *testing.T) {
 
 	mux.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
-		fmt.Fprint(w, `{
+		_,_ = fmt.Fprint(w, `{
 			"user": {
 				"id": 23439
 			}
@@ -230,7 +230,7 @@ func TestUserService_CreateContact(t *testing.T) {
 
 	mux.HandleFunc("/users/"+strconv.Itoa(userID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
-		fmt.Fprint(w, `{
+		_,_ = fmt.Fprint(w, `{
 			"contact_target": {
 				"id": 23439
 			}
@@ -260,7 +260,7 @@ func TestUserService_Delete(t *testing.T) {
 
 	mux.HandleFunc("/users/"+strconv.Itoa(userID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		fmt.Fprint(w, `{
+		_,_ = fmt.Fprint(w, `{
 			"message":"Deletion of user was successful!"
 		}`)
 	})
@@ -284,7 +284,7 @@ func TestUserService_DeleteContact(t *testing.T) {
 
 	mux.HandleFunc("/users/"+strconv.Itoa(userID)+"/"+strconv.Itoa(contactID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		fmt.Fprint(w, `{
+		_,_ = fmt.Fprint(w, `{
 			"message":"Deletion of contact target successful"
 		}`)
 	})
@@ -310,7 +310,7 @@ func TestUserService_Update(t *testing.T) {
 
 	mux.HandleFunc("/users/"+strconv.Itoa(userID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
-		fmt.Fprint(w, `{
+		_,_ = fmt.Fprint(w, `{
 			"message":"Modification of user was successful!"
 		}`)
 	})
@@ -337,7 +337,7 @@ func TestUserService_UpdateContact(t *testing.T) {
 
 	mux.HandleFunc("/users/"+strconv.Itoa(userID)+"/"+strconv.Itoa(contactID), func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
-		fmt.Fprint(w, `{
+		_,_ = fmt.Fprint(w, `{
 			"message":"Modification of contact target was successful!"
 		}`)
 	})

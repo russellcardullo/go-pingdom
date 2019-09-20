@@ -89,14 +89,14 @@ func TestDo(t *testing.T) {
 		if m := "GET"; m != r.Method {
 			t.Errorf("Request method = %v, want %v", r.Method, m)
 		}
-		fmt.Fprint(w, `{"A":"a"}`)
+		_, _ = fmt.Fprint(w, `{"A":"a"}`)
 	})
 
 	req, _ := client.NewRequest("GET", "/", nil)
 	body := new(foo)
 	want := &foo{"a"}
 
-	client.Do(req, body)
+	_, _ = client.Do(req, body)
 	assert.Equal(t, want, body)
 }
 

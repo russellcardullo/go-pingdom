@@ -14,7 +14,7 @@ func TestPublicReportList(t *testing.T) {
 
 	mux.HandleFunc("/reports.public", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 		    "public": [
 		        {
 		            "checkid": 3276510,
@@ -73,7 +73,7 @@ func TestPublicReportPublishCheck(t *testing.T) {
 
 	mux.HandleFunc("/reports.public/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
-		fmt.Fprint(w, `{"message": "Check published"}`)
+		_, _ = fmt.Fprint(w, `{"message": "Check published"}`)
 	})
 	want := &PingdomResponse{Message: "Check published"}
 
@@ -88,7 +88,7 @@ func TestPublicReportWithdrawlCheck(t *testing.T) {
 
 	mux.HandleFunc("/reports.public/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		fmt.Fprint(w, `{"message": "Check published"}`)
+		_, _ = fmt.Fprint(w, `{"message": "Check published"}`)
 	})
 	want := &PingdomResponse{Message: "Check published"}
 

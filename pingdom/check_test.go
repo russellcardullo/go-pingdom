@@ -14,7 +14,7 @@ func TestCheckServiceList(t *testing.T) {
 
 	mux.HandleFunc("/checks", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"checks": [
 				{
 					"hostname": "example.com",
@@ -152,7 +152,7 @@ func TestCheckServiceCreate(t *testing.T) {
 
 	mux.HandleFunc("/checks", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"check":{
 				"id":138631,
 				"name":"My new HTTP check"
@@ -179,7 +179,7 @@ func TestCheckServiceRead(t *testing.T) {
 
 	mux.HandleFunc("/checks/85975", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"check" : {
         "created" : 1240394682,
         "hostname" : "s7.mydomain.com",
@@ -272,7 +272,7 @@ func TestCheckServiceUpdate(t *testing.T) {
 
 	mux.HandleFunc("/checks/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
-		fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
+		_, _ = fmt.Fprint(w, `{"message":"Modification of check was successful!"}`)
 	})
 
 	updateCheck := HttpCheck{Name: "Updated Check", Hostname: "example2.com", Resolution: 5}
@@ -289,7 +289,7 @@ func TestCheckServiceDelete(t *testing.T) {
 
 	mux.HandleFunc("/checks/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		fmt.Fprint(w, `{"message":"Deletion of check was successful!"}`)
+		_, _ = fmt.Fprint(w, `{"message":"Deletion of check was successful!"}`)
 	})
 
 	want := &PingdomResponse{Message: "Deletion of check was successful!"}
@@ -312,7 +312,7 @@ func TestCheckServiceSummaryPerformance(t *testing.T) {
 
 		mux.HandleFunc(fmt.Sprintf("/summary.performance/%v", id), func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(401)
-			fmt.Fprint(w, errorMsg)
+			_, _ = fmt.Fprint(w, errorMsg)
 		})
 
 		_, err := client.Checks.SummaryPerformance(request)
@@ -355,7 +355,7 @@ func TestCheckServiceSummaryPerformance(t *testing.T) {
 
 		mux.HandleFunc(fmt.Sprintf("/summary.performance/%v", id), func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(200)
-			fmt.Fprint(w, `{
+			_, _ = fmt.Fprint(w, `{
 	"summary": {
 		"hours": [
 			{
@@ -390,7 +390,7 @@ func TestCheckServiceResults(t *testing.T) {
 
 	mux.HandleFunc("/results/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
     "activeprobes": [
         259,
         255,

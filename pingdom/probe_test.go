@@ -14,7 +14,7 @@ func TestProbesServiceList(t *testing.T) {
 
 	mux.HandleFunc("/probes", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"probes": [
 				{
 					"id": 32,

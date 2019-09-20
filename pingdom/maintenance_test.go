@@ -14,7 +14,7 @@ func TestMaintenanceServiceList(t *testing.T) {
 
 	mux.HandleFunc("/maintenance", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"maintenance": [
 				{
 					"description": "Maintenance N",
@@ -65,7 +65,7 @@ func TestMaintenanceServiceCreate(t *testing.T) {
 
 	mux.HandleFunc("/maintenance", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"maintenance": {
 				"id": 85975
 			}
@@ -93,7 +93,7 @@ func TestMaintenanceServiceRead(t *testing.T) {
 
 	mux.HandleFunc("/maintenance/456", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"maintenance": {
 					"id": 456,
 					"description": "Particular maintenance window",
@@ -135,7 +135,7 @@ func TestMaintenanceServiceUpdate(t *testing.T) {
 
 	mux.HandleFunc("/maintenance/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
-		fmt.Fprint(w, `{"message":"Maintenance window successfully modified!"}`)
+		_, _ = fmt.Fprint(w, `{"message":"Maintenance window successfully modified!"}`)
 	})
 
 	updateMaintenance := MaintenanceWindow{
@@ -156,7 +156,7 @@ func TestMaintenanceServiceDelete(t *testing.T) {
 
 	mux.HandleFunc("/maintenance/12345", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		fmt.Fprint(w, `{"message":"Maintenance window successfully deleted!"}`)
+		_, _ = fmt.Fprint(w, `{"message":"Maintenance window successfully deleted!"}`)
 	})
 	want := &PingdomResponse{Message: "Maintenance window successfully deleted!"}
 

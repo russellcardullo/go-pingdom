@@ -14,7 +14,7 @@ func TestMTeamServiceList(t *testing.T) {
 
 	mux.HandleFunc("/teams", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"teams": [
 					{
 							"id": "1",
@@ -87,7 +87,7 @@ func TestTeamServiceCreate(t *testing.T) {
 
 	mux.HandleFunc("/teams", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"id": "65",
 			"name": "Operations",
 			"users": [
@@ -138,7 +138,7 @@ func TestTeamServiceRead(t *testing.T) {
 
 	mux.HandleFunc("/teams/1", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"team": {
 					"id": "1",
 					"name": "Team Rocket",
@@ -176,7 +176,7 @@ func TestTeamServiceUpdate(t *testing.T) {
 
 	mux.HandleFunc("/teams/65", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "PUT")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"id": "65",
 			"name": "Operations",
 			"users": [
@@ -227,7 +227,7 @@ func TestTeamServiceDelete(t *testing.T) {
 
 	mux.HandleFunc("/teams/1234", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "DELETE")
-		fmt.Fprint(w, `{
+		_, _ = fmt.Fprint(w, `{
 			"success": true
 	}`)
 	})
