@@ -12,15 +12,12 @@ import (
 )
 
 type credentials struct {
-	User         string `json:"user"`
-	Password     string `json:"password"`
-	APIKey       string `json:"apikey"`
-	AccountEmail string `json:"accountEmail"`
+	APIToken string `json:"apitoken"`
 }
 
 func getConfig() credentials {
 	// Config Example
-	// { "user" : "", "password" : "", "apikey" : "", "accountEmail" : "" }
+	// { "apitoken" : "" }
 	if len(os.Args) < 2 {
 		fmt.Println("You must provide a configuration file.")
 	}
@@ -96,9 +93,7 @@ func userExamples() {
 
 func main() {
 	client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-		User:     "username",
-		Password: "password",
-		APIKey:   "api_key",
+		APIToken: "api_token",
 	})
 	if err != nil {
 		fmt.Println("Error", err)

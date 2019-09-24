@@ -20,9 +20,7 @@ func init() {
 		runAcceptance = true
 
 		config := pingdom.ClientConfig{
-			User:     os.Getenv("PINGDOM_USER"),
-			Password: os.Getenv("PINGDOM_PASSWORD"),
-			APIKey:   os.Getenv("PINGDOM_API_KEY"),
+			APIToken: os.Getenv("PINGDOM_API_TOKEN"),
 			HTTPClient: &http.Client{
 				Timeout: time.Second * 10,
 			},

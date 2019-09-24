@@ -10,40 +10,20 @@ This currently supports working with HTTP, ping checks, and TCP checks.
 
 ### Client ###
 
-Pingdom handles single-user and multi-user accounts differently.
-
-Construct a new single-user Pingdom client:
+Construct a new Pingdom client:
 
 ```go
 client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-    Username: "pingdom_username",
-    Password: "pingdom_password",
-    APIKey: "pingdom_api_key",
+    APIToken: "pingdom_api_token",
 })
 ```
-
-Construct a multi-user Pingdom client:
-
-```go
-client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-    Username: "pingdom_username",
-    Password: "pingdom_password",
-    APIKey: "pingdom_api_key",
-    AccountEmail: "pingdom_account_email",
-})
-```
-
-The `pingdom_account_email` variable is the email address of the owner of the multi-user account. This is passed in the `Account-Email` header to the Pingdom API.
 
 Using a Pingdom client, you can access supported services.
 
 You can override the timeout or other parameters by passing a custom http client:
 ```go
 client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-    Username: "pingdom_username",
-    Password: "pingdom_password",
-    APIKey: "pingdom_api_key",
-    AccountEmail: "pingdom_account_email",
+    APIToken: "pingdom_api_token",
     HTTPClient: &http.Client{
         Timeout: time.Second * 10,
     },
@@ -285,8 +265,8 @@ _, err := client.PublicReport.WithdrawlCheck(12345)
 
 ### UserService ###
 
-This service manages users and their contact information which is represented by the `User` struct. 
-When creating or modifying users you must provide the `Username`. 
+This service manages users and their contact information which is represented by the `User` struct.
+When creating or modifying users you must provide the `Username`.
 More information from Pingdom: https://www.pingdom.com/resources/api/2.1/#ResourceUsers
 
 Get all users and contact info:
@@ -302,7 +282,7 @@ Create a new user and contact:
 user := User{
     Username : "loginName",
     Paused : "NO",
-} 
+}
 userId, err := client.Users.Create(user)
 fmt.Println("New UserId: ", userId.Id)
 
@@ -324,7 +304,7 @@ contactId := 90877
 user := User{
     Username : "loginName",
     Paused : "NO",
-} 
+}
 result, err := client.Users.Update(userId, user)
 fmt.Println("result.Message)
 

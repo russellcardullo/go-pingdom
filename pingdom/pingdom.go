@@ -9,17 +9,14 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://api.pingdom.com/api/2.1"
+	defaultBaseURL = "https://api.pingdom.com/api/3.1"
 )
 
 // Client represents a client to the Pingdom API.  This package also
 // provides a NewClient function for convenience to initialize a client
 // with default parameters.
 type Client struct {
-	User         string
-	Password     string
-	APIKey       string
-	AccountEmail string
+	APIToken     string
 	BaseURL      *url.URL
 	client       *http.Client
 	Checks       *CheckService
@@ -32,12 +29,9 @@ type Client struct {
 
 // ClientConfig represents a configuration for a pingdom client.
 type ClientConfig struct {
-	User         string
-	Password     string
-	APIKey       string
-	AccountEmail string
-	BaseURL      string
-	HTTPClient   *http.Client
+	APIToken   string
+	BaseURL    string
+	HTTPClient *http.Client
 }
 
 // NewClientWithConfig returns a Pingdom client.
@@ -54,11 +48,8 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	}
 
 	c := &Client{
-		User:         config.User,
-		Password:     config.Password,
-		APIKey:       config.APIKey,
-		AccountEmail: config.AccountEmail,
-		BaseURL:      baseURL,
+		APIToken: config.APIToken,
+		BaseURL:  baseURL,
 	}
 
 	if config.HTTPClient != nil {
@@ -78,28 +69,13 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 
 // NewClient returns a Pingdom client with a default base URL and default HTTP client.
 // Deprecated: Use NewClientWithConfig
-func NewClient(user string, password string, key string) *Client {
-	config := ClientConfig{
-		User:     user,
-		Password: password,
-		APIKey:   key,
-	}
-	c, _ := NewClientWithConfig(config)
-	return c
-}
-
-// NewMultiUserClient extends NewClient to allow Multi-User authentication.
-// Deprecated: Use NewClientWithConfig
-func NewMultiUserClient(user string, password string, key string, accountEmail string) *Client {
-	config := ClientConfig{
-		User:         user,
-		Password:     password,
-		APIKey:       key,
-		AccountEmail: accountEmail,
-	}
-	c, _ := NewClientWithConfig(config)
-	return c
-}
+// func NewClient(key string) *Client {
+// 	config := ClientConfig{
+// 		APIToken   key,
+// 	}
+// 	c, _ := NewClientWithConfig(config)
+// 	return c
+// }
 
 // NewRequest makes a new HTTP Request.  The method param should be an HTTP method in
 // all caps such as GET, POST, PUT, DELETE.  The rsc param should correspond with
@@ -122,11 +98,7 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 	}
 
 	req, err := http.NewRequest(method, baseURL.String(), nil)
-	req.SetBasicAuth(pc.User, pc.Password)
-	req.Header.Add("App-Key", pc.APIKey)
-	if pc.AccountEmail != "" {
-		req.Header.Add("Account-Email", pc.AccountEmail)
-	}
+	req.Header.Add("Authorization", "Bearer "+pc.APIToken)
 	return req, err
 }
 
