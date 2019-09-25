@@ -119,13 +119,6 @@ type TeamDeleteResponse struct {
 	Success bool `json:"success"`
 }
 
-// PublicReportResponse represents the JSON response for a public report from the Pingdom API.
-type PublicReportResponse struct {
-	ID        int    `json:"checkid"`
-	Name      string `json:"checkname"`
-	ReportURL string `json:"reporturl"`
-}
-
 // SummaryPerformanceResponse represents the JSON response for a summary performance from the Pingdom API.
 type SummaryPerformanceResponse struct {
 	Summary SummaryPerformanceMap `json:"summary"`
@@ -269,10 +262,6 @@ type listProbesJSONResponse struct {
 
 type listTeamsJSONResponse struct {
 	Teams []TeamResponse `json:"teams"`
-}
-
-type listPublicReportsJSONResponse struct {
-	Checks []PublicReportResponse `json:"public"`
 }
 
 type checkDetailsJSONResponse struct {
