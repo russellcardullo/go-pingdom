@@ -192,9 +192,7 @@ for _, probe := range probes {
 
 You can run acceptance tests against the actual pingdom API to test any changes:
 ```
-PINGDOM_USER=[username] \
-  PINGDOM_PASSWORD=[password] \
-  PINGDOM_API_KEY=[api key] make acceptance
+PINGDOM_API_TOKEN=[api token] make acceptance
 ```
 
 Note that this will create actual resources in your Pingdom account.  The tests will make a best effort to clean up but these would
