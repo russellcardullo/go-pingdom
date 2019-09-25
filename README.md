@@ -186,54 +186,6 @@ for _, probe := range probes {
 }
 ```
 
-### TeamService ###
-
-This service manages pingdom Teams which are represented by the `Team` struct.
-When creating or updating Teams you must specify at a minimum the `Name`.
-Other fields are optional but if not set will be given the zero
-values for the underlying type.
-
-More information on Teams from Pingdom: https://www.pingdom.com/resources/api/2.1#ResourceTeam
-
-Get a list of all teams:
-
-```go
-teams, err := client.Teams.List()
-fmt.Println("Teams:", teams) // [{ID Name Users} ...]
-```
-
-Create a new Team:
-
-```go
-t := pingdom.TeamData{
-    Name: "Team",
-}
-team, err := client.Teams.Create(&t)
-fmt.Println("Created Team:", team) // {ID Name Users}
-```
-
-Get details for a specific team:
-
-```go
-team, err := client.Teams.Read(12345)
-```
-
-Update a team:
-
-```go
-modifyTeam := pingdom.TeamData{
-    Name:    "New Name"
-    UserIDs: "123,678",
-}
-team, err := client.Teams.Update(12345, &modifyTeam)
-```
-
-Delete a team:
-
-```go
-team, err := client.Teams.Delete(12345)
-```
-
 ## Development ##
 
 ### Acceptance Tests ###
