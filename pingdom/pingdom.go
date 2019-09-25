@@ -24,7 +24,6 @@ type Client struct {
 	Probes       *ProbeService
 	Teams        *TeamService
 	PublicReport *PublicReportService
-	Users        *UserService
 }
 
 // ClientConfig represents a configuration for a pingdom client.
@@ -63,7 +62,6 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	c.Probes = &ProbeService{client: c}
 	c.Teams = &TeamService{client: c}
 	c.PublicReport = &PublicReportService{client: c}
-	c.Users = &UserService{client: c}
 	return c, nil
 }
 
