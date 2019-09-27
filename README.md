@@ -1,6 +1,6 @@
 # go-pingdom #
 
-[![Build Status](https://travis-ci.org/russellcardullo/go-pingdom.svg?branch=master)](https://travis-ci.org/russellcardullo/go-pingdom) [![Go Report Card](https://goreportcard.com/badge/github.com/russellcardullo/go-pingdom/pingdom)](https://goreportcard.com/report/github.com/russellcardullo/go-pingdom/pingdom) [![GoDoc](https://godoc.org/github.com/russellcardullo/go-pingdom/pingdom?status.svg)](https://godoc.org/github.com/russellcardullo/go-pingdom/pingdom)
+[![Build Status](https://travis-ci.org/strike-team/go-pingdom.svg?branch=master)](https://travis-ci.org/strike-team/go-pingdom) [![Go Report Card](https://goreportcard.com/badge/github.com/strike-team/go-pingdom/pingdom)](https://goreportcard.com/report/github.com/strike-team/go-pingdom/pingdom) [![GoDoc](https://godoc.org/github.com/strike-team/go-pingdom/pingdom?status.svg)](https://godoc.org/github.com/strike-team/go-pingdom/pingdom)
 
 go-pingdom is a Go client library for the Pingdom API.
 
@@ -285,8 +285,8 @@ _, err := client.PublicReport.WithdrawlCheck(12345)
 
 ### UserService ###
 
-This service manages users and their contact information which is represented by the `User` struct. 
-When creating or modifying users you must provide the `Username`. 
+This service manages users and their contact information which is represented by the `User` struct.
+When creating or modifying users you must provide the `Username`.
 More information from Pingdom: https://www.pingdom.com/resources/api/2.1/#ResourceUsers
 
 Get all users and contact info:
@@ -302,7 +302,7 @@ Create a new user and contact:
 user := User{
     Username : "loginName",
     Paused : "NO",
-} 
+}
 userId, err := client.Users.Create(user)
 fmt.Println("New UserId: ", userId.Id)
 
@@ -324,7 +324,7 @@ contactId := 90877
 user := User{
     Username : "loginName",
     Paused : "NO",
-} 
+}
 result, err := client.Users.Update(userId, user)
 fmt.Println("result.Message)
 
@@ -357,7 +357,7 @@ fmt.Println("result.Message)
 
 You can run acceptance tests against the actual pingdom API to test any changes:
 ```
-PINGDOM_USER=[username] \
+  PINGDOM_USER=[username] \
   PINGDOM_PASSWORD=[password] \
   PINGDOM_API_KEY=[api key] make acceptance
 ```
