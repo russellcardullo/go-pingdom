@@ -87,13 +87,14 @@ type MaintenanceCheckResponse struct {
 
 // TsmResponse represents the JSON response for a check from the Pingdom API.
 type TsmResponse struct {
-	Name                   string `json:"name"`
-	Status                 string `json:"status"`
-	Kitchen                string `json:"kitchen"`
-	Active                 string `json:"active"`
-	CreatedAt              int64  `json:"created_at"`
-	Interval               int    `json:"interval"`
-	UseLegacyNotifications string `json:"use_legacy_notifications,omitempty"`
+	Name                   string             `json:"name"`
+	Status                 string             `json:"status"`
+	Kitchen                string             `json:"kitchen"`
+	Active                 string             `json:"active"`
+	CreatedAt              int64              `json:"created_at"`
+	Interval               int                `json:"interval"`
+	UseLegacyNotifications string             `json:"use_legacy_notifications,omitempty"`
+	Tags                   []CheckResponseTag `json:"tags,omitempty"`
 }
 
 // ProbeResponse represents the JSON response for probes from the Pingdom API.
