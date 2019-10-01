@@ -93,7 +93,7 @@ type TmsResponse struct {
 	Active                 string             `json:"active"`
 	CreatedAt              int64              `json:"created_at"`
 	Interval               int                `json:"interval"`
-	UseLegacyNotifications string             `json:"use_legacy_notifications,omitempty"`
+	UseLegacyNotifications bool               `json:"use_legacy_notifications,omitempty"`
 	Tags                   []CheckResponseTag `json:"tags,omitempty"`
 }
 
