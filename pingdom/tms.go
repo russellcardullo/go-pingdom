@@ -11,7 +11,7 @@ type TmsService struct {
 }
 
 // TODO
-func (cs *TmsService) List(params ...map[string]string) ([]TmsResponse, error) {
+func (cs *TmsService) List(params ...map[string]string) (map[int]TmsResponse, error) {
 	param := map[string]string{}
 	if len(params) == 1 {
 		param = params[0]

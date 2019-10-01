@@ -271,7 +271,7 @@ type listChecksJSONResponse struct {
 }
 
 type listTmsJSONResponse struct {
-	Tms []TmsResponse `json:"recipes"`
+	Tms map[int]TmsResponse `json:"recipes"`
 }
 
 type listMaintenanceJSONResponse struct {
