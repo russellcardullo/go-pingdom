@@ -85,8 +85,8 @@ type MaintenanceCheckResponse struct {
 	Tms    []int `json:"tms"`
 }
 
-// TsmResponse represents the JSON response for a check from the Pingdom API.
-type TsmResponse struct {
+// TmsResponse represents the JSON response for a check from the Pingdom API.
+type TmsResponse struct {
 	Name                   string             `json:"name"`
 	Status                 string             `json:"status"`
 	Kitchen                string             `json:"kitchen"`
@@ -270,8 +270,8 @@ type listChecksJSONResponse struct {
 	Checks []CheckResponse `json:"checks"`
 }
 
-type listTsmJSONResponse struct {
-	Tsm []TsmResponse `json:"recipes"`
+type listTmsJSONResponse struct {
+	Tms []TmsResponse `json:"recipes"`
 }
 
 type listMaintenanceJSONResponse struct {

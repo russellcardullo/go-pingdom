@@ -5,13 +5,13 @@ import (
 	"io/ioutil"
 )
 
-// TsmService provides an interface to Pingdom transactions.
-type TsmService struct {
+// TmsService provides an interface to Pingdom transactions.
+type TmsService struct {
 	client *Client
 }
 
 // TODO
-func (cs *TsmService) List(params ...map[string]string) ([]TsmResponse, error) {
+func (cs *TmsService) List(params ...map[string]string) ([]TmsResponse, error) {
 	param := map[string]string{}
 	if len(params) == 1 {
 		param = params[0]
@@ -34,8 +34,8 @@ func (cs *TsmService) List(params ...map[string]string) ([]TsmResponse, error) {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	bodyString := string(bodyBytes)
 
-	p := &listTsmJSONResponse{}
+	p := &listTmsJSONResponse{}
 	err = json.Unmarshal([]byte(bodyString), &p)
 
-	return p.Tsm, err
+	return p.Tms, err
 }

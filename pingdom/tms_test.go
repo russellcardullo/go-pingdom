@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTsmServiceList(t *testing.T) {
+func TestTmsServiceList(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -35,7 +35,7 @@ func TestTsmServiceList(t *testing.T) {
 			]
 		}`)
 	})
-	want := []TsmResponse{
+	want := []TmsResponse{
 		{
 			Name:      "example.com",
 			Status:    "SUCCESSFUL",
@@ -54,7 +54,7 @@ func TestTsmServiceList(t *testing.T) {
 		},
 	}
 
-	tsm, err := client.Tsm.List()
+	tms, err := client.Tms.List()
 	assert.NoError(t, err)
-	assert.Equal(t, want, tsm, "Tsm.List() should return correct result")
+	assert.Equal(t, want, tms, "Tms.List() should return correct result")
 }
