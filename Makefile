@@ -7,16 +7,16 @@ install:
 	go install ./...
 
 lint:
-	golint github.com/russellcardullo/go-pingdom/pingdom
+	golint github.com/strike-team/go-pingdom/pingdom
 
 test:
-	go test github.com/russellcardullo/go-pingdom/pingdom
+	go test github.com/strike-team/go-pingdom/pingdom
 
 acceptance:
-	PINGDOM_ACCEPTANCE=1 go test github.com/russellcardullo/go-pingdom/acceptance
+	PINGDOM_ACCEPTANCE=1 go test github.com/strike-team/go-pingdom/acceptance
 
 cov:
-	go test github.com/russellcardullo/go-pingdom/pingdom -coverprofile=coverage.out
+	go test github.com/strike-team/go-pingdom/pingdom -coverprofile=coverage.out
 	go tool cover -func=coverage.out
 	rm coverage.out
 

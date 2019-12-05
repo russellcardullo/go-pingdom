@@ -85,6 +85,18 @@ type MaintenanceCheckResponse struct {
 	Tms    []int `json:"tms"`
 }
 
+// TmsResponse represents the JSON response for a check from the Pingdom API.
+type TmsResponse struct {
+	Name                   string             `json:"name"`
+	Status                 string             `json:"status"`
+	Kitchen                string             `json:"kitchen"`
+	Active                 string             `json:"active"`
+	CreatedAt              int64              `json:"created_at"`
+	Interval               int                `json:"interval"`
+	UseLegacyNotifications bool               `json:"use_legacy_notifications,omitempty"`
+	Tags                   []CheckResponseTag `json:"tags,omitempty"`
+}
+
 // ProbeResponse represents the JSON response for probes from the Pingdom API.
 type ProbeResponse struct {
 	ID         int    `json:"id"`
@@ -256,6 +268,10 @@ func (r *PingdomError) Error() string {
 
 type listChecksJSONResponse struct {
 	Checks []CheckResponse `json:"checks"`
+}
+
+type listTmsJSONResponse struct {
+	Tms map[int]TmsResponse `json:"recipes"`
 }
 
 type listMaintenanceJSONResponse struct {
