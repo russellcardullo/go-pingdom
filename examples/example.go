@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/russellcardullo/go-pingdom/pingdom"
+	"github.com/sightmachine/go-pingdom/pingdom"
 )
 
 type credentials struct {

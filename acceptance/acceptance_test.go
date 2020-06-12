@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/russellcardullo/go-pingdom/pingdom"
+	"github.com/sightmachine/go-pingdom/pingdom"
 	"github.com/stretchr/testify/assert"
 )
 
