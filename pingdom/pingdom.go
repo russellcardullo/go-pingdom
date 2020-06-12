@@ -123,7 +123,7 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 
 	req, err := http.NewRequest(method, baseURL.String(), nil)
 	req.SetBasicAuth(pc.User, pc.Password)
-	req.Header.Add("App-Key", pc.APIKey)
+	req.Header.Add("Bearer", pc.APIKey)
 	if pc.AccountEmail != "" {
 		req.Header.Add("Account-Email", pc.AccountEmail)
 	}
