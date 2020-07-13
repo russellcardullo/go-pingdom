@@ -40,6 +40,8 @@ type CheckResponse struct {
 	Teams                    []CheckTeamResponse `json:"teams,omitempty"`
 	ResponseTimeThreshold    int                 `json:"responsetime_threshold,omitempty"`
 	ProbeFilters             []string            `json:"probe_filters,omitempty"`
+	VerifyCertificate        bool                `json:"verify_certificate,omitempty"`
+	SSLDownDaysBefore        int                 `json:"ssl_down_days_before,omitempty"`
 
 	// Legacy; this is not returned by the API, we backfill the value from the
 	// Teams field.

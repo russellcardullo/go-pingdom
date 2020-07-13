@@ -21,6 +21,8 @@ func TestHttpCheckPutParams(t *testing.T) {
 		UserIds:               []int{123, 456},
 		TeamIds:               []int{789},
 		ResponseTimeThreshold: 2300,
+		VerifyCertificate:     true,
+		SSLDownDaysBefore:     10,
 	}
 	want := map[string]string{
 		"name":                   "fake check",
@@ -42,6 +44,8 @@ func TestHttpCheckPutParams(t *testing.T) {
 		"userids":                "123,456",
 		"teamids":                "789",
 		"responsetime_threshold": "2300",
+		"verify_certificate":     "true",
+		"ssl_down_days_before":   "10",
 	}
 
 	params := check.PutParams()
@@ -63,6 +67,8 @@ func TestHttpCheckPostParams(t *testing.T) {
 		UserIds:               []int{123, 456},
 		TeamIds:               []int{789},
 		ResponseTimeThreshold: 2300,
+		VerifyCertificate:     true,
+		SSLDownDaysBefore:     10,
 	}
 	want := map[string]string{
 		"name":                   "fake check",
@@ -81,6 +87,8 @@ func TestHttpCheckPostParams(t *testing.T) {
 		"userids":                "123,456",
 		"teamids":                "789",
 		"responsetime_threshold": "2300",
+		"verify_certificate":     "true",
+		"ssl_down_days_before":   "10",
 	}
 
 	params := check.PostParams()
