@@ -40,8 +40,6 @@ type CheckResponse struct {
 	Teams                    []CheckTeamResponse `json:"teams,omitempty"`
 	ResponseTimeThreshold    int                 `json:"responsetime_threshold,omitempty"`
 	ProbeFilters             []string            `json:"probe_filters,omitempty"`
-	VerifyCertificate        bool                `json:"verify_certificate,omitempty"`
-	SSLDownDaysBefore        int                 `json:"ssl_down_days_before,omitempty"`
 
 	// Legacy; this is not returned by the API, we backfill the value from the
 	// Teams field.
@@ -231,15 +229,17 @@ func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
 
 // CheckResponseHTTPDetails represents the details specific to HTTP checks.
 type CheckResponseHTTPDetails struct {
-	Url              string            `json:"url,omitempty"`
-	Encryption       bool              `json:"encryption,omitempty"`
-	Port             int               `json:"port,omitempty"`
-	Username         string            `json:"username,omitempty"`
-	Password         string            `json:"password,omitempty"`
-	ShouldContain    string            `json:"shouldcontain,omitempty"`
-	ShouldNotContain string            `json:"shouldnotcontain,omitempty"`
-	PostData         string            `json:"postdata,omitempty"`
-	RequestHeaders   map[string]string `json:"requestheaders,omitempty"`
+	Url               string            `json:"url,omitempty"`
+	Encryption        bool              `json:"encryption,omitempty"`
+	Port              int               `json:"port,omitempty"`
+	Username          string            `json:"username,omitempty"`
+	Password          string            `json:"password,omitempty"`
+	ShouldContain     string            `json:"shouldcontain,omitempty"`
+	ShouldNotContain  string            `json:"shouldnotcontain,omitempty"`
+	PostData          string            `json:"postdata,omitempty"`
+	RequestHeaders    map[string]string `json:"requestheaders,omitempty"`
+	VerifyCertificate bool              `json:"verify_certificate,omitempty"`
+	SSLDownDaysBefore int               `json:"ssl_down_days_before,omitempty"`
 }
 
 // CheckResponseTCPDetails represents the details specific to TCP checks.

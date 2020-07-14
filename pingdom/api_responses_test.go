@@ -32,9 +32,7 @@ var detailedCheckJSON = `
 	"lasterrortime" : 1293143467,
 	"lasttesttime" : 1294064823,
 	"tags": [],
-	"responsetime_threshold": 2300,
-	"verify_certificate": true,
-	"ssl_down_days_before": 10
+	"responsetime_threshold": 2300
 }
 `
 
@@ -52,6 +50,4 @@ func TestCheckResponseUnmarshal(t *testing.T) {
 	assert.NotNil(t, ck.Type.HTTP)
 	assert.Equal(t, 2, len(ck.Type.HTTP.RequestHeaders))
 	assert.Equal(t, "HIGH", ck.SeverityLevel)
-	assert.True(t, ck.VerifyCertificate)
-	assert.Equal(t, 10, ck.SSLDownDaysBefore)
 }
