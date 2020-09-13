@@ -96,7 +96,8 @@ func TestDo(t *testing.T) {
 	body := new(foo)
 	want := &foo{"a"}
 
-	client.Do(req, body)
+	_, err := client.Do(req, body)
+	assert.NoError(t, err)
 	assert.Equal(t, want, body)
 }
 
