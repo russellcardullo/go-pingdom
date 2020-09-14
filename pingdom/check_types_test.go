@@ -7,52 +7,110 @@ import (
 )
 
 func TestHttpCheckPutParams(t *testing.T) {
-	check := HttpCheck{
-		Name:     "fake check",
-		Hostname: "example.com",
-		Url:      "/foo",
-		RequestHeaders: map[string]string{
-			"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
-			"Pragma":     "no-cache",
+	verifyCertificate := true
+	sslDownDaysBefore := 10
+
+	tests := []struct {
+		name       string
+		giveCheck  HttpCheck
+		wantParams map[string]string
+	}{
+		{
+			name: "parametrizes http check",
+			giveCheck: HttpCheck{
+				Name:     "fake check",
+				Hostname: "example.com",
+				Url:      "/foo",
+				RequestHeaders: map[string]string{
+					"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+					"Pragma":     "no-cache",
+				},
+				Username:              "user",
+				Password:              "pass",
+				IntegrationIds:        []int{33333333, 44444444},
+				UserIds:               []int{123, 456},
+				TeamIds:               []int{789},
+				ResponseTimeThreshold: 2300,
+				VerifyCertificate:     &verifyCertificate,
+				SSLDownDaysBefore:     &sslDownDaysBefore,
+			},
+			wantParams: map[string]string{
+				"name":                   "fake check",
+				"host":                   "example.com",
+				"paused":                 "false",
+				"resolution":             "0",
+				"notifyagainevery":       "0",
+				"notifywhenbackup":       "false",
+				"url":                    "/foo",
+				"requestheader0":         "Pragma:no-cache",
+				"requestheader1":         "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+				"auth":                   "user:pass",
+				"encryption":             "false",
+				"shouldnotcontain":       "",
+				"postdata":               "",
+				"integrationids":         "33333333,44444444",
+				"tags":                   "",
+				"probe_filters":          "",
+				"userids":                "123,456",
+				"teamids":                "789",
+				"responsetime_threshold": "2300",
+				"verify_certificate":     "true",
+				"ssl_down_days_before":   "10",
+			},
 		},
-		Username:              "user",
-		Password:              "pass",
-		IntegrationIds:        []int{33333333, 44444444},
-		UserIds:               []int{123, 456},
-		TeamIds:               []int{789},
-		ResponseTimeThreshold: 2300,
-		VerifyCertificate:     true,
-		SSLDownDaysBefore:     10,
-	}
-	want := map[string]string{
-		"name":                   "fake check",
-		"host":                   "example.com",
-		"paused":                 "false",
-		"resolution":             "0",
-		"notifyagainevery":       "0",
-		"notifywhenbackup":       "false",
-		"url":                    "/foo",
-		"requestheader0":         "Pragma:no-cache",
-		"requestheader1":         "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
-		"auth":                   "user:pass",
-		"encryption":             "false",
-		"shouldnotcontain":       "",
-		"postdata":               "",
-		"integrationids":         "33333333,44444444",
-		"tags":                   "",
-		"probe_filters":          "",
-		"userids":                "123,456",
-		"teamids":                "789",
-		"responsetime_threshold": "2300",
-		"verify_certificate":     "true",
-		"ssl_down_days_before":   "10",
+		{
+			name: "parametrizes http check without optional fields",
+			giveCheck: HttpCheck{
+				Name:     "fake check",
+				Hostname: "example.com",
+				Url:      "/foo",
+				RequestHeaders: map[string]string{
+					"User-Agent": "Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+					"Pragma":     "no-cache",
+				},
+				Username:              "user",
+				Password:              "pass",
+				IntegrationIds:        []int{33333333, 44444444},
+				UserIds:               []int{123, 456},
+				TeamIds:               []int{789},
+				ResponseTimeThreshold: 2300,
+			},
+			wantParams: map[string]string{
+				"name":                   "fake check",
+				"host":                   "example.com",
+				"paused":                 "false",
+				"resolution":             "0",
+				"notifyagainevery":       "0",
+				"notifywhenbackup":       "false",
+				"url":                    "/foo",
+				"requestheader0":         "Pragma:no-cache",
+				"requestheader1":         "User-Agent:Pingdom.com_bot_version_1.4_(http://www.pingdom.com/)",
+				"auth":                   "user:pass",
+				"encryption":             "false",
+				"shouldnotcontain":       "",
+				"postdata":               "",
+				"integrationids":         "33333333,44444444",
+				"tags":                   "",
+				"probe_filters":          "",
+				"userids":                "123,456",
+				"teamids":                "789",
+				"responsetime_threshold": "2300",
+			},
+		},
 	}
 
-	params := check.PutParams()
-	assert.Equal(t, want, params)
+	for _, tt := range tests {
+		t.Run(tt.name, func(tst *testing.T) {
+			params := tt.giveCheck.PutParams()
+			assert.Equal(tst, tt.wantParams, params)
+		})
+	}
 }
 
 func TestHttpCheckPostParams(t *testing.T) {
+	verifyCertificate := true
+	sslDownDaysBefore := 10
+
 	check := HttpCheck{
 		Name:     "fake check",
 		Hostname: "example.com",
@@ -67,8 +125,8 @@ func TestHttpCheckPostParams(t *testing.T) {
 		UserIds:               []int{123, 456},
 		TeamIds:               []int{789},
 		ResponseTimeThreshold: 2300,
-		VerifyCertificate:     true,
-		SSLDownDaysBefore:     10,
+		VerifyCertificate:     &verifyCertificate,
+		SSLDownDaysBefore:     &sslDownDaysBefore,
 	}
 	want := map[string]string{
 		"name":                   "fake check",

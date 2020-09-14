@@ -30,8 +30,8 @@ type HttpCheck struct {
 	ProbeFilters             string            `json:"probe_filters,omitempty"`
 	UserIds                  []int             `json:"userids,omitempty"`
 	TeamIds                  []int             `json:"teamids,omitempty"`
-	VerifyCertificate        bool              `json:"verify_certificate,omitempty"` // Note: this is backwards-incompatible as the default is true
-	SSLDownDaysBefore        int               `json:"ssl_down_days_before,omitempty"`
+	VerifyCertificate        *bool             `json:"verify_certificate,omitempty"`
+	SSLDownDaysBefore        *int              `json:"ssl_down_days_before,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check.
@@ -85,21 +85,20 @@ type SummaryPerformanceRequest struct {
 // with an HTTP PUT request.
 func (ck *HttpCheck) PutParams() map[string]string {
 	m := map[string]string{
-		"name":               ck.Name,
-		"host":               ck.Hostname,
-		"resolution":         strconv.Itoa(ck.Resolution),
-		"paused":             strconv.FormatBool(ck.Paused),
-		"notifyagainevery":   strconv.Itoa(ck.NotifyAgainEvery),
-		"notifywhenbackup":   strconv.FormatBool(ck.NotifyWhenBackup),
-		"url":                ck.Url,
-		"encryption":         strconv.FormatBool(ck.Encryption),
-		"postdata":           ck.PostData,
-		"integrationids":     intListToCDString(ck.IntegrationIds),
-		"tags":               ck.Tags,
-		"probe_filters":      ck.ProbeFilters,
-		"userids":            intListToCDString(ck.UserIds),
-		"teamids":            intListToCDString(ck.TeamIds),
-		"verify_certificate": strconv.FormatBool(ck.VerifyCertificate),
+		"name":             ck.Name,
+		"host":             ck.Hostname,
+		"resolution":       strconv.Itoa(ck.Resolution),
+		"paused":           strconv.FormatBool(ck.Paused),
+		"notifyagainevery": strconv.Itoa(ck.NotifyAgainEvery),
+		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
+		"url":              ck.Url,
+		"encryption":       strconv.FormatBool(ck.Encryption),
+		"postdata":         ck.PostData,
+		"integrationids":   intListToCDString(ck.IntegrationIds),
+		"tags":             ck.Tags,
+		"probe_filters":    ck.ProbeFilters,
+		"userids":          intListToCDString(ck.UserIds),
+		"teamids":          intListToCDString(ck.TeamIds),
 	}
 
 	// Ignore zero values
@@ -115,8 +114,12 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		m["responsetime_threshold"] = strconv.Itoa(ck.ResponseTimeThreshold)
 	}
 
-	if ck.SSLDownDaysBefore != 0 {
-		m["ssl_down_days_before"] = strconv.Itoa(ck.SSLDownDaysBefore)
+	if ck.VerifyCertificate != nil {
+		m["verify_certificate"] = strconv.FormatBool(*ck.VerifyCertificate)
+	}
+
+	if ck.SSLDownDaysBefore != nil {
+		m["ssl_down_days_before"] = strconv.Itoa(*ck.SSLDownDaysBefore)
 	}
 
 	// ShouldContain and ShouldNotContain are mutually exclusive.
