@@ -12,9 +12,7 @@ const (
 	defaultBaseURL = "https://api.pingdom.com/api/3.1"
 )
 
-// Client represents a client to the Pingdom API.  This package also
-// provides a NewClient function for convenience to initialize a client
-// with default parameters.
+// Client represents a client to the Pingdom API.
 type Client struct {
 	APIToken     string
 	BaseURL      *url.URL
@@ -60,16 +58,6 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	c.Probes = &ProbeService{client: c}
 	return c, nil
 }
-
-// NewClient returns a Pingdom client with a default base URL and default HTTP client.
-// Deprecated: Use NewClientWithConfig
-// func NewClient(key string) *Client {
-// 	config := ClientConfig{
-// 		APIToken   key,
-// 	}
-// 	c, _ := NewClientWithConfig(config)
-// 	return c
-// }
 
 // NewRequest makes a new HTTP Request.  The method param should be an HTTP method in
 // all caps such as GET, POST, PUT, DELETE.  The rsc param should correspond with
