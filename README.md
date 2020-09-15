@@ -6,6 +6,8 @@ go-pingdom is a Go client library for the Pingdom API.
 
 This currently supports working with HTTP, ping checks, and TCP checks.
 
+**Important**: The current version of this library only supports the Pingdom 3.1 API.  If you are still using the deprecated Pingdom 2.1 API please pin your dependencies to tag v1.1.0 of this library.
+
 ## Usage ##
 
 ### Client ###
