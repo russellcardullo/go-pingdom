@@ -30,6 +30,8 @@ type HttpCheck struct {
 	ProbeFilters             string            `json:"probe_filters,omitempty"`
 	UserIds                  []int             `json:"userids,omitempty"`
 	TeamIds                  []int             `json:"teamids,omitempty"`
+	VerifyCertificate        *bool             `json:"verify_certificate,omitempty"`
+	SSLDownDaysBefore        *int              `json:"ssl_down_days_before,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check.
@@ -110,6 +112,14 @@ func (ck *HttpCheck) PutParams() map[string]string {
 
 	if ck.ResponseTimeThreshold != 0 {
 		m["responsetime_threshold"] = strconv.Itoa(ck.ResponseTimeThreshold)
+	}
+
+	if ck.VerifyCertificate != nil {
+		m["verify_certificate"] = strconv.FormatBool(*ck.VerifyCertificate)
+	}
+
+	if ck.SSLDownDaysBefore != nil {
+		m["ssl_down_days_before"] = strconv.Itoa(*ck.SSLDownDaysBefore)
 	}
 
 	// ShouldContain and ShouldNotContain are mutually exclusive.
