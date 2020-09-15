@@ -25,9 +25,7 @@ func setup() {
 
 	// test client
 	client, _ = NewClientWithConfig(ClientConfig{
-		User:     "fake_email@example.com",
-		Password: "12345",
-		APIKey:   "my_api_key",
+		APIToken: "my_api_key",
 	})
 
 	url, _ := url.Parse(server.URL)
@@ -44,26 +42,12 @@ func testMethod(t *testing.T, r *http.Request, want string) {
 
 func TestNewClientWithConfig(t *testing.T) {
 	c, err := NewClientWithConfig(ClientConfig{
-		User:     "user",
-		Password: "password",
-		APIKey:   "key",
+		APIToken: "key",
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, http.DefaultClient, c.client)
 	assert.Equal(t, defaultBaseURL, c.BaseURL.String())
 	assert.NotNil(t, c.Checks)
-}
-
-func TestNewClient(t *testing.T) {
-	c := NewClient("user", "password", "key")
-	assert.Equal(t, http.DefaultClient, c.client)
-	assert.Equal(t, defaultBaseURL, c.BaseURL.String())
-	assert.NotNil(t, c.Checks)
-}
-
-func TestNewMultiUserClient(t *testing.T) {
-	c := NewMultiUserClient("user", "password", "key", "account_email")
-	assert.NotEqual(t, "", c.AccountEmail, "NewMultiUserClient failed to set AccountEmail property")
 }
 
 func TestNewRequest(t *testing.T) {

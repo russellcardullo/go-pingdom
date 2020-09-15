@@ -3,7 +3,6 @@ package acceptance
 import (
 	"net/http"
 	"os"
-	"strconv"
 	"testing"
 	"time"
 
@@ -20,9 +19,7 @@ func init() {
 		runAcceptance = true
 
 		config := pingdom.ClientConfig{
-			User:     os.Getenv("PINGDOM_USER"),
-			Password: os.Getenv("PINGDOM_PASSWORD"),
-			APIKey:   os.Getenv("PINGDOM_API_KEY"),
+			APIToken: os.Getenv("PINGDOM_API_TOKEN"),
 			HTTPClient: &http.Client{
 				Timeout: time.Second * 10,
 			},
@@ -108,29 +105,4 @@ func TestProbes(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, probes)
 	assert.NotEmpty(t, probes)
-}
-
-func TestTeams(t *testing.T) {
-	if !runAcceptance {
-		t.Skip()
-	}
-	teams, err := client.Teams.List()
-	assert.NoError(t, err)
-	assert.NotNil(t, teams)
-
-	td := pingdom.TeamData{
-		Name: "Team",
-	}
-	team, err := client.Teams.Create(&td)
-	assert.NoError(t, err)
-	assert.NotNil(t, team)
-
-	id, _ := strconv.Atoi(team.ID)
-	teamr, err := client.Teams.Read(id)
-	assert.NoError(t, err)
-	assert.NotNil(t, teamr)
-
-	success, err := client.Teams.Delete(id)
-	assert.NoError(t, err)
-	assert.NotNil(t, success)
 }
