@@ -40,6 +40,7 @@ type CheckResponse struct {
 	Teams                    []CheckTeamResponse `json:"teams,omitempty"`
 	ResponseTimeThreshold    int                 `json:"responsetime_threshold,omitempty"`
 	ProbeFilters             []string            `json:"probe_filters,omitempty"`
+	IP6                      bool                `json:"ip6,omitempty"`
 
 	// Legacy; this is not returned by the API, we backfill the value from the
 	// Teams field.
@@ -97,32 +98,6 @@ type ProbeResponse struct {
 	IPv6       string `json:"ipv6"`
 	CountryISO string `json:"countryiso"`
 	Region     string `json:"region"`
-}
-
-// TeamResponse represents the JSON response for teams from the Pingdom API.
-type TeamResponse struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Users []TeamUserResponse
-}
-
-// TeamUserResponse represents the JSON response for users in teams from the Pingdom API.
-type TeamUserResponse struct {
-	ID    string `json:"id"`
-	Email string `json:"email"`
-	Name  string `json:"name"`
-}
-
-// TeamDeleteResponse represents the JSON response for delete team from the Pingdom API.
-type TeamDeleteResponse struct {
-	Success bool `json:"success"`
-}
-
-// PublicReportResponse represents the JSON response for a public report from the Pingdom API.
-type PublicReportResponse struct {
-	ID        int    `json:"checkid"`
-	Name      string `json:"checkname"`
-	ReportURL string `json:"reporturl"`
 }
 
 // SummaryPerformanceResponse represents the JSON response for a summary performance from the Pingdom API.
@@ -266,24 +241,12 @@ type listProbesJSONResponse struct {
 	Probes []ProbeResponse `json:"probes"`
 }
 
-type listTeamsJSONResponse struct {
-	Teams []TeamResponse `json:"teams"`
-}
-
-type listPublicReportsJSONResponse struct {
-	Checks []PublicReportResponse `json:"public"`
-}
-
 type checkDetailsJSONResponse struct {
 	Check *CheckResponse `json:"check"`
 }
 
 type maintenanceDetailsJSONResponse struct {
 	Maintenance *MaintenanceResponse `json:"maintenance"`
-}
-
-type teamDetailsJSONResponse struct {
-	Team *TeamResponse `json:"team"`
 }
 
 type createUserContactJSONResponse struct {

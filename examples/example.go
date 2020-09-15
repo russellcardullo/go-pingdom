@@ -6,21 +6,17 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-	"strconv"
 
 	"github.com/russellcardullo/go-pingdom/pingdom"
 )
 
 type credentials struct {
-	User         string `json:"user"`
-	Password     string `json:"password"`
-	APIKey       string `json:"apikey"`
-	AccountEmail string `json:"accountEmail"`
+	APIToken string `json:"apitoken"`
 }
 
 func getConfig() credentials {
 	// Config Example
-	// { "user" : "", "password" : "", "apikey" : "", "accountEmail" : "" }
+	// { "apitoken" : "" }
 	if len(os.Args) < 2 {
 		fmt.Println("You must provide a configuration file.")
 	}
@@ -51,54 +47,9 @@ func getConfig() credentials {
 	return config
 }
 
-func userExamples() {
-	config := getConfig()
-	client := pingdom.NewMultiUserClient(config.User, config.Password, config.APIKey, config.AccountEmail)
-
-	//Create User
-	user := pingdom.User{
-		Username: "exampleUser",
-	}
-	u, _ := client.Users.Create(&user)
-	fmt.Println("User Id: " + strconv.Itoa(u.Id))
-
-	// Create contact info
-	contact := pingdom.Contact{
-		Email: "test@example.com",
-	}
-	c, _ := client.Users.CreateContact(u.Id, contact)
-	fmt.Println("Contact Id: " + strconv.Itoa(c.Id))
-
-	//List all users and contacts
-	users, _ := client.Users.List()
-	fmt.Println("All users:", users)
-
-	user.Username = "newExampleUser"
-	uu, _ := client.Users.Update(u.Id, &user)
-	fmt.Println(uu.Message)
-
-	contact.Email = ""
-	contact.Provider = "Nexmo"
-	contact.Number = "5555555555"
-	contact.CountryCode = "1"
-
-	cc, _ := client.Users.UpdateContact(u.Id, c.Id, contact)
-	fmt.Println(cc.Message)
-
-	//Delete our example User Cpmtact
-	rContact, _ := client.Users.DeleteContact(u.Id, c.Id)
-	fmt.Println(rContact.Message)
-
-	//Delete our example User
-	rUser, _ := client.Users.Delete(u.Id)
-	fmt.Println(rUser.Message)
-}
-
 func main() {
 	client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-		User:     "username",
-		Password: "password",
-		APIKey:   "api_key",
+		APIToken: "api_token",
 	})
 	if err != nil {
 		fmt.Println("Error", err)
@@ -131,6 +82,4 @@ func main() {
 	// Delete a check
 	delMsg, _ := client.Checks.Delete(check.ID)
 	fmt.Println("Deleted check, message:", delMsg)
-
-	userExamples()
 }
