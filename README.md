@@ -235,6 +235,69 @@ Delete a team:
 team, err := client.Teams.Delete(12345)
 ```
 
+### ContactService ###
+
+This service manages users and their contact information which is represented by the `Contact` struct.
+More information from Pingdom: https://docs.pingdom.com/api/#tag/Contacts
+
+Get all contact info:
+
+```go
+contacts, err := client.Contacts.List()
+fmt.Println(contacts)
+```
+
+Create a new contact:
+
+```go
+contact := Contact{
+    Name: "John Doe",
+    Paused: false,
+    NotificationTargets: NotificationTargets{
+        SMS: []SMSNotificationTarget{
+            {
+                Number: "5555555555",
+                CountryCode: "1",
+                Provider: "Verizon",
+            }
+        }
+    }
+}
+contactId, err := client.Contacts.Create(contact)
+fmt.Println("New Contact ID: ", contactId.Id)
+```
+
+Update a contact
+
+```go
+contactId := 1234
+
+contact := Contact{
+    Name : "John Doe",
+    Paused : false,
+    NotificationTargets: NotificationTargets{
+        SMS: []SMSNotificationTarget{
+            {
+                Number: "5555555555",
+                CountryCode: "1",
+                Provider: "T-Mobile",
+            }
+        }
+    }
+}
+result, err := client.Contacts.Update(contactId, contact)
+fmt.Println(result.Message)
+```
+
+Delete a contact
+
+```go
+contactId := 1234
+
+result, err := client.Contacts.Delete(contactId)
+fmt.Println(result.Message)
+```
+
 ## Development ##
 
 ### Acceptance Tests ###

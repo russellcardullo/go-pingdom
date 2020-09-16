@@ -119,6 +119,58 @@ type TeamDeleteResponse struct {
 	Message string `json:"message"`
 }
 
+// ContactResponse respresents the JSON response for alerting contacts from the Pingdom API
+type ContactResponse struct {
+	ID                  int                         `json:"id"`
+	Name                string                      `json:"name"`
+	NotificationTargets NotificationTargetsResponse `json:"notification_targets"`
+	Owner               bool                        `json:"owner"`
+	Paused              bool                        `json:"paused"`
+	Teams               []ContactTeamResponse       `json:"teams"`
+	Type                string                      `json:"type"`
+}
+
+// ContactTeamResponse represents the JSON response for teams a contact belongs to from the Pingdom API.
+type ContactTeamResponse struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// NotificationTargetsResponse represents the JSON response for notification phone numbers from the Pingdom API.
+type NotificationTargetsResponse struct {
+	SMS   []SMSNotificationResponse   `json:"sms,omitempty"`
+	Email []EmailNotificationResponse `json:"email,omitempty"`
+	APNS  []APNSNotificationResponse  `json:"apns,omitempty"`
+	AGCM  []AGCMNotificationResponse  `json:"agcm,omitempty"`
+}
+
+// SMSNotificationResponse represents an SMS notification attached to a contact
+type SMSNotificationResponse struct {
+	CountryCode string `json:"country_code"`
+	Number      string `json:"number"`
+	Provider    string `json:"provider"`
+	Severity    string `json:"severity"`
+}
+
+// EmailNotificationResponse represents an Email notification attached to a contact
+type EmailNotificationResponse struct {
+	Address  string `json:"address"`
+	Severity string `json:"severity"`
+}
+
+// APNSNotificationResponse represents an APNS notification attached to a contact
+type APNSNotificationResponse struct {
+	Device   string `json:"apns_device"`
+	Name     string `json:"device_name"`
+	Severity string `json:"severity"`
+}
+
+// AGCMNotificationResponse represents an AGCM notification attached to a contact
+type AGCMNotificationResponse struct {
+	AGCMID   string `json:"agcm_id"`
+	Severity string `json:"severity"`
+}
+
 // SummaryPerformanceResponse represents the JSON response for a summary performance from the Pingdom API.
 type SummaryPerformanceResponse struct {
 	Summary SummaryPerformanceMap `json:"summary"`
@@ -154,36 +206,6 @@ type Result struct {
 	ResponseTime   int    `json:"responsetime"`
 	StatusDesc     string `json:"statusdesc"`
 	StatusDescLong string `json:"statusdesclong"`
-}
-
-// UserSmsResponse represents the JSON response for a user SMS contact.
-type UserSmsResponse struct {
-	Id          int    `json:"id"`
-	Severity    string `json:"severity"`
-	CountryCode string `json:"country_code"`
-	Number      string `json:"number"`
-	Provider    string `json:"provider"`
-}
-
-// UserEmailResponse represents the JSON response for a user email contact.
-type UserEmailResponse struct {
-	Id       int    `json:"id"`
-	Severity string `json:"severity"`
-	Address  string `json:"address"`
-}
-
-// CreateUserContactResponse represents the JSON response for a user contact.
-type CreateUserContactResponse struct {
-	Id int `json:"id"`
-}
-
-// UsersResponse represents the JSON response for a Pingom User.
-type UsersResponse struct {
-	Id       int                 `json:"id"`
-	Paused   string              `json:"paused,omitempty"`
-	Username string              `json:"name,omitempty"`
-	Sms      []UserSmsResponse   `json:"sms,omitempty"`
-	Email    []UserEmailResponse `json:"email,omitempty"`
 }
 
 // UnmarshalJSON converts a byte array into a CheckResponseType.
@@ -270,6 +292,10 @@ type teamDetailsJSONResponse struct {
 	Team *TeamResponse `json:"team"`
 }
 
+type contactDetailsJSONResponse struct {
+	Contact *ContactResponse `json:"contact"`
+}
+
 type checkDetailsJSONResponse struct {
 	Check *CheckResponse `json:"check"`
 }
@@ -278,16 +304,12 @@ type maintenanceDetailsJSONResponse struct {
 	Maintenance *MaintenanceResponse `json:"maintenance"`
 }
 
-type createUserContactJSONResponse struct {
-	Contact *CreateUserContactResponse `json:"contact_target"`
+type createContactJSONResponse struct {
+	Contact *ContactResponse `json:"contact"`
 }
 
-type createUserJSONResponse struct {
-	User *UsersResponse `json:"user"`
-}
-
-type listUsersJSONResponse struct {
-	Users []UsersResponse `json:"users"`
+type listContactsJSONResponse struct {
+	Contacts []ContactResponse `json:"contacts"`
 }
 
 type errorJSONResponse struct {
