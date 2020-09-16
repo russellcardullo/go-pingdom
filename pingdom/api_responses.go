@@ -100,6 +100,25 @@ type ProbeResponse struct {
 	Region     string `json:"region"`
 }
 
+// TeamResponse represents the JSON response for alerting teams from the Pingdom API.
+type TeamResponse struct {
+	ID      int                  `json:"id"`
+	Name    string               `json:"name,omitempty"`
+	Members []TeamMemberResponse `json:"members,omitempty"`
+}
+
+// TeamMemberResponse represents the JSON response for contacts in alerting teams from the Pingdom API.
+type TeamMemberResponse struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
+// TeamDeleteResponse represents the JSON response for delete team from the Pingdom API.
+type TeamDeleteResponse struct {
+	Message string `json:"message"`
+}
+
 // SummaryPerformanceResponse represents the JSON response for a summary performance from the Pingdom API.
 type SummaryPerformanceResponse struct {
 	Summary SummaryPerformanceMap `json:"summary"`
@@ -241,6 +260,14 @@ type listMaintenanceJSONResponse struct {
 
 type listProbesJSONResponse struct {
 	Probes []ProbeResponse `json:"probes"`
+}
+
+type listTeamsJSONResponse struct {
+	Teams []TeamResponse `json:"teams"`
+}
+
+type teamDetailsJSONResponse struct {
+	Team *TeamResponse `json:"team"`
 }
 
 type checkDetailsJSONResponse struct {
