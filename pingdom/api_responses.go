@@ -119,58 +119,6 @@ type TeamDeleteResponse struct {
 	Message string `json:"message"`
 }
 
-// ContactResponse respresents the JSON response for alerting contacts from the Pingdom API
-type ContactResponse struct {
-	ID                  int                         `json:"id"`
-	Name                string                      `json:"name"`
-	NotificationTargets NotificationTargetsResponse `json:"notification_targets"`
-	Owner               bool                        `json:"owner"`
-	Paused              bool                        `json:"paused"`
-	Teams               []ContactTeamResponse       `json:"teams"`
-	Type                string                      `json:"type"`
-}
-
-// ContactTeamResponse represents the JSON response for teams a contact belongs to from the Pingdom API.
-type ContactTeamResponse struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-// NotificationTargetsResponse represents the JSON response for notification phone numbers from the Pingdom API.
-type NotificationTargetsResponse struct {
-	SMS   []SMSNotificationResponse   `json:"sms,omitempty"`
-	Email []EmailNotificationResponse `json:"email,omitempty"`
-	APNS  []APNSNotificationResponse  `json:"apns,omitempty"`
-	AGCM  []AGCMNotificationResponse  `json:"agcm,omitempty"`
-}
-
-// SMSNotificationResponse represents an SMS notification attached to a contact
-type SMSNotificationResponse struct {
-	CountryCode string `json:"country_code"`
-	Number      string `json:"number"`
-	Provider    string `json:"provider"`
-	Severity    string `json:"severity"`
-}
-
-// EmailNotificationResponse represents an Email notification attached to a contact
-type EmailNotificationResponse struct {
-	Address  string `json:"address"`
-	Severity string `json:"severity"`
-}
-
-// APNSNotificationResponse represents an APNS notification attached to a contact
-type APNSNotificationResponse struct {
-	Device   string `json:"apns_device"`
-	Name     string `json:"device_name"`
-	Severity string `json:"severity"`
-}
-
-// AGCMNotificationResponse represents an AGCM notification attached to a contact
-type AGCMNotificationResponse struct {
-	AGCMID   string `json:"agcm_id"`
-	Severity string `json:"severity"`
-}
-
 // SummaryPerformanceResponse represents the JSON response for a summary performance from the Pingdom API.
 type SummaryPerformanceResponse struct {
 	Summary SummaryPerformanceMap `json:"summary"`
@@ -293,7 +241,7 @@ type teamDetailsJSONResponse struct {
 }
 
 type contactDetailsJSONResponse struct {
-	Contact *ContactResponse `json:"contact"`
+	Contact *Contact `json:"contact"`
 }
 
 type checkDetailsJSONResponse struct {
@@ -305,11 +253,11 @@ type maintenanceDetailsJSONResponse struct {
 }
 
 type createContactJSONResponse struct {
-	Contact *ContactResponse `json:"contact"`
+	Contact *Contact `json:"contact"`
 }
 
 type listContactsJSONResponse struct {
-	Contacts []ContactResponse `json:"contacts"`
+	Contacts []Contact `json:"contacts"`
 }
 
 type errorJSONResponse struct {

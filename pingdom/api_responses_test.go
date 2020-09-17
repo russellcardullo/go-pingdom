@@ -111,22 +111,22 @@ var detailedContactJSON = `
 }
 `
 
-func TestCheckContactResponseUnmarshal(t *testing.T) {
+func TestCheckContactUnmarshal(t *testing.T) {
 	var contacts listContactsJSONResponse
 	err := json.Unmarshal([]byte(detailedContactJSON), &contacts)
 	contact := contacts.Contacts[0]
 
-	expectedNotificationTargets := NotificationTargetsResponse{
-		SMS: []SMSNotificationResponse{
-			SMSNotificationResponse{
+	expectedNotificationTargets := NotificationTargets{
+		SMS: []SMSNotification{
+			SMSNotification{
 				Severity:    "HIGH",
 				CountryCode: "00",
 				Number:      "111111111",
 				Provider:    "provider's name",
 			},
 		},
-		Email: []EmailNotificationResponse{
-			EmailNotificationResponse{
+		Email: []EmailNotification{
+			EmailNotification{
 				Severity: "HIGH",
 				Address:  "johndoe@teamrocket.com",
 			},

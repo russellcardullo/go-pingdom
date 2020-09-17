@@ -5,20 +5,6 @@ import (
 	"fmt"
 )
 
-// UserSms represents the sms contact object for a User.
-type UserSms struct {
-	Severity    string `json:"severity"`
-	CountryCode string `json:"country_code"`
-	Number      string `json:"number"`
-	Provider    string `json:"provider"`
-}
-
-// UserEmail represents the email contact object for a User.
-type UserEmail struct {
-	Severity string `json:"severity"`
-	Address  string `json:"address"`
-}
-
 // NotificationTargets represents different ways a contact could be notified of alerts
 type NotificationTargets struct {
 	SMS   []SMSNotification   `json:"sms,omitempty"`
@@ -56,7 +42,7 @@ type AGCMNotification struct {
 
 // ContactTeam represents an alerting team from the view of a Contact
 type ContactTeam struct {
-	ID   string `json:"id"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 

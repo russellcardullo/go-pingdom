@@ -19,7 +19,7 @@ type ContactAPI interface {
 }
 
 // List returns a list of all contacts and their contact details.
-func (cs *ContactService) List() ([]ContactResponse, error) {
+func (cs *ContactService) List() ([]Contact, error) {
 
 	req, err := cs.client.NewRequest("GET", "/alerting/contacts", nil)
 	if err != nil {
@@ -46,7 +46,7 @@ func (cs *ContactService) List() ([]ContactResponse, error) {
 }
 
 // Read return a contact object from Pingdom.
-func (cs *ContactService) Read(contactID int) (*ContactResponse, error) {
+func (cs *ContactService) Read(contactID int) (*Contact, error) {
 	req, err := cs.client.NewRequest("GET", "/alerting/contacts/"+strconv.Itoa(contactID), nil)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (cs *ContactService) Read(contactID int) (*ContactResponse, error) {
 }
 
 // Create adds a new contact.
-func (cs *ContactService) Create(contact ContactAPI) (*ContactResponse, error) {
+func (cs *ContactService) Create(contact ContactAPI) (*Contact, error) {
 	if err := contact.ValidContact(); err != nil {
 		return nil, err
 	}

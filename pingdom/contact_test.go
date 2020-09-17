@@ -72,21 +72,21 @@ func TestContactService_List(t *testing.T) {
 			]
 		}`)
 	})
-	want := []ContactResponse{
+	want := []Contact{
 		{
 			ID:     1,
 			Paused: false,
 			Name:   "John Doe",
 			Owner:  true,
-			Teams: []ContactTeamResponse{
+			Teams: []ContactTeam{
 				{
 					ID:   123456,
 					Name: "The Dream Team",
 				},
 			},
 			Type: "user",
-			NotificationTargets: NotificationTargetsResponse{
-				SMS: []SMSNotificationResponse{
+			NotificationTargets: NotificationTargets{
+				SMS: []SMSNotification{
 					{
 						Severity:    "HIGH",
 						CountryCode: "00",
@@ -94,7 +94,7 @@ func TestContactService_List(t *testing.T) {
 						Provider:    "provider's name",
 					},
 				},
-				Email: []EmailNotificationResponse{
+				Email: []EmailNotification{
 					{
 						Severity: "HIGH",
 						Address:  "johndoe@teamrocket.com",
@@ -107,9 +107,9 @@ func TestContactService_List(t *testing.T) {
 			Paused: true,
 			Name:   "John \"Hannibal\" Smith",
 			Type:   "user",
-			Teams:  []ContactTeamResponse{},
-			NotificationTargets: NotificationTargetsResponse{
-				SMS: []SMSNotificationResponse{
+			Teams:  []ContactTeam{},
+			NotificationTargets: NotificationTargets{
+				SMS: []SMSNotification{
 					{
 						Severity:    "HIGH",
 						CountryCode: "00",
@@ -117,7 +117,7 @@ func TestContactService_List(t *testing.T) {
 						Provider:    "provider's name",
 					},
 				},
-				Email: []EmailNotificationResponse{
+				Email: []EmailNotification{
 					{
 						Severity: "HIGH",
 						Address:  "hannibal@ateam.org",
@@ -170,29 +170,29 @@ func TestContactService_Read(t *testing.T) {
 			}
 		  }`)
 	})
-	want := ContactResponse{
+	want := Contact{
 		ID:     123456,
 		Paused: false,
 		Name:   "John Doe",
 		Owner:  true,
 		Type:   "user",
-		NotificationTargets: NotificationTargetsResponse{
-			SMS: []SMSNotificationResponse{
-				SMSNotificationResponse{
+		NotificationTargets: NotificationTargets{
+			SMS: []SMSNotification{
+				SMSNotification{
 					Severity:    "HIGH",
 					CountryCode: "00",
 					Number:      "111111111",
 					Provider:    "provider's name",
 				},
 			},
-			Email: []EmailNotificationResponse{
+			Email: []EmailNotification{
 				{
 					Address:  "johndoe@teamrocket.com",
 					Severity: "HIGH",
 				},
 			},
 		},
-		Teams: []ContactTeamResponse{
+		Teams: []ContactTeam{
 			{
 				ID:   123456,
 				Name: "The Dream Team",
@@ -218,7 +218,7 @@ func TestContactService_Create(t *testing.T) {
 		}`)
 	})
 
-	want := &ContactResponse{
+	want := &Contact{
 		ID: 23439,
 	}
 
