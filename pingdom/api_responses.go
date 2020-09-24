@@ -3,6 +3,7 @@ package pingdom
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // PingdomResponse represents a general response from the Pingdom API.
@@ -45,6 +46,70 @@ type CheckResponse struct {
 	// Legacy; this is not returned by the API, we backfill the value from the
 	// Teams field.
 	TeamIds []int
+}
+
+// TmsCheckResponse represents the JSON response for a TMS check from the Pingdom API.
+type TmsCheckResponse struct {
+	ID                       int                    `json:"id"`
+	Name                     string                 `json:"name"`
+	Steps                    []TmsStep              `json:"steps"`
+	Active                   bool                   `json:"active,omitempty"`
+	ContactIds               []int                  `json:"contact_ids,omitempty"`
+	CustomMessage            string                 `json:"custom_message,omitempty"`
+	IntegrationIds           []int                  `json:"integration_ids,omitempty"`
+	Interval                 int                    `json:"interval,omitempty"`
+	Metadata                 map[string]interface{} `json:"metadata,omitempty"`
+	Region                   string                 `json:"region,omitempty"`
+	SendNotificationWhenDown int                    `json:"send_notification_when_down,omitempty"`
+	SeverityLevel            string                 `json:"severity_level,omitempty"`
+	Tags                     []string               `json:"tags,omitempty"`
+	TeamIds                  []int                  `json:"team_ids,omitempty"`
+}
+
+// TmsStatusChangeResponse represents the JSON response for a TMS status change from the Pingdom API.
+type TmsStatusChangeResponse struct {
+	Report TmsStatusChange `json:"report"`
+}
+
+// TmsPerformanceReportResponse represents the JSON response for a TMS performance report for a single transaction from the Pingdom API.
+type TmsPerformanceReportResponse struct {
+	Report TmsPerformanceReport `json:"report"`
+}
+
+// TmsStatusChange represents the JSON for a TMS status change report from the Pingdom API.
+type TmsStatusChange struct {
+	CheckId int        `json:"check_id"`
+	Name    string     `json:"name"`
+	States  []TmsState `json:"states"`
+}
+
+type TmsPerformanceReport struct {
+	CheckId    int           `json:"check_id"`
+	Name       string        `json:"name"`
+	Intervals  []TmsInterval `json:"intervals"`
+	Resolution Resolution    `json:"resolution"`
+}
+
+type TmsState struct {
+	From    time.Time `json:"from"`
+	To      time.Time `json:"to"`
+	Status  string    `json:"status"`
+	Message string    `json:"message,omitempty"`
+	Error   int       `json:"id,omitempty"`
+}
+
+type TmsInterval struct {
+	AverageResponse int             `json:"average_response,omitempty"`
+	Downtime        int             `json:"downtime,omitempty"`
+	From            time.Time       `json:"from"`
+	Steps           []TmsStepStatus `json:"steps,omitempty"`
+	Unmonitored     int             `json:"unmonitored,omitempty"`
+	Uptime          int             `json:"uptime,omitempty"`
+}
+
+type TmsStepStatus struct {
+	Step            TmsStep `json:"step,omitempty"`
+	AverageResponse int     `json:"average_response,omitempty"`
 }
 
 // CheckTeamResponse is a Team returned inside of a Check instance. (We can't
@@ -235,6 +300,12 @@ type listChecksJSONResponse struct {
 	Checks []CheckResponse `json:"checks"`
 }
 
+type listTmsChecksJSONResponse struct {
+	TmsChecks []TmsCheckResponse `json:"checks"`
+	Limit     int                `json:"limit,omitempty"`
+	Offset    int                `json:"offset,omitempty"`
+}
+
 type listMaintenanceJSONResponse struct {
 	Maintenances []MaintenanceResponse `json:"maintenance"`
 }
@@ -245,6 +316,10 @@ type listProbesJSONResponse struct {
 
 type checkDetailsJSONResponse struct {
 	Check *CheckResponse `json:"check"`
+}
+
+type tmsCheckDetailsJSONResponse struct {
+	TmsCheck *TmsCheckResponse `json:"check"`
 }
 
 type maintenanceDetailsJSONResponse struct {
