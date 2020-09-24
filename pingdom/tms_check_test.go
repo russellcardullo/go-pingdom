@@ -327,7 +327,7 @@ func TestTmsCheckStatusChangeReportList(t *testing.T) {
 		},
 	}
 
-	mux.HandleFunc(fmt.Sprintf("/tms/check/report/status"), func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/tms/check/report/status", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		fmt.Fprint(w, `{
   "report": {
