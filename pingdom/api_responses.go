@@ -100,6 +100,25 @@ type ProbeResponse struct {
 	Region     string `json:"region"`
 }
 
+// TeamResponse represents the JSON response for alerting teams from the Pingdom API.
+type TeamResponse struct {
+	ID      int                  `json:"id"`
+	Name    string               `json:"name,omitempty"`
+	Members []TeamMemberResponse `json:"members,omitempty"`
+}
+
+// TeamMemberResponse represents the JSON response for contacts in alerting teams from the Pingdom API.
+type TeamMemberResponse struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
+// TeamDeleteResponse represents the JSON response for delete team from the Pingdom API.
+type TeamDeleteResponse struct {
+	Message string `json:"message"`
+}
+
 // SummaryPerformanceResponse represents the JSON response for a summary performance from the Pingdom API.
 type SummaryPerformanceResponse struct {
 	Summary SummaryPerformanceMap `json:"summary"`
@@ -135,36 +154,6 @@ type Result struct {
 	ResponseTime   int    `json:"responsetime"`
 	StatusDesc     string `json:"statusdesc"`
 	StatusDescLong string `json:"statusdesclong"`
-}
-
-// UserSmsResponse represents the JSON response for a user SMS contact.
-type UserSmsResponse struct {
-	Id          int    `json:"id"`
-	Severity    string `json:"severity"`
-	CountryCode string `json:"country_code"`
-	Number      string `json:"number"`
-	Provider    string `json:"provider"`
-}
-
-// UserEmailResponse represents the JSON response for a user email contact.
-type UserEmailResponse struct {
-	Id       int    `json:"id"`
-	Severity string `json:"severity"`
-	Address  string `json:"address"`
-}
-
-// CreateUserContactResponse represents the JSON response for a user contact.
-type CreateUserContactResponse struct {
-	Id int `json:"id"`
-}
-
-// UsersResponse represents the JSON response for a Pingom User.
-type UsersResponse struct {
-	Id       int                 `json:"id"`
-	Paused   string              `json:"paused,omitempty"`
-	Username string              `json:"name,omitempty"`
-	Sms      []UserSmsResponse   `json:"sms,omitempty"`
-	Email    []UserEmailResponse `json:"email,omitempty"`
 }
 
 // UnmarshalJSON converts a byte array into a CheckResponseType.
@@ -243,6 +232,18 @@ type listProbesJSONResponse struct {
 	Probes []ProbeResponse `json:"probes"`
 }
 
+type listTeamsJSONResponse struct {
+	Teams []TeamResponse `json:"teams"`
+}
+
+type teamDetailsJSONResponse struct {
+	Team *TeamResponse `json:"team"`
+}
+
+type contactDetailsJSONResponse struct {
+	Contact *Contact `json:"contact"`
+}
+
 type checkDetailsJSONResponse struct {
 	Check *CheckResponse `json:"check"`
 }
@@ -251,16 +252,12 @@ type maintenanceDetailsJSONResponse struct {
 	Maintenance *MaintenanceResponse `json:"maintenance"`
 }
 
-type createUserContactJSONResponse struct {
-	Contact *CreateUserContactResponse `json:"contact_target"`
+type createContactJSONResponse struct {
+	Contact *Contact `json:"contact"`
 }
 
-type createUserJSONResponse struct {
-	User *UsersResponse `json:"user"`
-}
-
-type listUsersJSONResponse struct {
-	Users []UsersResponse `json:"users"`
+type listContactsJSONResponse struct {
+	Contacts []Contact `json:"contacts"`
 }
 
 type errorJSONResponse struct {

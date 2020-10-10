@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 const (
@@ -18,8 +19,10 @@ type Client struct {
 	BaseURL      *url.URL
 	client       *http.Client
 	Checks       *CheckService
+	Contacts     *ContactService
 	Maintenances *MaintenanceService
 	Probes       *ProbeService
+	Teams        *TeamService
 }
 
 // ClientConfig represents a configuration for a pingdom client.
@@ -54,8 +57,10 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	}
 
 	c.Checks = &CheckService{client: c}
+	c.Contacts = &ContactService{client: c}
 	c.Maintenances = &MaintenanceService{client: c}
 	c.Probes = &ProbeService{client: c}
+	c.Teams = &TeamService{client: c}
 	return c, nil
 }
 
@@ -81,6 +86,23 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 
 	req, err := http.NewRequest(method, baseURL.String(), nil)
 	req.Header.Add("Authorization", "Bearer "+pc.APIToken)
+	return req, err
+}
+
+// NewJSONRequest makes a new HTTP Request.  The method param should be an HTTP method in
+// all caps such as GET, POST, PUT, DELETE.  The rsc param should correspond with
+// a restful resource.  Params should be a json formatted string.
+func (pc *Client) NewJSONRequest(method string, rsc string, params string) (*http.Request, error) {
+	baseURL, err := url.Parse(pc.BaseURL.String() + rsc)
+	if err != nil {
+		return nil, err
+	}
+
+	reqBody := strings.NewReader(params)
+
+	req, err := http.NewRequest(method, baseURL.String(), reqBody)
+	req.Header.Add("Authorization", "Bearer "+pc.APIToken)
+	req.Header.Add("Content-Type", "application/json")
 	return req, err
 }
 

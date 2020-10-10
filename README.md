@@ -188,6 +188,116 @@ for _, probe := range probes {
 }
 ```
 
+### TeamService ###
+
+This service manages pingdom Teams which are represented by the `Team` struct.
+When creating or updating Teams you must specify the `Name` and `MemberIDs`,
+though `MemberIDs` may be an empty slice.
+More information on Teams from Pingdom: https://docs.pingdom.com/api/#tag/Teams
+
+Get a list of all teams:
+
+```go
+teams, err := client.Teams.List()
+fmt.Println("Teams:", teams) // [{ID Name MemberIDs} ...]
+```
+
+Create a new Team:
+
+```go
+t := pingdom.TeamData{
+    Name: "Team",
+    MemberIDs: []int{},
+}
+team, err := client.Teams.Create(&t)
+fmt.Println("Created Team:", team) // {ID Name MemberIDs}
+```
+
+Get details for a specific team:
+
+```go
+team, err := client.Teams.Read(12345)
+```
+
+Update a team:
+
+```go
+modifyTeam := pingdom.TeamData{
+    Name:    "New Name"
+    MemberIDs: []int{123, 678},
+}
+team, err := client.Teams.Update(12345, &modifyTeam)
+```
+
+Delete a team:
+
+```go
+team, err := client.Teams.Delete(12345)
+```
+
+### ContactService ###
+
+This service manages users and their contact information which is represented by the `Contact` struct.
+More information from Pingdom: https://docs.pingdom.com/api/#tag/Contacts
+
+Get all contact info:
+
+```go
+contacts, err := client.Contacts.List()
+fmt.Println(contacts)
+```
+
+Create a new contact:
+
+```go
+contact := Contact{
+    Name: "John Doe",
+    Paused: false,
+    NotificationTargets: NotificationTargets{
+        SMS: []SMSNotificationTarget{
+            {
+                Number: "5555555555",
+                CountryCode: "1",
+                Provider: "Verizon",
+            }
+        }
+    }
+}
+contactId, err := client.Contacts.Create(contact)
+fmt.Println("New Contact ID: ", contactId.Id)
+```
+
+Update a contact
+
+```go
+contactId := 1234
+
+contact := Contact{
+    Name : "John Doe",
+    Paused : false,
+    NotificationTargets: NotificationTargets{
+        SMS: []SMSNotificationTarget{
+            {
+                Number: "5555555555",
+                CountryCode: "1",
+                Provider: "T-Mobile",
+            }
+        }
+    }
+}
+result, err := client.Contacts.Update(contactId, contact)
+fmt.Println(result.Message)
+```
+
+Delete a contact
+
+```go
+contactId := 1234
+
+result, err := client.Contacts.Delete(contactId)
+fmt.Println(result.Message)
+```
+
 ## Development ##
 
 ### Acceptance Tests ###
