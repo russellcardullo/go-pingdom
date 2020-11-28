@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
@@ -46,8 +47,15 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	}
 
 	c := &Client{
-		APIToken: config.APIToken,
-		BaseURL:  baseURL,
+		BaseURL: baseURL,
+	}
+
+	if config.APIToken == "" {
+		if envAPIToken, set := os.LookupEnv("PINGDOM_API_TOKEN"); set {
+			c.APIToken = envAPIToken
+		}
+	} else {
+		c.APIToken = config.APIToken
 	}
 
 	if config.HTTPClient != nil {

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 
@@ -48,6 +49,30 @@ func TestNewClientWithConfig(t *testing.T) {
 	assert.Equal(t, http.DefaultClient, c.client)
 	assert.Equal(t, defaultBaseURL, c.BaseURL.String())
 	assert.NotNil(t, c.Checks)
+}
+
+func TestNewClientWithEnvAPITokenDoesNotOverride(t *testing.T) {
+	os.Setenv("PINGDOM_API_TOKEN", "envSetAwesome")
+	defer os.Unsetenv("PINGDOM_API_TOKEN")
+	c, err := NewClientWithConfig(ClientConfig{
+		APIToken: "key",
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, http.DefaultClient, c.client)
+	assert.Equal(t, defaultBaseURL, c.BaseURL.String())
+	assert.NotNil(t, c.Checks)
+	assert.Equal(t, c.APIToken, "key")
+}
+
+func TestNewClientWithEnvAPITokenWorks(t *testing.T) {
+	os.Setenv("PINGDOM_API_TOKEN", "envSetAwesome")
+	defer os.Unsetenv("PINGDOM_API_TOKEN")
+	c, err := NewClientWithConfig(ClientConfig{})
+	assert.NoError(t, err)
+	assert.Equal(t, http.DefaultClient, c.client)
+	assert.Equal(t, defaultBaseURL, c.BaseURL.String())
+	assert.NotNil(t, c.Checks)
+	assert.Equal(t, c.APIToken, "envSetAwesome")
 }
 
 func TestNewRequest(t *testing.T) {

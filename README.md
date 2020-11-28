@@ -32,6 +32,13 @@ client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
 })
 ```
 
+The `APIToken` can also implicitly be provided by setting the environment variable `PINGDOM_API_TOKEN`:
+
+```bash
+export PINGDOM_API_TOKEN=pingdom_api_token
+./your_application
+```
+
 ### CheckService ###
 
 This service manages pingdom Checks which are represented by the `Check` struct.

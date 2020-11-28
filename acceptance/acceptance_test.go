@@ -19,7 +19,6 @@ func init() {
 		runAcceptance = true
 
 		config := pingdom.ClientConfig{
-			APIToken: os.Getenv("PINGDOM_API_TOKEN"),
 			HTTPClient: &http.Client{
 				Timeout: time.Second * 10,
 			},
