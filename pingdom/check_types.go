@@ -201,6 +201,7 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"probe_filters":    ck.ProbeFilters,
 		"userids":          intListToCDString(ck.UserIds),
 		"teamids":          intListToCDString(ck.TeamIds),
+		"tags":             ck.Tags,
 	}
 
 	if ck.SendNotificationWhenDown != 0 {
