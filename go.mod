@@ -1,6 +1,6 @@
-module github.com/russellcardullo/go-pingdom
+module github.com/nordcloud/go-pingdom
 
-go 1.13
+go 1.15
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
