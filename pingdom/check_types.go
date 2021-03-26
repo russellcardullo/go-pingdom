@@ -70,6 +70,24 @@ type TCPCheck struct {
 	StringToExpect           string `json:"stringtoexpect,omitempty"`
 }
 
+// DNSCheck represents a Pingdom DNS check.
+type DNSCheck struct {
+	Name                     string `json:"name"`
+	Hostname                 string `json:"hostname,omitempty"`
+	ExpectedIP               string `json:"expectedip,omitempty"`
+	NameServer               string `json:"nameserver,omitempty"`
+	Resolution               int    `json:"resolution,omitempty"`
+	Paused                   bool   `json:"paused,omitempty"`
+	SendNotificationWhenDown int    `json:"sendnotificationwhendown,omitempty"`
+	NotifyAgainEvery         int    `json:"notifyagainevery,omitempty"`
+	NotifyWhenBackup         bool   `json:"notifywhenbackup,omitempty"`
+	IntegrationIds           []int  `json:"integrationids,omitempty"`
+	Tags                     string `json:"tags,omitempty"`
+	ProbeFilters             string `json:"probe_filters,omitempty"`
+	UserIds                  []int  `json:"userids,omitempty"`
+	TeamIds                  []int  `json:"teamids,omitempty"`
+}
+
 // SummaryPerformanceRequest is the API request to Pingdom for a SummaryPerformance.
 type SummaryPerformanceRequest struct {
 	Id            int
@@ -87,7 +105,6 @@ func (ck *HttpCheck) PutParams() map[string]string {
 	m := map[string]string{
 		"name":             ck.Name,
 		"host":             ck.Hostname,
-		"resolution":       strconv.Itoa(ck.Resolution),
 		"paused":           strconv.FormatBool(ck.Paused),
 		"notifyagainevery": strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
@@ -99,6 +116,14 @@ func (ck *HttpCheck) PutParams() map[string]string {
 		"probe_filters":    ck.ProbeFilters,
 		"userids":          intListToCDString(ck.UserIds),
 		"teamids":          intListToCDString(ck.TeamIds),
+	}
+
+	if ck.Resolution != 0 {
+		m["resolution"] = strconv.Itoa(ck.Resolution)
+	}
+
+	if ck.SendNotificationWhenDown != 0 {
+		m["sendnotificationwhendown"] = strconv.Itoa(ck.SendNotificationWhenDown)
 	}
 
 	// Ignore zero values
@@ -167,17 +192,8 @@ func (ck *HttpCheck) PostParams() map[string]string {
 // Valid determines whether the HttpCheck contains valid fields.  This can be
 // used to guard against sending illegal values to the Pingdom API.
 func (ck *HttpCheck) Valid() error {
-	if ck.Name == "" {
-		return fmt.Errorf("Invalid value for `Name`.  Must contain non-empty string")
-	}
-
-	if ck.Hostname == "" {
-		return fmt.Errorf("Invalid value for `Hostname`.  Must contain non-empty string")
-	}
-
-	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
-		ck.Resolution != 30 && ck.Resolution != 60 {
-		return fmt.Errorf("invalid value %v for `Resolution`, allowed values are [1,5,15,30,60]", ck.Resolution)
+	if err := validCommonParameters(ck.Name, ck.Hostname, ck.Resolution); err != nil {
+		return err
 	}
 
 	if ck.ShouldContain != "" && ck.ShouldNotContain != "" {
@@ -193,7 +209,6 @@ func (ck *PingCheck) PutParams() map[string]string {
 	m := map[string]string{
 		"name":             ck.Name,
 		"host":             ck.Hostname,
-		"resolution":       strconv.Itoa(ck.Resolution),
 		"paused":           strconv.FormatBool(ck.Paused),
 		"notifyagainevery": strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
@@ -201,6 +216,10 @@ func (ck *PingCheck) PutParams() map[string]string {
 		"probe_filters":    ck.ProbeFilters,
 		"userids":          intListToCDString(ck.UserIds),
 		"teamids":          intListToCDString(ck.TeamIds),
+	}
+
+	if ck.Resolution != 0 {
+		m["resolution"] = strconv.Itoa(ck.Resolution)
 	}
 
 	if ck.SendNotificationWhenDown != 0 {
@@ -232,18 +251,10 @@ func (ck *PingCheck) PostParams() map[string]string {
 // Valid determines whether the PingCheck contains valid fields.  This can be
 // used to guard against sending illegal values to the Pingdom API.
 func (ck *PingCheck) Valid() error {
-	if ck.Name == "" {
-		return fmt.Errorf("Invalid value for `Name`.  Must contain non-empty string")
+	if err := validCommonParameters(ck.Name, ck.Hostname, ck.Resolution); err != nil {
+		return err
 	}
 
-	if ck.Hostname == "" {
-		return fmt.Errorf("Invalid value for `Hostname`.  Must contain non-empty string")
-	}
-
-	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
-		ck.Resolution != 30 && ck.Resolution != 60 {
-		return fmt.Errorf("invalid value %v for `Resolution`, allowed values are [1,5,15,30,60]", ck.Resolution)
-	}
 	return nil
 }
 
@@ -253,7 +264,6 @@ func (ck *TCPCheck) PutParams() map[string]string {
 	m := map[string]string{
 		"name":             ck.Name,
 		"host":             ck.Hostname,
-		"resolution":       strconv.Itoa(ck.Resolution),
 		"paused":           strconv.FormatBool(ck.Paused),
 		"notifyagainevery": strconv.Itoa(ck.NotifyAgainEvery),
 		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
@@ -263,6 +273,10 @@ func (ck *TCPCheck) PutParams() map[string]string {
 		"userids":          intListToCDString(ck.UserIds),
 		"teamids":          intListToCDString(ck.TeamIds),
 		"port":             strconv.Itoa(ck.Port),
+	}
+
+	if ck.Resolution != 0 {
+		m["resolution"] = strconv.Itoa(ck.Resolution)
 	}
 
 	if ck.SendNotificationWhenDown != 0 {
@@ -298,21 +312,74 @@ func (ck *TCPCheck) PostParams() map[string]string {
 // Valid determines whether the TCPCheck contains valid fields.  This can be
 // used to guard against sending illegal values to the Pingdom API.
 func (ck *TCPCheck) Valid() error {
-	if ck.Name == "" {
-		return fmt.Errorf("invalid value for `Name`, must contain non-empty string")
+	if err := validCommonParameters(ck.Name, ck.Hostname, ck.Resolution); err != nil {
+		return err
 	}
 
-	if ck.Hostname == "" {
-		return fmt.Errorf("invalid value for `Hostname`, must contain non-empty string")
+	if ck.Port < 1 || ck.Port > 65535 {
+		return fmt.Errorf("Invalid value for `Port`.  Must contain an integer >= 1 and <= 65535")
 	}
 
-	if ck.Resolution != 1 && ck.Resolution != 5 && ck.Resolution != 15 &&
-		ck.Resolution != 30 && ck.Resolution != 60 {
-		return fmt.Errorf("invalid value %v for `Resolution`, allowed values are [1,5,15,30,60]", ck.Resolution)
+	return nil
+}
+
+// PutParams returns a map of parameters for a DNSCheck that can be sent along
+// with an HTTP PUT request.
+func (ck *DNSCheck) PutParams() map[string]string {
+	m := map[string]string{
+		"name":             ck.Name,
+		"host":             ck.Hostname,
+		"expectedip":       ck.ExpectedIP,
+		"nameserver":       ck.NameServer,
+		"paused":           strconv.FormatBool(ck.Paused),
+		"notifyagainevery": strconv.Itoa(ck.NotifyAgainEvery),
+		"notifywhenbackup": strconv.FormatBool(ck.NotifyWhenBackup),
+		"integrationids":   intListToCDString(ck.IntegrationIds),
+		"probe_filters":    ck.ProbeFilters,
+		"tags":             ck.Tags,
+		"userids":          intListToCDString(ck.UserIds),
+		"teamids":          intListToCDString(ck.TeamIds),
 	}
 
-	if ck.Port < 1 {
-		return fmt.Errorf("Invalid value for `Port`.  Must contain an integer >= 1")
+	if ck.Resolution != 0 {
+		m["resolution"] = strconv.Itoa(ck.Resolution)
+	}
+
+	if ck.SendNotificationWhenDown != 0 {
+		m["sendnotificationwhendown"] = strconv.Itoa(ck.SendNotificationWhenDown)
+	}
+
+	return m
+}
+
+// PostParams returns a map of parameters for a DNSCheck that can be sent along
+// with an HTTP POST request. Same as PUT.
+func (ck *DNSCheck) PostParams() map[string]string {
+	params := ck.PutParams()
+
+	for k, v := range params {
+		if v == "" {
+			delete(params, k)
+		}
+	}
+
+	params["type"] = "dns"
+	return params
+}
+
+// Valid determines whether the DNSCheck contains valid fields.  This can be
+// used to guard against sending illegal values to the Pingdom API.
+func (ck *DNSCheck) Valid() error {
+	if err := validCommonParameters(ck.Name, ck.Hostname, ck.Resolution); err != nil {
+		return err
+	}
+
+	if ck.ExpectedIP == "" {
+		return fmt.Errorf("invalid value for `ExpectedIP`, must contain non-empty string")
+	}
+
+	if ck.NameServer == "" {
+		return fmt.Errorf("invalid value for `NameServer`, must contain non-empty string")
 	}
 
 	return nil
@@ -328,6 +395,24 @@ func intListToCDString(integers []int) string {
 		}
 	}
 	return CDString
+}
+
+func validCommonParameters(name string, hostname string, resolution int) error {
+	if name == "" {
+		return fmt.Errorf("invalid value for `Name`, must contain non-empty string")
+	}
+
+	if hostname == "" {
+		return fmt.Errorf("invalid value for `Hostname`, must contain non-empty string")
+	}
+
+	// if resolution value is 0, it will be set to default value which is 5.
+	if resolution != 0 && resolution != 1 && resolution != 5 && resolution != 15 &&
+		resolution != 30 && resolution != 60 {
+		return fmt.Errorf("invalid value %v for `Resolution`, allowed values are [1,5,15,30,60]", resolution)
+	}
+
+	return nil
 }
 
 // Valid determines whether a SummaryPerformanceRequest contains valid fields for the Pingdom API.

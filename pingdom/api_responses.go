@@ -40,7 +40,7 @@ type CheckResponse struct {
 	Teams                    []CheckTeamResponse `json:"teams,omitempty"`
 	ResponseTimeThreshold    int                 `json:"responsetime_threshold,omitempty"`
 	ProbeFilters             []string            `json:"probe_filters,omitempty"`
-	IP6                      bool                `json:"ip6,omitempty"`
+	IPv6                     bool                `json:"ipv6,omitempty"`
 
 	// Legacy; this is not returned by the API, we backfill the value from the
 	// Teams field.
@@ -59,6 +59,7 @@ type CheckResponseType struct {
 	Name string                    `json:"-"`
 	HTTP *CheckResponseHTTPDetails `json:"http,omitempty"`
 	TCP  *CheckResponseTCPDetails  `json:"tcp,omitempty"`
+	DNS  *CheckResponseDNSDetails  `json:"dns,omitempty"`
 }
 
 // CheckResponseTag is an optional tag that can be added to checks.
@@ -187,6 +188,7 @@ func (c *CheckResponseType) UnmarshalJSON(b []byte) error {
 		}
 		c.HTTP = rawCheckDetails.HTTP
 		c.TCP = rawCheckDetails.TCP
+		c.DNS = rawCheckDetails.DNS
 	}
 	return nil
 }
@@ -211,6 +213,12 @@ type CheckResponseTCPDetails struct {
 	Port           int    `json:"port,omitempty"`
 	StringToSend   string `json:"stringtosend,omitempty"`
 	StringToExpect string `json:"stringtoexpect,omitempty"`
+}
+
+// CheckResponseDNSDetails represents the details specific to DNS checks.
+type CheckResponseDNSDetails struct {
+	ExpectedIP string `json:"expectedip,omitempty"`
+	NameServer string `json:"nameserver,omitempty"`
 }
 
 // Return string representation of the PingdomError.

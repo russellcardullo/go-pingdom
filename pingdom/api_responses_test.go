@@ -52,6 +52,46 @@ func TestCheckResponseUnmarshal(t *testing.T) {
 	assert.Equal(t, "HIGH", ck.SeverityLevel)
 }
 
+var detailedDNSCheckJSON = `
+{
+	"id": 1234567,
+	"name": "test-dns",
+	"resolution": 1,
+	"sendnotificationwhendown": 6,
+	"notifyagainevery": 0,
+	"notifywhenbackup": true,
+	"created": 1616616166,
+	"type": {
+		"dns": {
+			"expectedip": "2606:2800:220:1:248:1893:25c8:1946",
+			"nameserver": "a.iana-servers.net"
+		}
+	},
+	"hostname": "example.com",
+	"ipv6": true,
+	"responsetime_threshold": 30000,
+	"custom_message": "",
+	"integrationids": [],
+	"status": "unknown",
+	"tags": [],
+	"probe_filters": [],
+	"userids": [
+		12345678
+	]
+}
+`
+
+func TestDNSCheckResponseUnmarshal(t *testing.T) {
+	var ck CheckResponse
+	err := json.Unmarshal([]byte(detailedDNSCheckJSON), &ck)
+	assert.NoError(t, err)
+	assert.Equal(t, true, ck.IPv6)
+	assert.Equal(t, "dns", ck.Type.Name)
+	assert.NotNil(t, ck.Type.DNS)
+	assert.Equal(t, "2606:2800:220:1:248:1893:25c8:1946", ck.Type.DNS.ExpectedIP)
+	assert.Equal(t, "a.iana-servers.net", ck.Type.DNS.NameServer)
+}
+
 var detailedContactJSON = `
 {
 	"contacts": [

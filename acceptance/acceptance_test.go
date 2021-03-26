@@ -65,6 +65,38 @@ func TestHTTPCheck(t *testing.T) {
 	assert.NotNil(t, delMsg)
 }
 
+func TestDNSCheck(t *testing.T) {
+	if !runAcceptance {
+		t.Skip()
+	}
+	newCheck := pingdom.DNSCheck{
+		Name:                     "Test Check",
+		Hostname:                 "example.com",
+		ExpectedIP:               "2606:2800:220:1:248:1893:25c8:1946",
+		NameServer:               "a.iana-servers.net",
+		SendNotificationWhenDown: 100,
+		Tags:                     "dns",
+	}
+	check, err := client.Checks.Create(&newCheck)
+	assert.NoError(t, err)
+	assert.NotNil(t, check)
+	assert.Equal(t, check.Name, "Test Check")
+
+	newCheck.Name = "Test Check 2"
+	up, err := client.Checks.Update(check.ID, &newCheck)
+	assert.NoError(t, err)
+	assert.NotNil(t, up)
+
+	resp, err := client.Checks.Read(check.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, newCheck.Name, resp.Name)
+	assert.Equal(t, resp.Resolution, 5)
+
+	delMsg, err := client.Checks.Delete(check.ID)
+	assert.NoError(t, err)
+	assert.NotNil(t, delMsg)
+}
+
 func TestTagSupport(t *testing.T) {
 	if !runAcceptance {
 		t.Skip()
