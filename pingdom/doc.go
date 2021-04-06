@@ -5,8 +5,8 @@ supports working with basic HTTP and ping checks.
 Construct a new Pingdom client:
 
 	client, err := pingdom.NewClientWithConfig(pingdom.ClientConfig{
-		Username: "pingdom_username",
-		Password: "pingdom_password",
+		Username: "SOLARWINDS_USER",
+		Password: "SOLARWINDS_PASSWD",
 		APIKey: "pingdom_api_key",
 	})
 

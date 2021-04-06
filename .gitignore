@@ -1,5 +1,7 @@
 vendor
 
+.vscode
+
 \.idea/
 
 examples/example-users
