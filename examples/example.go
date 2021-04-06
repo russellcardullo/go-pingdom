@@ -40,7 +40,7 @@ func getConfig() credentials {
 
 	// we unmarshal our byteArray which contains our
 	// jsonFile's content into 'users' which we defined above
-	json.Unmarshal(byteValue, &config)
+	_ = json.Unmarshal(byteValue, &config)
 
 	fmt.Println(config)
 

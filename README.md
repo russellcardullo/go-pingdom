@@ -10,7 +10,7 @@ This currently supports working with HTTP, ping checks, and TCP checks.
 
 ## Usage ##
 
-### Client ###
+### Pingdom Client ###
 
 Construct a new Pingdom client:
 
@@ -67,6 +67,19 @@ export SOLARWINDS_USER=test_user
 export SOLARWINDS_PASSWD=test_pwd
 ./your_application
 ```
+
+### Solarwinds Client ###
+
+Construct a new Solarwinds client:
+
+```go
+solarwindsClient, err := solarwinds.NewClient(solarwinds.ClientConfig{
+    Username: "solarwinds web portal login username",
+    Password: "solarwinds web portal login password"
+})
+```
+
+Using a Solarwinds client, you can access supported services.
 
 ### CheckService ###
 
@@ -410,6 +423,61 @@ listProviders, err := client_ext.Integrations.ListProviders()
 
 
 
+### UserService ###
+
+This service manages Solarwinds users. A Solarwinds user can be granted access to a range of services, each with its 
+own web portal. Pingdom is one of those services. The Solarwinds API is a GraphQL API which is at a different domain 
+as Pingdom API.
+
+Create a new user invitation. The user will only appear on the active user list and be able to use Pingdom service after
+he accepts the invitation manually.
+
+```go
+user := User{
+    Email: "sombody@nordcloud.com",
+    Role: "ADMIN"
+    Products: []Product{
+        {
+        	Name: "PINGDOM",
+        	Role: "MEMBER",
+        }	
+    }
+}
+err := client.UserService.Create(user)
+```
+
+Update an user. User information will be updated if the user has already accepted the invitation. If the invitation has
+not yet been accepted, the invitation will be revoked and a new one with the updated information will be sent.
+```go
+update := User{
+    Email: "sombody@nordcloud.com",
+    Role: "ADMIN"
+    Products: []Product{
+    {
+        Name: "PINGDOM",
+        Role: "MEMBER",
+    }
+}
+err := client.UserService.Update(update)
+```
+
+Delete an user. It is not possible to delete an active user in Solarwinds. If it is an active user, the function will
+return error with proper status code set, no user will be deleted. If it is an invitation, the invitation will be revoked.
+
+```go
+email = "somebody@nordcloud.com"
+
+err := client.UserService.Delete(email)
+```
+
+Retrieve an user. It can either be an invitation or an active user.
+
+```go
+email = "sombody@nordcloud.com"
+
+err := client.UserService.Retrieve(email)
+```
+
 ## Development ##
 
 ### Acceptance Tests ###
@@ -425,4 +493,11 @@ SOLARWINDS_USER=[username] SOLARWINDS_PASSWD=[password] make acceptance
 ```
 
 Note that this will create actual resources in your Pingdom account.  The tests will make a best effort to clean up but these would
+
+In order to run acceptance tests against the actual Solarwinds API, the following environment variables must be set:
+```
+SOLARWINDS_USER=[solarwinds username] SOLARWINDS_PASSWD=[solarwinds password] make acceptance
+```
+
+Note that this will create actual resources in your Pingdom/Solarwinds account.  The tests will make a best effort to clean up but these would
 not be guaranteed on test failures depending on the nature of the failure.
