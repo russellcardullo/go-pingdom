@@ -12,7 +12,7 @@ type MaintenanceWindow struct {
 	To             int64  `json:"to"`
 	RecurrenceType string `json:"recurrencetype,omitempty"`
 	RepeatEvery    int    `json:"repeatevery,omitempty"`
-	EffectiveTo    int    `json:"effectiveto,omitempty"`
+	EffectiveTo    int64  `json:"effectiveto,omitempty"`
 	UptimeIDs      string `json:"uptimeids,omitempty"`
 	TmsIDs         string `json:"tmsids,omitempty"`
 }
@@ -48,7 +48,7 @@ func (ck *MaintenanceWindow) PutParams() map[string]string {
 	}
 
 	if ck.EffectiveTo != 0 {
-		m["effectiveto"] = strconv.Itoa(ck.EffectiveTo)
+		m["effectiveto"] = strconv.FormatInt(ck.EffectiveTo, 10)
 	}
 
 	return m

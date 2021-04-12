@@ -22,6 +22,7 @@ type Client struct {
 	Checks       *CheckService
 	Contacts     *ContactService
 	Maintenances *MaintenanceService
+	Occurrences  *OccurrenceService
 	Probes       *ProbeService
 	Teams        *TeamService
 }
@@ -67,6 +68,7 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	c.Checks = &CheckService{client: c}
 	c.Contacts = &ContactService{client: c}
 	c.Maintenances = &MaintenanceService{client: c}
+	c.Occurrences = &OccurrenceService{client: c}
 	c.Probes = &ProbeService{client: c}
 	c.Teams = &TeamService{client: c}
 	return c, nil
@@ -88,6 +90,27 @@ func (pc *Client) NewRequest(method string, rsc string, params map[string]string
 		ps := url.Values{}
 		for k, v := range params {
 			ps.Set(k, v)
+		}
+		baseURL.RawQuery = ps.Encode()
+	}
+
+	req, err := http.NewRequest(method, baseURL.String(), nil)
+	req.Header.Add("Authorization", "Bearer "+pc.APIToken)
+	return req, err
+}
+
+func (pc *Client) NewRequestMultiParamValue(method string, rsc string, params map[string][]string) (*http.Request, error) {
+	baseURL, err := url.Parse(pc.BaseURL.String() + rsc)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		ps := url.Values{}
+		for k, mv := range params {
+			for _, v := range mv {
+				ps.Add(k, v)
+			}
 		}
 		baseURL.RawQuery = ps.Encode()
 	}

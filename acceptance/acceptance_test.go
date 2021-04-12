@@ -1,6 +1,7 @@
 package acceptance
 
 import (
+	"github.com/nordcloud/go-pingdom/solarwinds"
 	"net/http"
 	"os"
 	"testing"
@@ -284,4 +285,69 @@ func TestTeamAndContactConnections(t *testing.T) {
 	delMsg, err := client.Teams.Delete(team.ID)
 	assert.NoError(t, err)
 	assert.NotNil(t, delMsg)
+}
+
+func TestOccurrences(t *testing.T) {
+	if !runAcceptance {
+		t.Skip()
+	}
+
+	now := time.Now()
+	from := now.Add(24 * time.Hour)
+	to := from.Add(1 * time.Hour)
+
+	// To create a new occurrence, we need to create a maintenance.
+	maintenance := pingdom.MaintenanceWindow{
+		Description:    "Acceptance test - " + solarwinds.RandString(10),
+		From:           from.Unix(),
+		To:             to.Unix(),
+		RecurrenceType: "day",
+		RepeatEvery:    1,
+		EffectiveTo:    to.Add(3 * 24 * time.Hour).Unix(),
+	}
+	createMaintenanceMsg, err := client.Maintenances.Create(&maintenance)
+	assert.NoError(t, err)
+	assert.NotNil(t, createMaintenanceMsg)
+	assert.NotEmpty(t, createMaintenanceMsg)
+
+	occurrences, err := client.Occurrences.List(pingdom.ListOccurrenceQuery{
+		MaintenanceId: int64(createMaintenanceMsg.ID),
+	})
+	assert.NoError(t, err)
+	assert.True(t, len(occurrences) > 1)
+	occurrence := occurrences[0]
+
+	newTo := time.Unix(occurrence.To, 0).Add(1 * time.Hour).Unix()
+	resp, err := client.Occurrences.Update(occurrence.Id, pingdom.Occurrence{
+		From: occurrence.From,
+		To:   newTo,
+	})
+	assert.NoError(t, err)
+	assert.NotEmpty(t, resp)
+
+	afterUpdate, err := client.Occurrences.Read(occurrence.Id)
+	assert.NoError(t, err)
+	assert.Equal(t, newTo, afterUpdate.To)
+
+	resp, err = client.Occurrences.Delete(occurrence.Id)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, resp)
+
+	resp, err = client.Maintenances.Delete(createMaintenanceMsg.ID)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, resp)
+
+	idsToDelete := make([]int64, 0, len(occurrences)-1)
+	for _, occ := range occurrences[1:] {
+		idsToDelete = append(idsToDelete, occ.Id)
+	}
+	resp, err = client.Occurrences.MultiDelete(idsToDelete)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, resp)
+
+	occurrences, err = client.Occurrences.List(pingdom.ListOccurrenceQuery{
+		MaintenanceId: int64(createMaintenanceMsg.ID),
+	})
+	assert.NoError(t, err)
+	assert.True(t, len(occurrences) == 0)
 }

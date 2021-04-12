@@ -158,7 +158,6 @@ func obtainToken(config ClientConfig) (*string, error) {
 	if err1 != nil {
 		return nil, err1
 	}
-	fmt.Println(authRespJSON.RedirectURL)
 
 	redirectURL, err := url.Parse(authRespJSON.RedirectURL)
 	if err != nil {
@@ -179,7 +178,6 @@ func obtainToken(config ClientConfig) (*string, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(jwtCookie.Value)
 
 	return &jwtCookie.Value, err
 }
@@ -238,7 +236,6 @@ func decodeResponse(r *http.Response, v interface{}) error {
 
 	bodyBytes, _ := ioutil.ReadAll(r.Body)
 	bodyString := string(bodyBytes)
-	fmt.Println(bodyString)
 	err := json.Unmarshal([]byte(bodyString), &v)
 	return err
 }

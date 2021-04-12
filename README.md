@@ -227,6 +227,53 @@ m := pingdom.MaintenanceWindow{
 maintenanceUpdate, err := client.Maintenances.Update(12345, &m)
 ```
 
+### OccurrenceService ###
+
+This service manages pingdom Maintenance Occurrences which are represented by the `Occurrence` struct.
+It is not possible to create occurrences directly, instead they are created automatically as specified by
+maintenances. Only `From` and `To` fields can be updated when updating an occurrence.
+
+More information on Occurrences from Pingdom: https://docs.pingdom.com/api/#tag/Maintenance-occurrences
+
+Get a list of all occurrences:
+
+```go
+occurrences, err := client.Occurrences.List(ListOccurrenceQuery{})
+fmt.Println("Occurrences:", occurrences) // [{ID Description} ...]
+```
+
+Get details for a specific occurrence:
+
+```go
+occurrence, err := client.Occurrences.Read(12345)
+```
+
+Update an occurrence: (Please note, that based on experience, you are allowed to modify only `From` and `To`)
+
+Note: that only future maintenance occurences can be updated.
+
+```go
+update := pingdom.Occurrence{
+    From:        1,
+    To:          1234567999,
+}
+msg, err := client.Occurrences.Update(12345, update)
+```
+
+Delete an Occurrence:
+
+Note: that only future maintenance occurrence can be deleted. 
+
+```go
+msg, err := client.Maintenances.Delete(12345)
+```
+
+Delete multiple Occurrences in one go:
+
+```go
+msg, err := client.Maintenances.Delete([]int64{1, 2, 3, 4, 5})
+```
+
 ### ProbeService ###
 
 This service gets pingdom Probes which are represented by the `Probes` struct.
