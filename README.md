@@ -48,6 +48,7 @@ Construct a new Pingdom extension client:
 client_ext, err := pingdomext.NewClientWithConfig(pingdomext.ClientConfig{
     Username: "test_user",
     Password: "test_pwd",
+    OrgId: "test_org"
     HTTPClient: &http.Client{
         CheckRedirect: func(req *http.Request, via []*http.Request) error {
             return http.ErrUseLastResponse
@@ -60,13 +61,16 @@ Using a Pingdom extention client, you can access supported services, like integr
 
 You must override the CheckRedirect since there have multiple redirect while get the jwt token for access api. 
 
-The `Username` and `Password` can also implicitly be provided by setting the environment variable `SOLARWINDS_USER` and `SOLARWINDS_PASSWD`:
+The `Username`,`Password` and `OrgID`can also implicitly be provided by setting the environment variable `SOLARWINDS_USER` , `SOLARWINDS_PASSWD` and `SOLARWINDS_ORG_ID`:
 
 ```bash
 export SOLARWINDS_USER=test_user
 export SOLARWINDS_PASSWD=test_pwd
+export SOLARWINDS_ORG_ID=test_org
 ./your_application
 ```
+
+The `Username` and `Password` is required, the `OrgID` is optional. If the `OrgID` is not provide, your default organization will be used.
 
 ### Solarwinds Client ###
 

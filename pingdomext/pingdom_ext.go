@@ -28,6 +28,7 @@ type Client struct {
 type ClientConfig struct {
 	Username   string
 	Password   string
+	OrgID      string
 	AuthURL    string
 	BaseURL    string
 	HTTPClient *http.Client
@@ -75,6 +76,12 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	if config.Password == "" {
 		if envPassword, set := os.LookupEnv("SOLARWINDS_PASSWD"); set {
 			config.Password = envPassword
+		}
+	}
+
+	if config.OrgID == "" {
+		if envOrgID, set := os.LookupEnv("SOLARWINDS_ORG_ID"); set {
+			config.OrgID = envOrgID
 		}
 	}
 
@@ -168,6 +175,10 @@ func obtainToken(config ClientConfig) (*string, error) {
 		return nil, err
 	}
 	tokenReq.AddCookie(sessionCookie)
+	tokenReq.AddCookie(&http.Cookie{
+		Name:  "login_session_swicus_org_id",
+		Value: config.OrgID,
+	})
 	tokenResp, err := config.HTTPClient.Do(tokenReq)
 	if err != nil {
 		return nil, err

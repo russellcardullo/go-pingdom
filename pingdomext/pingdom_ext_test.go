@@ -80,6 +80,7 @@ func TestNewClientWithConfig(t *testing.T) {
 	c, err := NewClientWithConfig(ClientConfig{
 		Username: "test_user",
 		Password: "test_pwd",
+		OrgID:    "test_org",
 		BaseURL:  url.String(),
 		AuthURL:  url.String() + "/v1/login",
 		HTTPClient: &http.Client{
@@ -113,6 +114,7 @@ func TestNewClientWithConfig2(t *testing.T) {
 	c, err := NewClientWithConfig(ClientConfig{
 		Username: "test_user",
 		Password: "test_pwd",
+		OrgID:    "test_org",
 		BaseURL:  url.String(),
 		AuthURL:  url.String() + "/v1/login",
 		HTTPClient: &http.Client{
