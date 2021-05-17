@@ -25,6 +25,7 @@ type Client struct {
 	Occurrences  *OccurrenceService
 	Probes       *ProbeService
 	Teams        *TeamService
+	TMSCheck     *TMSCheckService
 }
 
 // ClientConfig represents a configuration for a pingdom client.
@@ -71,6 +72,7 @@ func NewClientWithConfig(config ClientConfig) (*Client, error) {
 	c.Occurrences = &OccurrenceService{client: c}
 	c.Probes = &ProbeService{client: c}
 	c.Teams = &TeamService{client: c}
+	c.TMSCheck = &TMSCheckService{client: c}
 	return c, nil
 }
 

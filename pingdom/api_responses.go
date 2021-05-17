@@ -268,6 +268,88 @@ type listContactsJSONResponse struct {
 	Contacts []Contact `json:"contacts"`
 }
 
+// TMSCheckResponse represents the  JSON response for a TMS Check from the Pingdom API.
+type TMSCheckResponse struct {
+	ID                int      `json:"id,omitempty"`
+	Name              string   `json:"name,omitempty"`
+	Type              string   `json:"type,omitempty"`
+	Active            bool     `json:"active,omitempty"`
+	Status            string   `json:"status,omitempty"`
+	Interval          int      `json:"interval,omitempty"`
+	Region            string   `json:"region,omitempty"`
+	Tags              []string `json:"tags,omitempty"`
+	LastDowntimeStart int64    `json:"last_downtime_start,omitempty"`
+	LastDowntimeEnd   int64    `json:"last_downtime_end,omitempty"`
+	CreatedAt         int64    `json:"created_at,omitempty"`
+	ModifiedAt        int64    `json:"modified_at,omitempty"`
+}
+
+// TMSCheckDetailResponse represents the  JSON response for a TMS Check from the Pingdom API.
+type TMSCheckDetailResponse struct {
+	TMSCheck
+	ID                int    `json:"id,omitempty"`
+	Type              string `json:"type,omitempty"`
+	LastDowntimeStart int64  `json:"last_downtime_start,omitempty"`
+	LastDowntimeEnd   int64  `json:"last_downtime_end,omitempty"`
+	CreatedAt         int64  `json:"created_at,omitempty"`
+	ModifiedAt        int64  `json:"modified_at,omitempty"`
+	Status            string `json:"status,omitempty"`
+}
+type TMSCheckStatusReportResponse struct {
+	CheckID int              `json:"check_id,omitempty"`
+	Name    string           `json:"name,omitempty"`
+	States  []TMSCheckStatus `json:"states,omitempty"`
+}
+
+type TMSCheckStatus struct {
+	ErrorInStep int    `json:"error_in_step,omitempty"`
+	From        string `json:"from,omitempty"`
+	To          string `json:"to,omitempty"`
+	Message     string `json:"message,omitempty"`
+	Status      string `json:"status,omitempty"`
+}
+
+type TMSCheckPerformanceReportResponse struct {
+	CheckID    int                `json:"check_id,omitempty"`
+	Name       string             `json:"name,omitempty"`
+	Resolution string             `json:"resolution,omitempty"`
+	Intervals  []TMSCheckInterval `json:"intervals,omitempty"`
+}
+
+type TMSCheckInterval struct {
+	AverageResponse int64                `json:"average_response,omitempty"`
+	Downtime        int64                `json:"downtime,omitempty"`
+	From            string               `json:"from,omitempty"`
+	Steps           []TMSCheckStepReport `json:"steps,omitempty"`
+	Unmonitored     int64                `json:"unmonitored,omitempty"`
+	Uptime          int64                `json:"uptime,omitempty"`
+}
+
+type TMSCheckStepReport struct {
+	AverageResponse int64        `json:"average_response,omitempty"`
+	Step            TMSCheckStep `json:"step,omitempty"`
+}
+
+type listTMSChecksJSONResponse struct {
+	TMSChecks []TMSCheckResponse `json:"checks"`
+}
+
+type tmsChecksDetailJSONResponse struct {
+	TMSCheck *TMSCheckDetailResponse `json:"check"`
+}
+
+type tmsChecksStatusReportJSONResponse struct {
+	Report *TMSCheckStatusReportResponse `json:"report"`
+}
+
+type tmsChecksStatusReportsJSONResponse struct {
+	Reports []TMSCheckStatusReportResponse `json:"report"`
+}
+
+type tmsChecksPerformanceReportJSONResponse struct {
+	Report *TMSCheckPerformanceReportResponse `json:"report"`
+}
+
 type errorJSONResponse struct {
 	Error *PingdomError `json:"error"`
 }

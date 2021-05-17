@@ -1,11 +1,12 @@
 package acceptance
 
 import (
-	"github.com/nordcloud/go-pingdom/solarwinds"
 	"net/http"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/nordcloud/go-pingdom/solarwinds"
 
 	"github.com/nordcloud/go-pingdom/pingdom"
 	"github.com/stretchr/testify/assert"
@@ -350,4 +351,91 @@ func TestOccurrences(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.True(t, len(occurrences) == 0)
+}
+
+func TestTMSChecks(t *testing.T) {
+	if !runAcceptance {
+		t.Skip()
+	}
+
+	tmsCheck := pingdom.TMSCheck{
+		Name: "wlwu-test-111",
+		Steps: []pingdom.TMSCheckStep{
+			{
+				Args: map[string]string{
+					"url": "www.google.com",
+				},
+				Fn: "go_to",
+			},
+		},
+	}
+
+	createMsg, err := client.TMSCheck.Create(&tmsCheck)
+	assert.NoError(t, err)
+	assert.NotNil(t, createMsg)
+	assert.NotEmpty(t, createMsg)
+	tmsCheckID := createMsg.ID
+
+	getMsg, err := client.TMSCheck.Read(tmsCheckID)
+	assert.NoError(t, err)
+	assert.NotNil(t, getMsg)
+	assert.NotEmpty(t, getMsg)
+
+	listMsg, err := client.TMSCheck.List()
+	assert.NoError(t, err)
+	assert.NotNil(t, listMsg)
+	assert.NotEmpty(t, listMsg)
+
+	tmsCheck.Name = "wlwu-test-222"
+	updateMsg, err := client.TMSCheck.Update(tmsCheckID, &tmsCheck)
+	assert.NoError(t, err)
+	assert.NotNil(t, updateMsg)
+	assert.NotEmpty(t, updateMsg)
+
+	getStatusReportsMsg, err := client.TMSCheck.ListStatusReports(nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, getStatusReportsMsg)
+	assert.NotEmpty(t, getStatusReportsMsg)
+
+	getStatusReportsMsg, err = client.TMSCheck.ListStatusReports(map[string]string{
+		"from":  "2021-04-25T00:00:00Z",
+		"to":    "2021-04-29T00:00:00Z",
+		"order": "asc",
+	})
+	assert.NoError(t, err)
+	assert.NotNil(t, getStatusReportsMsg)
+	assert.NotEmpty(t, getStatusReportsMsg)
+
+	getStatusReportMsg, err := client.TMSCheck.GetStatusReport(tmsCheckID, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, getStatusReportMsg)
+	assert.NotEmpty(t, getStatusReportMsg)
+
+	getStatusReportMsg, err = client.TMSCheck.GetStatusReport(tmsCheckID, map[string]string{
+		"from":  "2021-04-25T00:00:00Z",
+		"to":    "2021-04-29T00:00:00Z",
+		"order": "asc",
+	})
+	assert.NoError(t, err)
+	assert.NotNil(t, getStatusReportMsg)
+	assert.NotEmpty(t, getStatusReportMsg)
+
+	getPerformanceReportMsg, err := client.TMSCheck.GetPerfomanceReport(tmsCheckID, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, getPerformanceReportMsg)
+	assert.NotEmpty(t, getPerformanceReportMsg)
+
+	getPerformanceReportMsg, err = client.TMSCheck.GetPerfomanceReport(tmsCheckID, map[string]string{
+		"from":  "2021-04-25T00:00:00Z",
+		"to":    "2021-04-29T00:00:00Z",
+		"order": "asc",
+	})
+	assert.NoError(t, err)
+	assert.NotNil(t, getPerformanceReportMsg)
+	assert.NotEmpty(t, getPerformanceReportMsg)
+
+	delMsg, err := client.TMSCheck.Delete(tmsCheckID)
+	assert.NoError(t, err)
+	assert.NotNil(t, delMsg)
+
 }

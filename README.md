@@ -410,6 +410,71 @@ result, err := client.Contacts.Delete(contactId)
 fmt.Println(result.Message)
 ```
 
+### TMS Checks Service ###
+
+This service manages pingdom TMS Checks which are represented by the `TMS Check` struct.
+More information from Pingdom: https://docs.pingdom.com/api/#tag/TMS-Checks
+
+
+Get a list of all TMS Checks:
+
+```go
+tmsChecks, err := client.TMSCheck.List()
+fmt.Println("TMS Checks:", tmsChecks) 
+```
+
+Create a new TMS Check:
+
+```go
+tmsCheck := pingdom.TMSCheck{
+		Name: "wlwu-test-111",
+		Steps: []pingdom.TMSCheckStep{
+			{
+				Args: map[string]string{
+					"url": "www.google.com",
+				},
+				Fn: "go_to",
+			},
+		},
+	}
+
+createMsg, err := client.TMSCheck.Create(&tmsCheck)
+tmsCheckID := createMsg.ID
+```
+
+Get details for a specific TMS Check:
+
+```go
+tmsCheckDetail, err := client.TMSCheck.Read(12345)
+```
+
+
+Update a TMS Check:
+
+```go
+tmsCheck := pingdom.TMSCheck{
+		Name: "wlwu-test-222",
+		Steps: []pingdom.TMSCheckStep{
+			{
+				Args: map[string]string{
+					"url": "www.google.com",
+				},
+				Fn: "go_to",
+			},
+		},
+	}
+updateMsg, err := client.TMSCheck.Update(12345, &tmsCheck)
+```
+
+Delete a TMS Check:
+
+```go
+delMsg, err := client.TMSCheck.Delete(12345)
+```
+
+
+
+
 
 ### IntegrationService ###
 
