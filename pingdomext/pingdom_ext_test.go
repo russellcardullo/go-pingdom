@@ -125,11 +125,9 @@ func TestNewClientWithConfig2(t *testing.T) {
 	})
 	assert.Error(t, err)
 	assert.Nil(t, c)
-
 }
 
 func TestClient_NewRequest(t *testing.T) {
-
 	setup()
 	defer teardown()
 

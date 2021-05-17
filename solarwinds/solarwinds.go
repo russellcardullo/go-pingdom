@@ -9,15 +9,19 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 )
 
 const (
-	defaultBaseURL        = "https://my.solarwinds.cloud"
-	graphQLEndpoint       = "/common/graphql"
-	headerNameSetCookie   = "Set-Cookie"
-	cookieNameSwicus      = "swicus"
-	cookieNameSwiSettings = "swi-settings"
-	headerNameCSRFToken   = "X-CSRF-Token"
+	defaultBaseURL              = "https://my.solarwinds.cloud"
+	graphQLEndpoint             = "/common/graphql"
+	headerNameSetCookie         = "Set-Cookie"
+	cookieNameSwicus            = "swicus"
+	cookieNameSwiSettings       = "swi-settings"
+	headerNameCSRFToken         = "X-CSRF-Token"
+	EnvSolarwindsUser           = "SOLARWINDS_USER"
+	EnvSolarwindsPassword       = "SOLARWINDS_PASSWD"
+	EnvSolarwindsOrganizationId = "SOLARWINDS_ORG_ID"
 )
 
 type Client struct {
@@ -25,6 +29,7 @@ type Client struct {
 	swiSettings       string
 	email             string
 	password          string
+	organizationId    string
 	client            *http.Client
 	baseURL           string
 	InvitationService *InvitationService
@@ -33,9 +38,10 @@ type Client struct {
 }
 
 type ClientConfig struct {
-	Username string // Typically this is an email
-	Password string
-	BaseURL  string // For UT
+	Username       string // Typically this is an email
+	Password       string
+	OrganizationId string
+	BaseURL        string // For UT
 }
 
 type loginPayload struct {
@@ -46,7 +52,7 @@ type loginPayload struct {
 
 type loginResult struct {
 	Swicus      string
-	RedirectUrl string
+	RedirectURL string
 }
 
 // Does not involve any network interactions.
@@ -61,10 +67,27 @@ func NewClient(config ClientConfig) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	username := config.Username
+	if username == "" {
+		username = os.Getenv(EnvSolarwindsUser)
+	}
+
+	password := config.Password
+	if password == "" {
+		password = os.Getenv(EnvSolarwindsPassword)
+	}
+
+	organizationId := config.OrganizationId
+	if organizationId == "" {
+		organizationId = os.Getenv(EnvSolarwindsOrganizationId)
+	}
+
 	c := &Client{
-		email:    config.Username,
-		password: config.Password,
-		baseURL:  baseURLToUse.String(),
+		email:          username,
+		password:       password,
+		organizationId: organizationId,
+		baseURL:        baseURLToUse.String(),
 	}
 	c.client = http.DefaultClient
 	c.InvitationService = &InvitationService{client: c}
@@ -84,10 +107,7 @@ func (c *Client) Init() error {
 	if err := c.obtainSwiSettings(); err != nil {
 		return err
 	}
-	if err := c.obtainToken(auth); err != nil {
-		return err
-	}
-	return nil
+	return c.obtainToken(auth)
 }
 
 func (c *Client) NewRequest(method string, rsc string, params io.Reader) (*http.Request, error) {
@@ -189,17 +209,23 @@ func (c *Client) obtainSwiSettings() error {
 	if err != nil {
 		return err
 	}
-	if swiSettings, err := retrieveCookie(resp.Request.Response, cookieNameSwiSettings); err != nil {
+	swiSettings, err := retrieveCookie(resp.Request.Response, cookieNameSwiSettings)
+	if err != nil {
 		return err
-	} else {
-		c.swiSettings = swiSettings
 	}
+	c.swiSettings = swiSettings
 	return nil
 }
 
 // obtainToken uses the 'swicus' and 'swi-settings' to obtain a CSRF token.
 func (c *Client) obtainToken(auth *loginResult) error {
-	req, err := http.NewRequest("GET", c.baseURL+"/settings", nil)
+	var url string
+	if c.organizationId != "" {
+		url = fmt.Sprintf("%s/%s/%s/users", c.baseURL, "settings", c.organizationId)
+	} else {
+		url = c.baseURL + "/settings"
+	}
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
 	}

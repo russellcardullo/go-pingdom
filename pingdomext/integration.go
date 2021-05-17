@@ -20,7 +20,6 @@ type Integration interface {
 
 // List returns the response holding a list of Integration.
 func (cs *IntegrationService) List() ([]IntegrationGetResponse, error) {
-
 	req, err := cs.client.NewRequest("GET", "/data/v3/integration", nil)
 	if err != nil {
 		return nil, err
@@ -116,7 +115,6 @@ func (cs *IntegrationService) Delete(id int) (*IntegrationStatus, error) {
 
 // ListProviders returns the response holding a list of Provider.
 func (cs *IntegrationService) ListProviders() ([]IntegrationProvider, error) {
-
 	req, err := cs.client.NewRequest("GET", "/integrations/provider", nil)
 	if err != nil {
 		return nil, err

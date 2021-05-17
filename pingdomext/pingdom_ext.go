@@ -237,7 +237,6 @@ func (pc *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 
 	err = decodeResponse(resp, v)
 	return resp, err
-
 }
 
 func decodeResponse(r *http.Response, v interface{}) error {
@@ -271,7 +270,6 @@ func validateResponse(r *http.Response) error {
 }
 
 func getCookie(resp *http.Response, name string) (*http.Cookie, error) {
-
 	for _, cookie := range resp.Cookies() {
 		if cookie.Name == name {
 			return cookie, nil

@@ -6,6 +6,7 @@ import (
 	"golang.org/x/net/html"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 )
@@ -34,9 +35,37 @@ func teardown() {
 }
 
 func TestNewClient(t *testing.T) {
-	c, err := NewClient(ClientConfig{})
+	config := ClientConfig{
+		Username:       "a",
+		Password:       "b",
+		OrganizationId: "c",
+	}
+	c, err := NewClient(config)
 	assert.NoError(t, err)
 	assert.Equal(t, c.baseURL, defaultBaseURL)
+	assert.Equal(t, config.Username, c.email)
+	assert.Equal(t, config.Password, c.password)
+	assert.Equal(t, config.OrganizationId, c.organizationId)
+
+	username := "aa"
+	password := "bb"
+	orgId := "cc"
+	err = os.Setenv(EnvSolarwindsUser, username)
+	assert.NoError(t, err)
+	err = os.Setenv(EnvSolarwindsPassword, password)
+	assert.NoError(t, err)
+	err = os.Setenv(EnvSolarwindsOrganizationId, orgId)
+	assert.NoError(t, err)
+
+	c, err = NewClient(ClientConfig{})
+	assert.NoError(t, err)
+	assert.Equal(t, username, c.email)
+	assert.Equal(t, password, c.password)
+	assert.Equal(t, orgId, c.organizationId)
+
+	for _, envname := range []string{EnvSolarwindsUser, EnvSolarwindsPassword, EnvSolarwindsOrganizationId} {
+		_ = os.Unsetenv(envname)
+	}
 }
 
 func TestExtractCSRFToken(t *testing.T) {
@@ -115,16 +144,7 @@ func TestObtainSwiSettings(t *testing.T) {
 	assert.Equal(t, swiSettings, client.swiSettings)
 }
 
-func TestObtainToken(t *testing.T) {
-	setup()
-	defer teardown()
-
-	tokenStr := "fbO8qrEt-qGJ3jtQctuzcbVfBD47Quy-RE_Q"
-	mux.HandleFunc("/settings", func(w http.ResponseWriter, r *http.Request) {
-		if m := "GET"; m != r.Method {
-			t.Errorf("Request method = %v, want %v", r.Method, m)
-		}
-		fmt.Fprint(w, `
+const obtainTokenRespStr = `
 <!doctype html>
 <html>
 <head>
@@ -158,10 +178,40 @@ func TestObtainToken(t *testing.T) {
 	<script src="https://cdn.solarwinds.cloud/common-settings/v713/static/js/main.82b65646.chunk.js"></script>
 </body>
 </html>
-`)
+`
+
+func TestObtainTokenWithoutOrgId(t *testing.T) {
+	setup()
+	defer teardown()
+
+	tokenStr := "fbO8qrEt-qGJ3jtQctuzcbVfBD47Quy-RE_Q"
+	mux.HandleFunc("/settings", func(w http.ResponseWriter, r *http.Request) {
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, want %v", r.Method, m)
+		}
+		fmt.Fprint(w, obtainTokenRespStr)
 	})
 	err := client.obtainToken(&loginResult{
-		RedirectUrl: server.URL + "/settings",
+		RedirectURL: server.URL + "/settings",
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, tokenStr, client.csrfToken)
+}
+
+func TestObtainTokenWithOrgId(t *testing.T) {
+	setup()
+	defer teardown()
+
+	tokenStr := "fbO8qrEt-qGJ3jtQctuzcbVfBD47Quy-RE_Q"
+	mux.HandleFunc("/settings/123/users", func(w http.ResponseWriter, r *http.Request) {
+		if m := "GET"; m != r.Method {
+			t.Errorf("Request method = %v, want %v", r.Method, m)
+		}
+		fmt.Fprint(w, obtainTokenRespStr)
+	})
+	client.organizationId = "123"
+	err := client.obtainToken(&loginResult{
+		RedirectURL: server.URL + "/settings",
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, tokenStr, client.csrfToken)

@@ -103,7 +103,6 @@ func TestOccurrenceServiceUpdate(t *testing.T) {
 	msg, err := client.Occurrences.Update(12345, update)
 	assert.NoError(t, err)
 	assert.Equal(t, want, msg, "Occurrence.Update() should return correct result")
-
 }
 
 func TestOccurrenceServiceDelete(t *testing.T) {

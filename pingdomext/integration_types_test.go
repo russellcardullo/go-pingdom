@@ -6,7 +6,6 @@ import (
 )
 
 func TestWebHookIntegration_PostParams(t *testing.T) {
-
 	tests := []struct {
 		name        string
 		integration WebHookIntegration

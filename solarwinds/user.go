@@ -94,7 +94,8 @@ func (us *UserService) Retrieve(email string) (*User, error) {
 	var targetInvitation *Invitation
 	for _, invitation := range invitationList.Organization.Invitations {
 		if invitation.Email == email {
-			targetInvitation = &invitation
+			copy := invitation
+			targetInvitation = &copy
 			break
 		}
 	}

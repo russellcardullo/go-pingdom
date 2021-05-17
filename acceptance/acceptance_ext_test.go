@@ -28,7 +28,6 @@ func init() {
 			},
 		}
 		client_ext, _ = pingdomext.NewClientWithConfig(config)
-
 	}
 }
 
@@ -84,5 +83,4 @@ func TestIntegrations(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, listProviderMsg)
 	assert.Equal(t, len(listProviderMsg), 2)
-
 }

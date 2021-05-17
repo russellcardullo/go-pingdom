@@ -153,7 +153,6 @@ func (pc *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
 
 	err = decodeResponse(resp, v)
 	return resp, err
-
 }
 
 func decodeResponse(r *http.Response, v interface{}) error {

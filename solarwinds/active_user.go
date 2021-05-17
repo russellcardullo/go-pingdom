@@ -109,7 +109,8 @@ func (us *ActiveUserService) GetByEmail(email string) (*OrganizationMember, erro
 	var targetUser *OrganizationMember
 	for _, activeUser := range activeUserList.Organization.Members {
 		if activeUser.User.Email == email {
-			targetUser = &activeUser
+			copy := activeUser
+			targetUser = &copy
 			break
 		}
 	}

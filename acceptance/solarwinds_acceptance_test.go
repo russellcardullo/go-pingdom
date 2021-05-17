@@ -15,16 +15,48 @@ var (
 func init() {
 	if os.Getenv("SOLARWINDS_ACCEPTANCE") == "1" {
 		runSolarwindsAcceptance = true
-		config := solarwinds.ClientConfig{
-			Username: os.Getenv("SOLARWINDS_USER"),
-			Password: os.Getenv("SOLARWINDS_PASSWD"),
-		}
-		solarwindsClient, _ = solarwinds.NewClient(config)
-		err := solarwindsClient.Init()
+		client, err := createSolarwindsClient()
 		if err != nil {
 			panic(err)
 		}
+		solarwindsClient = client
 	}
+}
+
+func createSolarwindsClient() (*solarwinds.Client, error) {
+	config := solarwinds.ClientConfig{
+		Username:       os.Getenv(solarwinds.EnvSolarwindsUser),
+		Password:       os.Getenv(solarwinds.EnvSolarwindsPassword),
+		OrganizationId: os.Getenv(solarwinds.EnvSolarwindsOrganizationId),
+	}
+	client, err := solarwinds.NewClient(config)
+	if err != nil {
+		return nil, err
+	}
+	err = client.Init()
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func TestInitWithOrganizationId(t *testing.T) {
+	if !runSolarwindsAcceptance {
+		t.Skip()
+	}
+	os.Setenv(solarwinds.EnvSolarwindsOrganizationId, "31479999098992640")
+	client1, err := createSolarwindsClient()
+	assert.NoError(t, err)
+	userList1, err := client1.UserService.ActiveUserService.List()
+	assert.NoError(t, err)
+
+	os.Setenv(solarwinds.EnvSolarwindsOrganizationId, "106269109693582336")
+	client2, err := createSolarwindsClient()
+	assert.NoError(t, err)
+	userList2, err := client2.UserService.ActiveUserService.List()
+	assert.NoError(t, err)
+
+	assert.NotEqual(t, userList1.Organization.Id, userList2.Organization.Id)
 }
 
 func TestInvitations(t *testing.T) {
@@ -72,7 +104,8 @@ func TestActiveUsers(t *testing.T) {
 	var currentMember *solarwinds.OrganizationMember
 	for _, member := range userList.Organization.Members {
 		if currentUserEmail == member.User.Email {
-			currentMember = &member
+			copy := member
+			currentMember = &copy
 			break
 		}
 	}
