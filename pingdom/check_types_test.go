@@ -8,6 +8,7 @@ import (
 
 func TestHttpCheckPutParams(t *testing.T) {
 	verifyCertificate := true
+	ipv6 := true
 	sslDownDaysBefore := 10
 
 	tests := []struct {
@@ -33,6 +34,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 				ResponseTimeThreshold: 2300,
 				VerifyCertificate:     &verifyCertificate,
 				SSLDownDaysBefore:     &sslDownDaysBefore,
+				IPV6:                  &ipv6,
 			},
 			wantParams: map[string]string{
 				"name":                   "fake check",
@@ -56,6 +58,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 				"responsetime_threshold": "2300",
 				"verify_certificate":     "true",
 				"ssl_down_days_before":   "10",
+				"ipv6":                   "true",
 			},
 		},
 		{
@@ -109,6 +112,7 @@ func TestHttpCheckPutParams(t *testing.T) {
 
 func TestHttpCheckPostParams(t *testing.T) {
 	verifyCertificate := true
+	ipv6 := true
 	sslDownDaysBefore := 10
 
 	check := HttpCheck{
@@ -127,6 +131,7 @@ func TestHttpCheckPostParams(t *testing.T) {
 		ResponseTimeThreshold: 2300,
 		VerifyCertificate:     &verifyCertificate,
 		SSLDownDaysBefore:     &sslDownDaysBefore,
+		IPV6:                  &ipv6,
 	}
 	want := map[string]string{
 		"name":                   "fake check",
@@ -147,6 +152,7 @@ func TestHttpCheckPostParams(t *testing.T) {
 		"responsetime_threshold": "2300",
 		"verify_certificate":     "true",
 		"ssl_down_days_before":   "10",
+		"ipv6":                   "true",
 	}
 
 	params := check.PostParams()
