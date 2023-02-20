@@ -1,5 +1,7 @@
 # go-pingdom #
 
+**I no longer use Pingdom and no longer maintain this project.**
+
 [![Build Status](https://travis-ci.org/russellcardullo/go-pingdom.svg?branch=master)](https://travis-ci.org/russellcardullo/go-pingdom) [![Go Report Card](https://goreportcard.com/badge/github.com/russellcardullo/go-pingdom/pingdom)](https://goreportcard.com/report/github.com/russellcardullo/go-pingdom/pingdom) [![GoDoc](https://godoc.org/github.com/russellcardullo/go-pingdom/pingdom?status.svg)](https://godoc.org/github.com/russellcardullo/go-pingdom/pingdom)
 
 go-pingdom is a Go client library for the Pingdom API.
