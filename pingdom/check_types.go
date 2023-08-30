@@ -32,6 +32,7 @@ type HttpCheck struct {
 	TeamIds                  []int             `json:"teamids,omitempty"`
 	VerifyCertificate        *bool             `json:"verify_certificate,omitempty"`
 	SSLDownDaysBefore        *int              `json:"ssl_down_days_before,omitempty"`
+	IPV6                     *bool             `json:"ipv6,omitempty"`
 }
 
 // PingCheck represents a Pingdom ping check.
@@ -120,6 +121,10 @@ func (ck *HttpCheck) PutParams() map[string]string {
 
 	if ck.SSLDownDaysBefore != nil {
 		m["ssl_down_days_before"] = strconv.Itoa(*ck.SSLDownDaysBefore)
+	}
+
+	if ck.IPV6 != nil {
+		m["ipv6"] = strconv.FormatBool(*ck.IPV6)
 	}
 
 	// ShouldContain and ShouldNotContain are mutually exclusive.
