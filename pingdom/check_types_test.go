@@ -269,6 +269,46 @@ func TestTCPCheckValid(t *testing.T) {
 	assert.Error(t, badCheck.Valid())
 }
 
+func TestDNSCheckPostParams(t *testing.T) {
+	check := DNSCheck{
+		Name:           "fake dns check",
+		ExpectedIP:     "1.1.1.1",
+		Hostname:       "example.com",
+		NameServer:     "8.8.8.8",
+		IntegrationIds: []int{33333333, 44444444},
+		UserIds:        []int{123, 456},
+		TeamIds:        []int{789},
+	}
+	want := map[string]string{
+		"name":             "fake dns check",
+		"ExpectedIP":       "1.1.1.1",
+		"host":             "example.com",
+		"nameserver":       "8.8.8.8",
+		"paused":           "false",
+		"resolution":       "0",
+		"notifyagainevery": "0",
+		"notifywhenbackup": "false",
+		"type":             "dns",
+		"integrationids":   "33333333,44444444",
+		"userids":          "123,456",
+		"teamids":          "789",
+		"port":             "8080",
+		"stringtosend":     "Hello World",
+		"stringtoexpect":   "Hi there",
+	}
+
+	params := check.PostParams()
+	assert.Equal(t, want, params)
+}
+
+func TestDNSCheckValid(t *testing.T) {
+	check := DNSCheck{Name: "fake check", ExpectedIP: "1.1.1.1", NameServer: "8.8.8.8", Hostname: "example.com", Resolution: 15}
+	assert.NoError(t, check.Valid())
+
+	badCheck := DNSCheck{Name: "fake check", Hostname: "example.com", Resolution: 15}
+	assert.Error(t, badCheck.Valid())
+}
+
 func TestSummaryPerformanceRequestValid(t *testing.T) {
 	t.Run("missing field 'id'", func(t *testing.T) {
 		assert.Equal(t, ErrMissingId, SummaryPerformanceRequest{}.Valid())
